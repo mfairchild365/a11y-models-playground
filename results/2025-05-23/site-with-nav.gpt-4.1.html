@@ -1,0 +1,755 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ShopSavvy - Home</title>
+    <link href="https://fonts.googleapis.com/css?family=Nunito:600,700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #2364aa;
+            --secondary: #3da5d9;
+            --accent: #f79824;
+            --dark: #212529;
+            --gray: #f8f9fa;
+            --card-bg: #fff;
+            --shadow: 0 2px 8px rgba(0,0,0,0.08);
+        }
+
+        * { box-sizing: border-box }
+
+        body {
+            font-family: 'Nunito', sans-serif;
+            background: var(--gray);
+            margin: 0;
+            color: var(--dark);
+        }
+
+        /* Header & Menu */
+        header {
+            background: var(--primary);
+            color: white;
+            padding: 0;
+            box-shadow: var(--shadow);
+            position: sticky;
+            top: 0;
+            z-index: 999;
+        }
+
+        .header-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 2rem;
+        }
+
+        .logo {
+            font-size: 1.8rem;
+            font-weight: 700;
+            letter-spacing: 2px;
+            color: white;
+            text-decoration: none;
+        }
+
+        .search-bar {
+            flex: 1;
+            margin: 0 2rem;
+            position: relative;
+        }
+        .search-bar input {
+            width: 100%;
+            padding: 0.7em 3.5em 0.7em 1em;
+            border-radius: 30px;
+            border: none;
+            outline: none;
+            font-size: 1em;
+            background: #fff;
+            color: var(--dark);
+            box-shadow: 0 1px 3px rgba(35,100,170,0.07);
+        }
+        .search-bar button {
+            position: absolute;
+            right: 0.2em;
+            top: 50%;
+            transform: translateY(-50%);
+            border: none;
+            background: var(--accent);
+            padding: 0.5em 1.1em;
+            border-radius: 30px;
+            color: #fff;
+            cursor: pointer;
+        }
+
+        .header-icons {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+        }
+        .header-icons span, .header-icons a {
+            font-size: 1.2em;
+            color: white;
+            text-decoration: none;
+            position: relative;
+        }
+        .header-icons .cart-count {
+            position: absolute;
+            top: -8px;
+            right: -10px;
+            background: var(--accent);
+            font-size: 0.8em;
+            border-radius: 50%;
+            padding: 0 5px;
+            color: #fff;
+        }
+
+        /* --- Complex Menu --- */
+        nav {
+            background: var(--secondary);
+            padding: 0.5rem 0;
+            box-shadow: var(--shadow);
+        }
+        .menu-main {
+            display: flex;
+            gap: 2rem;
+            align-items: center;
+            font-weight: 700;
+            font-size: 1.05em;
+            padding: 0 2rem;
+            flex-wrap: wrap;
+        }
+        .menu-main > li {
+            list-style: none;
+            position: relative;
+        }
+        .menu-main > li > a, 
+        .menu-main > li > span {
+            color: #fff;
+            text-decoration: none;
+            padding: 0.6em 1em;
+            border-radius: 4px;
+            display: block;
+            transition: background .2s;
+            cursor: pointer;
+        }
+        .menu-main > li > a:hover, .menu-main > li > span:hover {
+            background: var(--accent);
+            color: #fff;
+        }
+        .submenu, .megamenu {
+            display: none;
+            position: absolute;
+            background: #fff;
+            color: var(--dark);
+            min-width: 200px;
+            box-shadow: var(--shadow);
+            border-radius: 7px;
+            top: 120%;
+            left: 0;
+            z-index: 99;
+            animation: fadeIn .13s linear;
+        }
+        .submenu li, .megamenu li {
+            list-style: none;
+        }
+        .submenu li a {
+            display: block;
+            color: var(--dark);
+            padding: 0.7em 1em;
+            text-decoration: none;
+            transition: background .2s;
+            border-radius: 3px;
+        }
+        .submenu li a:hover {
+            background: var(--gray);
+        }
+        .menu-main > li:hover > .submenu,
+        .menu-main > li:hover > .megamenu {
+            display: block;
+        }
+        /* Mega submenu styling */
+        .megamenu {
+            display: none;
+            left: 0;
+            padding: 1rem 2rem;
+            background: #fff;
+            min-width: 600px;
+            box-shadow: var(--shadow);
+            border-radius: 7px;
+            top: 120%;
+            display: flex;
+            gap: 3rem;
+        }
+        .megamenu-column {
+            min-width: 180px;
+        }
+        .megamenu h4 {
+            margin: 0 0 .4em 0;
+            font-size: 1em;
+            font-weight: bold;
+        }
+        .megamenu li a {
+            color: var(--dark);
+            text-decoration: none;
+            font-size: 0.98em;
+            padding: 0.5em 0;
+            display: block;
+            border-radius: 3px;
+            transition: background .19s;
+        }
+        .megamenu li a:hover {
+            background: var(--gray);
+        }
+
+        /* -- Content Section -- */
+        .container {
+            max-width: 1400px;
+            margin: 2.5rem auto;
+            padding: 0 2rem;
+        }
+
+        /* --- Hero Banner --- */
+        .hero {
+            background: linear-gradient(90deg, var(--primary) 60%, var(--secondary) 100%);
+            color: #fff;
+            border-radius: 14px;
+            position: relative;
+            display: flex;
+            align-items: center;
+            overflow: hidden;
+            min-height: 360px;
+            margin-bottom: 2.5rem;
+            box-shadow: var(--shadow);
+        }
+        .hero .hero-content {
+            max-width: 600px;
+            padding: 2.5em 2.5em;
+            z-index: 2;
+        }
+        .hero .hero-content h1 {
+            font-size: 2.7em;
+            margin: 0 0 .3em 0;
+            font-weight: 800;
+            color: white;
+        }
+        .hero .hero-content p {
+            font-size: 1.27em;
+            opacity: .94;
+            margin-bottom: 1.7em;
+        }
+        .hero .hero-content button {
+            padding: 0.88em 2.2em;
+            font-size: 1.18em;
+            border-radius: 35px;
+            border: none;
+            cursor: pointer;
+            background: var(--accent);
+            color: #fff;
+            font-weight: 700;
+            transition: background .15s;
+        }
+        .hero .hero-content button:hover {
+            background: #d87d09;
+        }
+        .hero .hero-img {
+            flex: 1;
+            text-align: right;
+            z-index: 1;
+        }
+        .hero .hero-img img {
+            max-height: 320px;
+            width: auto;
+            filter: drop-shadow(0 8px 32px rgba(35,100,170,0.2));
+        }
+
+        /* --- Product Listing --- */
+        .section-title {
+            font-size: 1.6em;
+            font-weight: 800;
+            color: var(--primary);
+            margin: 2.5em 0 1.1em 0;
+            letter-spacing: -1px;
+        }
+        .products-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 2rem;
+        }
+        .product-card {
+            background: var(--card-bg);
+            border-radius: 11px;
+            box-shadow: var(--shadow);
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            transition: transform .14s;
+        }
+        .product-card:hover {
+            transform: translateY(-7px) scale(1.03);
+            box-shadow: 0 4px 40px 0 rgba(35,100,170,0.10);
+        }
+        .product-image {
+            background: #f2f7fb;
+            min-height: 170px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 1.3em;
+        }
+        .product-image img {
+            max-width: 100%;
+            max-height: 130px;
+            object-fit: contain;
+        }
+        .product-info {
+            flex: 1;
+            padding: 1.1em 1.3em 1.4em 1.3em;
+            display: flex;
+            flex-direction: column;
+        }
+        .product-title {
+            font-size: 1.08em;
+            font-weight: bold;
+            margin-bottom: .5em;
+        }
+        .product-price {
+            color: var(--accent);
+            font-size: 1.05em;
+            margin-bottom: .5em;
+            font-weight: bold;
+        }
+        .product-rating {
+            color: #f79824;
+            font-size: 1.01em;
+            margin-bottom: .8em;
+        }
+        .add-cart-btn {
+            margin-top: auto;
+            background: var(--primary);
+            color: #fff;
+            border-radius: 20px;
+            padding: .66em 1.1em;
+            border: none;
+            font-size: 1em;
+            font-weight: 700;
+            cursor: pointer;
+            box-shadow: 0 2px 8px rgba(35,100,170,0.07);
+            transition: background .15s;
+        }
+        .add-cart-btn:hover {
+            background: #173b67;
+        }
+
+        /* --- Articles Section --- */
+        .articles-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 1.6rem;
+        }
+        .article-card {
+            background: var(--card-bg);
+            border-radius: 9px;
+            box-shadow: var(--shadow);
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            min-height: 290px;
+            transition: box-shadow .15s,transform .12s;
+        }
+        .article-card:hover {
+            box-shadow: 0 6px 34px rgba(35,100,170,0.12);
+            transform: translateY(-7px);
+        }
+        .article-img {
+            width: 100%;
+            height: 160px;
+            background: #e3eafc;
+            object-fit: cover;
+        }
+        .article-content {
+            flex: 1;
+            padding: 1em 1.2em 1.1em 1.2em;
+            display: flex;
+            flex-direction: column;
+        }
+        .article-title {
+            font-weight: 700;
+            font-size: 1.1em;
+            margin: 0.3em 0 .6em 0;
+            color: var(--primary);
+        }
+        .article-meta {
+            font-size: 0.92em;
+            color: #888;
+            margin-bottom: .6em;
+        }
+        .article-summary {
+            flex: 1;
+            font-size: 1em;
+            color: #444;
+        }
+        .article-read {
+            margin-top: 1.1em;
+            color: var(--secondary);
+            font-weight: bold;
+            font-size: 1em;
+            text-decoration: none;
+        }
+
+        /* Responsive */
+        @media (max-width: 1000px) {
+            .hero { flex-direction: column; gap: 2em; min-height: 440px;}
+            .hero .hero-img { text-align: center; }
+            .hero .hero-content { padding: 2em 1.3em; max-width: 100%;}
+        }
+
+        @media (max-width: 750px) {
+            .products-grid { gap: 1.2em;}
+            .articles-grid { gap: 1em;}
+            nav, .menu-main { padding: 0 0.4em; gap: 0.7em;}
+            .header-top { flex-direction: column; gap: .8em; }
+            .search-bar { margin: 1em 0; }
+            .container { padding: 0 0.6em;}
+        }
+        @media (max-width: 600px) {
+            .products-grid { grid-template-columns: 1fr;}
+            .articles-grid { grid-template-columns: 1fr;}
+            .hero .hero-img img { max-height: 180px; }
+            .hero { min-height: 180px;}
+            .hero .hero-content h1 { font-size: 1.6em;}
+        }
+
+        @keyframes fadeIn {
+          from { opacity: 0; transform: translateY(8px);}
+          to   { opacity: 1; transform: none;}
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="header-top">
+            <a class="logo" href="#">ShopSavvy</a>
+            <div class="search-bar">
+                <input type="text" id="searchInput" placeholder="Search for products, brands, or categories...">
+                <button id="searchBtn"><span>&#128270;</span></button>
+            </div>
+            <div class="header-icons">
+                <a href="#"><span title="Account">&#128100;</span></a>
+                <a href="#"><span title="Wishlist">&#10084;&#65039;</span></a>
+                <a href="#"><span title="Cart">&#128722;<span class="cart-count" id="cartCount">2</span></span></a>
+            </div>
+        </div>
+        <nav>
+            <ul class="menu-main">
+                <li>
+                    <span>Electronics</span>
+                    <div class="megamenu">
+                        <div class="megamenu-column">
+                            <h4>Mobiles</h4>
+                            <ul>
+                                <li><a href="#">Smartphones</a></li>
+                                <li><a href="#">Feature Phones</a></li>
+                                <li><a href="#">Wearables</a></li>
+                            </ul>
+                        </div>
+                        <div class="megamenu-column">
+                            <h4>Computers</h4>
+                            <ul>
+                                <li><a href="#">Laptops</a></li>
+                                <li><a href="#">Desktops</a></li>
+                                <li><a href="#">Monitors</a></li>
+                                <li><a href="#">Components</a></li>
+                            </ul>
+                        </div>
+                        <div class="megamenu-column">
+                            <h4>Audio</h4>
+                            <ul>
+                                <li><a href="#">Headphones</a></li>
+                                <li><a href="#">Speakers</a></li>
+                                <li><a href="#">Soundbars</a></li>
+                            </ul>
+                        </div>
+                        <div class="megamenu-column">
+                            <h4>TV & Home</h4>
+                            <ul>
+                                <li><a href="#">Televisions</a></li>
+                                <li><a href="#">Streaming Devices</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </li>
+                <li>
+                    <span>Fashion</span>
+                    <ul class="submenu">
+                        <li><a href="#">Men</a></li>
+                        <li><a href="#">Women</a></li>
+                        <li><a href="#">Kids</a></li>
+                        <li><a href="#">Footwear</a></li>
+                        <li><a href="#">Watches</a></li>
+                        <li><a href="#">Jewellery</a></li>
+                    </ul>
+                </li>
+                <li>
+                    <span>Home & Kitchen</span>
+                    <ul class="submenu">
+                        <li><a href="#">Furniture</a></li>
+                        <li><a href="#">Decor</a></li>
+                        <li><a href="#">Appliances</a></li>
+                        <li><a href="#">Bedding</a></li>
+                        <li><a href="#">Dining</a></li>
+                    </ul>
+                </li>
+                <li>
+                    <span>Sports & Outdoors</span>
+                    <ul class="submenu">
+                        <li><a href="#">Fitness</a></li>
+                        <li><a href="#">Cycling</a></li>
+                        <li><a href="#">Camping</a></li>
+                        <li><a href="#">Shoes</a></li>
+                        <li><a href="#">Sport Gear</a></li>
+                    </ul>
+                </li>
+                <li>
+                    <span>Beauty</span>
+                    <ul class="submenu">
+                        <li><a href="#">Skincare</a></li>
+                        <li><a href="#">Haircare</a></li>
+                        <li><a href="#">Makeup</a></li>
+                        <li><a href="#">Fragrance</a></li>
+                    </ul>
+                </li>
+                <li>
+                    <a href="#">Deals</a>
+                </li>
+                <li>
+                    <a href="#">Blog</a>
+                </li>
+            </ul>
+        </nav>
+    </header>
+    <div class="container">
+        <!-- HERO BANNER -->
+        <section class="hero">
+            <div class="hero-content">
+                <h1>Upgrade Your Lifestyle</h1>
+                <p>
+                    Dive into our latest collections of electronics, fashion, home essentials, and more.
+                    Discover deals, read curated articles, and shop the trendiest products online!
+                </p>
+                <button onclick="scrollToProducts()">Shop Now</button>
+            </div>
+            <div class="hero-img">
+                <img src="https://images.unsplash.com/photo-1517336714731-489689fd1ca8?auto=format&fit=crop&w=520&q=80" alt="Hero Shopping" loading="lazy">
+            </div>
+        </section>
+
+        <!-- PRODUCTS -->
+        <h2 class="section-title" id="productsSection">Best Sellers</h2>
+        <div class="products-grid" id="productsGrid">
+            <!-- Product cards will be populated by JS -->
+        </div>
+
+        <!-- ARTICLES -->
+        <h2 class="section-title">Latest Articles</h2>
+        <div class="articles-grid" id="articlesGrid">
+            <!-- Article cards will be populated by JS -->
+        </div>
+    </div>
+
+    <footer style="background: #fff; color: #888; padding: 2em 0 1em 0; text-align:center; font-size: 1em; border-top: 1px solid #eee; margin-top:3em">
+        &copy; 2024 ShopSavvy &bull; <a href="#" style="color: var(--secondary); text-decoration:none;">Contact</a> &bull; <a href="#" style="color: var(--secondary); text-decoration:none;">Policies</a>
+    </footer>
+
+    <script>
+        // Example products
+        const products = [
+            {
+                title: "Apple iPhone 15 Pro (128GB) - Silver",
+                price: "$999",
+                rating: 4.8,
+                ratingsCount: 1811,
+                image: "https://store.storeimages.cdn-apple.com/4668/as-images.apple.com/is/iphone-15-pro-finish-select-202309-6-1inch-silver?wid=940&hei=1112&fmt=png-alpha&.v=1692923823345"
+            },
+            {
+                title: "Sony WH-1000XM5 Wireless Headphones",
+                price: "$398",
+                rating: 4.7,
+                ratingsCount: 3798,
+                image: "https://m.media-amazon.com/images/I/71voqZcS6cL._AC_SL1500_.jpg"
+            },
+            {
+                title: "ASUS VivoBook 15 OLED, 16GB RAM, 512GB SSD",
+                price: "$749",
+                rating: 4.6,
+                ratingsCount: 1012,
+                image: "https://m.media-amazon.com/images/I/71Xvo2XESIL._AC_SL1500_.jpg"
+            },
+            {
+                title: "Nike Air Max 90 Shoes",
+                price: "$139",
+                rating: 4.5,
+                ratingsCount: 251,
+                image: "https://static.nike.com/a/images/c_limit,w_592,f_auto/t_product_v1/f04d4ac7-b551-4834-a7d6-7eddb7ffc58e/air-max-90-shoes-6n3vKB.png"
+            },
+            {
+                title: "SAMSUNG 55-Inch QLED 4K TV",
+                price: "$999",
+                rating: 4.7,
+                ratingsCount: 1849,
+                image: "https://images.samsung.com/is/image/samsung/assets/latin_en/television/buy-qled-refresh/2022/TV_QN90B_qled.png?imwidth=720"
+            },
+            {
+                title: "Levi's 511 Slim Fit Men's Jeans",
+                price: "$58",
+                rating: 4.3,
+                ratingsCount: 1205,
+                image: "https://lsco.scene7.com/is/image/lsco/045114406-front-pdp?fmt=jpeg&qlt=75,1&resMode=sharp2&wid=800&hei=1067"
+            },
+            {
+                title: "Keurig K-Slim Single Serve Coffee Maker",
+                price: "$99",
+                rating: 4.6,
+                ratingsCount: 5618,
+                image: "https://m.media-amazon.com/images/I/81q5+Vge-GL._AC_SL1500_.jpg"
+            },
+            {
+                title: "Instant Pot Duo 7-in-1 Electric Cooker",
+                price: "$89",
+                rating: 4.8,
+                ratingsCount: 25110,
+                image: "https://m.media-amazon.com/images/I/719tB1pIJuL._AC_SL1500_.jpg"
+            },
+            {
+                title: "Fossil Women's Stainless Steel Watch",
+                price: "$85",
+                rating: 4.4,
+                ratingsCount: 912,
+                image: "https://m.media-amazon.com/images/I/71IobUK46IS._AC_UX679_.jpg"
+            },
+            {
+                title: "Fitbit Charge 6 Fitness Tracker",
+                price: "$149",
+                rating: 4.1,
+                ratingsCount: 512,
+                image: "https://m.media-amazon.com/images/I/61EhwfwNr8L._AC_SL1500_.jpg"
+            },
+        ];
+        // Example articles
+        const articles = [
+            {
+                title: "2024 Electronics Buying Guide: What to Know Before Your Purchase",
+                summary: "From the latest smartphones to smart home products, we break down what you need to consider before you buy any new tech this year.",
+                date: "June 18, 2024",
+                author: "Olivia Williams",
+                image: "https://images.unsplash.com/photo-1519389950473-47ba0277781c?auto=format&fit=crop&w=520&q=80",
+                link: "#"
+            },
+            {
+                title: "Men's Style Trends for Summer 2024",
+                summary: "Discover this season’s must-have looks in men’s fashion. From bold prints to relaxed fits, see what’s hot right now!",
+                date: "June 15, 2024",
+                author: "James Parker",
+                image: "https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=520&q=80",
+                link: "#"
+            },
+            {
+                title: "How to Create a Cozy Reading Nook at Home",
+                summary: "Turn any corner of your home into a personal getaway for reading and relaxation with these easy tips and product picks.",
+                date: "June 14, 2024",
+                author: "Ava Martinez",
+                image: "https://images.unsplash.com/photo-1515378791036-0648a3ef77b2?auto=format&fit=crop&w=520&q=80",
+                link: "#"
+            },
+            {
+                title: "Fitness Gear Essentials for Every Home Gym",
+                summary: "Whether you’re a beginner or a pro, check out our guide to smart must-haves for your workout setup.",
+                date: "June 12, 2024",
+                author: "Ethan Brown",
+                image: "https://images.unsplash.com/photo-1503341455253-b2e723bb3dbb?auto=format&fit=crop&w=520&q=80",
+                link: "#"
+            },
+            {
+                title: "10 Kitchen Appliances to Simplify Your Life",
+                summary: "Get more done with less effort. These kitchen gadgets are total game-changers for everyday cooks.",
+                date: "June 10, 2024",
+                author: "Charlotte Lee",
+                image: "https://images.unsplash.com/photo-1512918728675-ed5a9ecdebfd?auto=format&fit=crop&w=520&q=80",
+                link: "#"
+            },
+            {
+                title: "5 Skincare Secrets for Glowing Summer Skin",
+                summary: "Expert tips and the best products for keeping your skin healthy, happy, and radiant all season long.",
+                date: "June 9, 2024",
+                author: "Sophia Kim",
+                image: "https://images.unsplash.com/photo-1517841905240-472988babdf9?auto=format&fit=crop&w=520&q=80",
+                link: "#"
+            }
+        ];
+
+        function productCardHTML(product) {
+            return `<div class="product-card">
+                <div class="product-image">
+                    <img src="${product.image}" alt="${product.title}" loading="lazy">
+                </div>
+                <div class="product-info">
+                    <span class="product-title">${product.title}</span>
+                    <span class="product-price">${product.price}</span>
+                    <span class="product-rating">&#11088; ${product.rating} <span style="color:#888">(${product.ratingsCount.toLocaleString()})</span></span>
+                    <button class="add-cart-btn" onclick="addToCart('${encodeURIComponent(product.title)}')">Add to Cart</button>
+                </div>
+            </div>`;
+        }
+        function articleCardHTML(article) {
+            return `<div class="article-card">
+                <img class="article-img" src="${article.image}" alt="${article.title}" loading="lazy">
+                <div class="article-content">
+                    <div class="article-title">${article.title}</div>
+                    <div class="article-meta">${article.date} &middot; ${article.author}</div>
+                    <div class="article-summary">${article.summary}</div>
+                    <a class="article-read" href="${article.link}">Read More &rarr;</a>
+                </div>
+            </div>`;
+        }
+        function populateListings() {
+            document.getElementById("productsGrid").innerHTML =
+                products.map(productCardHTML).join("");
+            document.getElementById("articlesGrid").innerHTML =
+                articles.map(articleCardHTML).join("");
+        }
+
+        // Cart logic
+        let cartCount = 2;
+        function addToCart(titleEncoded) {
+            cartCount++;
+            document.getElementById("cartCount").textContent = cartCount;
+            const productName = decodeURIComponent(titleEncoded);
+            alert(`Added "${productName}" to cart!`);
+        }
+        // Smooth Scroll to products section
+        function scrollToProducts() {
+            document.getElementById("productsSection").scrollIntoView({ behavior: "smooth" });
+        }
+
+        // Live Search
+        document.getElementById("searchBtn").onclick = doSearch;
+        document.getElementById("searchInput").onkeydown = function(e){
+            if (e.key === "Enter") doSearch();
+        };
+        function doSearch() {
+            const q = document.getElementById("searchInput").value.trim().toLowerCase();
+            const filtered = !q ? products : products.filter(
+                p => p.title.toLowerCase().includes(q)
+            );
+            document.getElementById("productsGrid").innerHTML = filtered.length ?
+                filtered.map(productCardHTML).join("")
+                : `<div style="grid-column:1/-1;text-align:center;color:#888;font-size:1.18em;padding:3em 0;">
+                    <span>No products found for "<b>${q}</b>"</span>
+                  </div>`;
+        }
+
+        // On DOM ready
+        window.onload = function() {
+            populateListings();
+        };
+    </script>
+</body>
+</html>
