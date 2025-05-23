@@ -1,0 +1,9 @@
+messages:
+  - role: system
+    content: ''
+  - role: user
+    content: >-
+      Create a beautiful home page for a retail website in HTML and Javascript
+      as a single file. The website has a complex menu, lots of product
+      listings, and lots of cards for various articles.
+model: openai/gpt-4o
