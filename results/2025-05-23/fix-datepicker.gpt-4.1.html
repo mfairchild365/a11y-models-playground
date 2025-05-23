@@ -1,0 +1,484 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>User Registration</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f4f4f9;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+    }
+    .form-container {
+      background: #fff;
+      padding: 20px 30px;
+      border-radius: 10px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+      max-width: 400px;
+      width: 100%;
+    }
+    h2 {
+      text-align: center;
+      color: #333; /* Improved contrast */
+    }
+    .form-group {
+      margin-bottom: 15px;
+    }
+    label {
+      display: block;
+      margin-bottom: 5px;
+      font-weight: bold;
+    }
+    input, button {
+      width: 100%;
+      padding: 10px;
+      border-radius: 5px;
+    }
+    input[type="text"],
+    input[type="email"] {
+      border: 1px solid #ccc;
+    }
+    button[type="submit"] {
+      background-color: #5cb85c;
+      color: white;
+      border: none;
+      cursor: pointer;
+    }
+    button[type="submit"]:hover {
+      background-color: #4cae4c;
+    }
+    /* Custom Date Picker Styles */
+    #datepicker-container {
+      position: relative;
+    }
+    #datepicker {
+      position: absolute;
+      top: 100%;
+      left: 0;
+      background: #fff;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      z-index: 1000;
+      display: none;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      margin-top: 4px;
+    }
+    .datepicker-grid {
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      text-align: center;
+      padding: 10px;
+    }
+    .datepicker-header {
+      text-align: center;
+      font-size: 16px;
+      margin: 10px 0;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .datepicker-header button {
+      background: none;
+      border: none;
+      cursor: pointer;
+      font-size: 18px;
+      width: 32px;
+      height: 32px;
+      border-radius: 4px;
+      transition: background 0.2s;
+    }
+    .datepicker-header button:focus {
+      outline: 2px solid #4cae4c;
+      background: #e5f7e5;
+    }
+    .datepicker-day {
+      padding: 8px;
+      cursor: pointer;
+      border-radius: 50%;
+      border: none;
+      background: none;
+      transition: background 0.2s;
+    }
+    .datepicker-day:hover, .datepicker-day:focus {
+      background-color: #f0f0f0;
+      outline: 2px solid #4cae4c;
+    }
+    .datepicker-day.disabled {
+      color: #ccc;
+      pointer-events: none;
+      background: none;
+    }
+    .datepicker-day.selected {
+      background-color: #5cb85c;
+      color: white;
+    }
+    .visually-hidden {
+      position: absolute !important;
+      height: 1px; width: 1px;
+      overflow: hidden;
+      clip: rect(1px,1px,1px,1px); /* IE6, IE7 */
+      clip: rect(1px, 1px, 1px, 1px);
+      white-space: nowrap; /* added line */
+    }
+  </style>
+</head>
+<body>
+  <div class="form-container" role="main">
+    <h2 id="formTitle">User Registration</h2>
+    <form id="registrationForm" aria-labelledby="formTitle" autocomplete="off">
+      <div class="form-group">
+        <label for="username">Username:</label>
+        <input type="text" id="username" autocomplete="username" name="username" required>
+      </div>
+      <div class="form-group">
+        <label for="email">Email address:</label>
+        <input type="email" id="email" autocomplete="email" name="email" required>
+      </div>
+      <div class="form-group">
+        <label for="dob">Date of Birth:</label>
+        <div id="datepicker-container">
+          <input 
+            type="text"
+            id="dob"
+            name="dob"
+            readonly
+            aria-haspopup="dialog"
+            aria-expanded="false"
+            aria-controls="datepicker"
+            aria-describedby="dob-desc"
+            placeholder="YYYY-MM-DD"
+            required
+            inputmode="none"
+            autocomplete="off"
+          >
+          <span class="visually-hidden" id="dob-desc">
+            Press Enter or Space to open the calendar. Use arrow keys to navigate. Press Escape to close.
+          </span>
+          <div id="datepicker" role="dialog"
+            aria-modal="true"
+            aria-label="Select date of birth"
+            tabindex="-1"
+            style="display: none;"></div>
+        </div>
+      </div>
+      <div class="form-group">
+        <button type="submit">Register</button>
+      </div>
+      <div id="formSuccess" class="visually-hidden" aria-live="polite"></div>
+    </form>
+  </div>
+  <script>
+    // Accessibility constants
+    const form = document.getElementById('registrationForm');
+    const dateInput = document.getElementById('dob');
+    const datePicker = document.getElementById('datepicker');
+    const datePickerContainer = document.getElementById('datepicker-container');
+    const dobDesc = document.getElementById('dob-desc');
+    const formSuccess = document.getElementById('formSuccess');
+
+    let pickerYear, pickerMonth;
+    let pickerOpen = false;
+    let focusedDayBtn = null;
+
+    const today = new Date();
+    let selectedDate = null;
+
+    // Helper to render the calendar
+    function renderDatePicker(year, month) {
+      pickerYear = year;
+      pickerMonth = month;
+      datePicker.innerHTML = '';
+
+      // ---- Header ----
+      const header = document.createElement('div');
+      header.classList.add('datepicker-header');
+
+      // Prev button
+      const prevButton = document.createElement('button');
+      prevButton.type = "button";
+      prevButton.setAttribute('aria-label', 'Previous month');
+      prevButton.innerHTML = '&#8592;';
+      prevButton.tabIndex = 0;
+      prevButton.addEventListener('click', function () {
+        if (month === 0) {
+          renderDatePicker(year - 1, 11);
+        } else {
+          renderDatePicker(year, month - 1);
+        }
+      });
+
+      // Month/year display
+      const monthYear = document.createElement('span');
+      const monthNames = [
+        'January', 'February', 'March', 'April',
+        'May', 'June', 'July', 'August',
+        'September', 'October', 'November', 'December'
+      ];
+      monthYear.textContent = `${monthNames[month]} ${year}`;
+
+      // Next button
+      const nextButton = document.createElement('button');
+      nextButton.type = "button";
+      nextButton.setAttribute('aria-label', 'Next month');
+      nextButton.innerHTML = '&#8594;';
+      nextButton.tabIndex = 0;
+      nextButton.addEventListener('click', function () {
+        if (month === 11) {
+          renderDatePicker(year + 1, 0);
+        } else {
+          renderDatePicker(year, month + 1);
+        }
+      });
+
+      header.appendChild(prevButton);
+      header.appendChild(monthYear);
+      header.appendChild(nextButton);
+      datePicker.appendChild(header);
+
+      // ---- Days of week ----
+      const daysOfWeek = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+      const grid = document.createElement('div');
+      grid.classList.add('datepicker-grid');
+
+      daysOfWeek.forEach(day => {
+        const dayElement = document.createElement('div');
+        dayElement.textContent = day;
+        dayElement.style.fontWeight = 'bold';
+        dayElement.setAttribute('aria-hidden', 'true');
+        grid.appendChild(dayElement);
+      });
+
+      // ---- Days grid ----
+      const firstDay = new Date(year, month, 1).getDay();
+      const daysInMonth = new Date(year, month + 1, 0).getDate();
+
+      // Blank days before start
+      for (let i = 0; i < firstDay; i++) {
+        const blank = document.createElement('div');
+        grid.appendChild(blank);
+      }
+
+      // Create day buttons
+      for (let day = 1; day <= daysInMonth; day++) {
+        const dayBtn = document.createElement('button');
+        dayBtn.type = 'button';
+        dayBtn.classList.add('datepicker-day');
+        dayBtn.textContent = day;
+        dayBtn.tabIndex = -1;
+        dayBtn.setAttribute('data-day', day);
+
+        // Compare for selected
+        let isSelected = false;
+        if (selectedDate) {
+          const selYear = selectedDate.getFullYear();
+          const selMonth = selectedDate.getMonth();
+          const selDay = selectedDate.getDate();
+          if (selYear === year && selMonth === month && selDay === day) {
+            isSelected = true;
+          }
+        }
+        if (isSelected) {
+          dayBtn.classList.add('selected');
+          // ARIA for current selection
+          dayBtn.setAttribute('aria-current', 'date');
+        }
+
+        // Today has extra hint
+        if (
+          year === today.getFullYear() &&
+          month === today.getMonth() &&
+          day === today.getDate()
+        ) {
+          dayBtn.setAttribute('aria-label', day + ' (today)');
+        }
+
+        // Click: select date
+        dayBtn.addEventListener('click', function () {
+          selectDate(new Date(year, month, day));
+        });
+
+        // Keyboard focus
+        dayBtn.addEventListener('keydown', dayKeyDownHandler);
+
+        grid.appendChild(dayBtn);
+
+        // After render: set first day of month for initial focus
+        if (!focusedDayBtn && isSelected) {
+          focusedDayBtn = dayBtn;
+        }
+      }
+
+      datePicker.appendChild(grid);
+
+      // Focus appropriate button
+      setTimeout(() => {
+        // Focus selected, or today, or first non-blank day
+        let firstDayBtn = grid.querySelector('.datepicker-day');
+        let targetBtn =
+          grid.querySelector('.datepicker-day.selected') ||
+          (year === today.getFullYear() && month === today.getMonth() ? grid.querySelector('.datepicker-day[aria-label$="(today)"]') : null) ||
+          firstDayBtn;
+        if (targetBtn) {
+          targetBtn.focus();
+          focusedDayBtn = targetBtn;
+        }
+      }, 15);
+    }
+
+    // Open picker
+    function openDatePicker() {
+      renderDatePicker(selectedDate ? selectedDate.getFullYear() : today.getFullYear(),
+        selectedDate ? selectedDate.getMonth() : today.getMonth());
+      datePicker.style.display = 'block';
+      dateInput.setAttribute('aria-expanded', 'true');
+      pickerOpen = true;
+
+      // Focus appropriate day button after display
+      setTimeout(() => {
+        if (datePicker) {
+          let targetBtn =
+            datePicker.querySelector('.datepicker-day.selected') ||
+            (pickerYear === today.getFullYear() && pickerMonth === today.getMonth()
+              ? datePicker.querySelector('.datepicker-day[aria-label$="(today)"]')
+              : null) ||
+            datePicker.querySelector('.datepicker-day');
+          if (targetBtn) {
+            targetBtn.focus();
+            focusedDayBtn = targetBtn;
+          }
+        }
+      }, 15);
+    }
+
+    // Close picker and return focus
+    function closeDatePicker() {
+      datePicker.style.display = 'none';
+      dateInput.setAttribute('aria-expanded', 'false');
+      pickerOpen = false;
+      focusedDayBtn = null;
+      dateInput.focus();
+    }
+
+    // Keyboard events for date input
+    dateInput.addEventListener('keydown', function (e) {
+      if (e.key === 'Enter' || e.key === ' ' || e.key === 'Spacebar') {
+        e.preventDefault();
+        if (!pickerOpen) openDatePicker();
+      } else if (e.key === 'ArrowDown') {
+        if (!pickerOpen) {
+          e.preventDefault();
+          openDatePicker();
+        }
+      }
+    });
+
+    // Open picker with click
+    dateInput.addEventListener('click', function (e) {
+      if (!pickerOpen) openDatePicker();
+    });
+
+    // Focus trap and escape
+    datePicker.addEventListener('keydown', function (e) {
+      if (e.key === 'Escape') {
+        e.stopPropagation();
+        closeDatePicker();
+      } else if (e.key === 'Tab') {
+        // Trap focus within dialog
+        const focusable = datePicker.querySelectorAll('button, [tabindex="0"]');
+        if (focusable.length === 0) return;
+        let first = focusable[0];
+        let last = focusable[focusable.length - 1];
+        if (e.shiftKey) {
+          if (document.activeElement === first) {
+            e.preventDefault();
+            last.focus();
+          }
+        } else {
+          if (document.activeElement === last) {
+            e.preventDefault();
+            first.focus();
+          }
+        }
+      }
+    });
+
+    // Dismiss on outside pointer
+    document.addEventListener('mousedown', function (e) {
+      if (pickerOpen && !datePickerContainer.contains(e.target)) {
+        closeDatePicker();
+      }
+    });
+
+    // Keyboard nav for day buttons
+    function dayKeyDownHandler(e) {
+      if (!pickerOpen) return;
+      const grid = datePicker.querySelector('.datepicker-grid');
+      const dayBtns = Array.from(grid.querySelectorAll('.datepicker-day'));
+      let idx = dayBtns.indexOf(document.activeElement);
+      switch (e.key) {
+        case 'ArrowLeft':
+          e.preventDefault();
+          if (idx > 0) dayBtns[idx - 1].focus();
+          break;
+        case 'ArrowRight':
+          e.preventDefault();
+          if (idx < dayBtns.length - 1) dayBtns[idx + 1].focus();
+          break;
+        case 'ArrowUp':
+          e.preventDefault();
+          if (idx - 7 >= 0) dayBtns[idx - 7].focus();
+          break;
+        case 'ArrowDown':
+          e.preventDefault();
+          if (idx + 7 < dayBtns.length) dayBtns[idx + 7].focus();
+          break;
+        case 'Enter':
+        case ' ':
+        case 'Spacebar':
+          e.preventDefault();
+          document.activeElement.click();
+          break;
+        case 'Tab':
+          // Do nothing (handled elsewhere)
+          break;
+        default:
+          break;
+      }
+    }
+
+    // Set value, close picker
+    function selectDate(dateObj) {
+      selectedDate = dateObj;
+      dateInput.value = selectedDate.toISOString().slice(0, 10);
+      closeDatePicker();
+    }
+
+    // Form success simulation for accessibility
+    form.addEventListener('submit', function (e) {
+      e.preventDefault();
+      formSuccess.textContent = "Registration submitted successfully!";
+      formSuccess.className = "";
+      formSuccess.setAttribute('tabindex', '-1');
+      formSuccess.focus();
+      setTimeout(() => {
+        formSuccess.className = "visually-hidden";
+        formSuccess.removeAttribute('tabindex');
+      }, 3000);
+    });
+
+    // When picker is open, hitting Shift+Tab from input or Tab from last button should trap focus within the dialog
+    // (Basic focus trap included above)
+
+    // When user tabs to DOB input, clear aria-live region
+    dateInput.addEventListener('focus', function () {
+      formSuccess.textContent = '';
+    });
+  </script>
+</body>
+</html>
