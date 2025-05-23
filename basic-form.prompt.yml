@@ -3,7 +3,7 @@ messages:
     content: You are a developer.
   - role: user
     content: >-
-      Create a beautiful registration form in HTML and JavaScript. The
-      registration form is for a conference workshop.
-model: openai/gpt-4o
+      Create a beautiful registration form in HTML and JavaScript as a single
+      file. The registration form is for a conference workshop.
+model: mistral-ai/codestral-2501
 modelParameters: {}
