@@ -1,0 +1,6 @@
+messages:
+  - role: system
+    content: ''
+  - role: user
+    content: 'Find all WCAG issues in {{file}}.'
+model: openai/gpt-4o
