@@ -1,0 +1,459 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>My Retail Store</title>
+  <style>
+    /* Google Font */
+    @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap');
+
+    :root {
+      --primary: #007bff;
+      --secondary: #6c757d;
+      --light: #f8f9fa;
+      --dark: #343a40;
+      --white: #fff;
+      --gray: #dee2e6;
+      --radius: 6px;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Roboto', sans-serif;
+    }
+
+    body {
+      background: var(--light);
+      color: var(--dark);
+      line-height: 1.5;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    header {
+      background: var(--white);
+      border-bottom: 1px solid var(--gray);
+      position: sticky;
+      top: 0;
+      z-index: 10;
+    }
+
+    .container {
+      width: 90%;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    /* Nav */
+    .nav-wrapper {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 1rem 0;
+    }
+
+    .logo {
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: var(--primary);
+    }
+
+    nav {
+      display: flex;
+      align-items: center;
+    }
+
+    .menu {
+      list-style: none;
+      display: flex;
+      gap: 1.5rem;
+    }
+
+    .menu li {
+      position: relative;
+    }
+
+    .menu li > a {
+      padding: 0.5rem 0;
+      display: block;
+      font-weight: 500;
+    }
+
+    /* Dropdown */
+    .dropdown {
+      position: absolute;
+      top: 100%;
+      left: 0;
+      background: var(--white);
+      border: 1px solid var(--gray);
+      border-radius: var(--radius);
+      box-shadow: 0 4px 8px rgba(0,0,0,0.05);
+      opacity: 0;
+      visibility: hidden;
+      transform: translateY(10px);
+      transition: all 0.2s ease-in-out;
+      min-width: 180px;
+    }
+
+    .dropdown li {
+      padding: 0.5rem 1rem;
+      white-space: nowrap;
+    }
+
+    .menu li:hover .dropdown,
+    .menu li:focus-within .dropdown {
+      opacity: 1;
+      visibility: visible;
+      transform: translateY(0);
+    }
+
+    /* Search + Mobile */
+    .search-box {
+      position: relative;
+      margin-right: 1rem;
+    }
+
+    .search-box input {
+      padding: 0.5rem 2.5rem 0.5rem 0.75rem;
+      border: 1px solid var(--gray);
+      border-radius: var(--radius);
+    }
+
+    .search-box button {
+      position: absolute;
+      right: 0.25rem;
+      top: 50%;
+      transform: translateY(-50%);
+      border: none;
+      background: none;
+      cursor: pointer;
+      font-size: 1rem;
+      color: var(--secondary);
+    }
+
+    .hamburger {
+      display: none;
+      cursor: pointer;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .hamburger span {
+      width: 24px;
+      height: 3px;
+      background: var(--dark);
+      border-radius: 2px;
+    }
+
+    @media (max-width: 768px) {
+      .menu {
+        position: fixed;
+        top: 0; left: 0; bottom: 0;
+        background: var(--white);
+        flex-direction: column;
+        padding-top: 4rem;
+        gap: 1rem;
+        width: 240px;
+        transform: translateX(-260px);
+        transition: transform 0.3s ease;
+      }
+      .menu.open {
+        transform: translateX(0);
+      }
+      .hamburger {
+        display: flex;
+      }
+      .search-box {
+        display: none;
+      }
+    }
+
+    /* Hero */
+    .hero {
+      position: relative;
+      background: url('https://via.placeholder.com/1200x400') center/cover no-repeat;
+      height: 400px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--white);
+      text-shadow: 0 2px 6px rgba(0,0,0,0.4);
+    }
+
+    .hero h1 {
+      font-size: 2.5rem;
+      background: rgba(0,0,0,0.4);
+      padding: 1rem 2rem;
+      border-radius: var(--radius);
+    }
+
+    /* Sections */
+    section {
+      margin: 2rem 0;
+    }
+
+    h2 {
+      margin-bottom: 1rem;
+      color: var(--dark);
+    }
+
+    .grid {
+      display: grid;
+      gap: 1rem;
+    }
+
+    .products .grid {
+      grid-template-columns: repeat(auto-fill, minmax(200px,1fr));
+    }
+
+    .product-card {
+      background: var(--white);
+      border: 1px solid var(--gray);
+      border-radius: var(--radius);
+      overflow: hidden;
+      transition: transform 0.2s;
+    }
+    .product-card:hover {
+      transform: translateY(-4px);
+    }
+    .product-card img {
+      width: 100%;
+      display: block;
+    }
+    .product-card .info {
+      padding: 0.75rem;
+    }
+    .product-card .info h3 {
+      font-size: 1rem;
+      margin-bottom: 0.5rem;
+      font-weight: 500;
+    }
+    .product-card .info p {
+      font-size: 0.9rem;
+      color: var(--secondary);
+      margin-bottom: 0.75rem;
+    }
+    .product-card .info button {
+      background: var(--primary);
+      color: var(--white);
+      border: none;
+      padding: 0.5rem 0.75rem;
+      border-radius: var(--radius);
+      cursor: pointer;
+      width: 100%;
+    }
+
+    .articles .grid {
+      grid-template-columns: repeat(auto-fill, minmax(250px,1fr));
+    }
+
+    .article-card {
+      background: var(--white);
+      border: 1px solid var(--gray);
+      border-radius: var(--radius);
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      transition: transform 0.2s;
+    }
+    .article-card:hover {
+      transform: translateY(-4px);
+    }
+    .article-card img {
+      width: 100%;
+      display: block;
+      height: 140px;
+      object-fit: cover;
+    }
+    .article-card .content {
+      padding: 1rem;
+      flex: 1;
+    }
+    .article-card .content h4 {
+      margin-bottom: 0.5rem;
+      font-size: 1.1rem;
+    }
+    .article-card .content p {
+      font-size: 0.9rem;
+      color: var(--secondary);
+      margin-bottom: 1rem;
+    }
+    .article-card .content a {
+      color: var(--primary);
+      font-weight: 500;
+    }
+
+    /* Footer */
+    footer {
+      background: var(--dark);
+      color: var(--light);
+      padding: 2rem 0;
+      font-size: 0.9rem;
+    }
+    footer .footer-cols {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 2rem;
+    }
+    footer .col {
+      flex: 1;
+      min-width: 150px;
+    }
+    footer a {
+      color: var(--light);
+    }
+    footer .socials a {
+      margin-right: 0.5rem;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="container nav-wrapper">
+      <div class="logo">ShopEase</div>
+      <div class="search-box">
+        <input type="text" placeholder="Search products..." />
+        <button>&#128269;</button>
+      </div>
+      <div class="hamburger" id="hamburger">
+        <span></span><span></span><span></span>
+      </div>
+      <nav>
+        <ul class="menu" id="menu">
+          <li><a href="#">Home</a></li>
+          <li tabindex="0">
+            <a href="#">Shop</a>
+            <ul class="dropdown">
+              <li><a href="#">Men</a></li>
+              <li><a href="#">Women</a></li>
+              <li><a href="#">Kids</a></li>
+              <li><a href="#">Accessories</a></li>
+            </ul>
+          </li>
+          <li tabindex="0">
+            <a href="#">Brands</a>
+            <ul class="dropdown">
+              <li><a href="#">Brand A</a></li>
+              <li><a href="#">Brand B</a></li>
+              <li><a href="#">Brand C</a></li>
+              <li><a href="#">Brand D</a></li>
+            </ul>
+          </li>
+          <li><a href="#">Sale</a></li>
+          <li><a href="#">Contact</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <div class="hero">
+    <h1>Discover Your Style</h1>
+  </div>
+
+  <main class="container">
+    <!-- Products Section -->
+    <section class="products">
+      <h2>Featured Products</h2>
+      <div class="grid" id="products-grid">
+        <!-- product cards injected by JS -->
+      </div>
+    </section>
+
+    <!-- Articles Section -->
+    <section class="articles">
+      <h2>From Our Blog</h2>
+      <div class="grid" id="articles-grid">
+        <!-- article cards injected by JS -->
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="container footer-cols">
+      <div class="col">
+        <h4>About ShopEase</h4>
+        <p>Your one-stop shop for the latest trends in fashion and lifestyle.</p>
+      </div>
+      <div class="col">
+        <h4>Quick Links</h4>
+        <ul>
+          <li><a href="#">Shop</a></li>
+          <li><a href="#">Brands</a></li>
+          <li><a href="#">Sale</a></li>
+          <li><a href="#">Contact</a></li>
+        </ul>
+      </div>
+      <div class="col socials">
+        <h4>Follow Us</h4>
+        <a href="#">&#x1F30E; Facebook</a><br />
+        <a href="#">&#x1F426; Twitter</a><br />
+        <a href="#">&#x1F4F7; Instagram</a>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    // Toggle mobile menu
+    const hamburger = document.getElementById('hamburger');
+    const menu = document.getElementById('menu');
+    hamburger.addEventListener('click', () => {
+      menu.classList.toggle('open');
+    });
+
+    // Sample data
+    const products = [
+      { name: 'Classic Tee', price: '$25.00', img: 'https://via.placeholder.com/400x300?text=Tee' },
+      { name: 'Stylish Jacket', price: '$78.00', img: 'https://via.placeholder.com/400x300?text=Jacket' },
+      { name: 'Running Shoes', price: '$120.00', img: 'https://via.placeholder.com/400x300?text=Shoes' },
+      { name: 'Leather Bag', price: '$150.00', img: 'https://via.placeholder.com/400x300?text=Bag' },
+      { name: 'Smart Watch', price: '$200.00', img: 'https://via.placeholder.com/400x300?text=Watch' },
+      { name: 'Sunglasses', price: '$45.00', img: 'https://via.placeholder.com/400x300?text=Shades' },
+      { name: 'Jeans', price: '$60.00', img: 'https://via.placeholder.com/400x300?text=Jeans' },
+      { name: 'Hat Collection', price: '$30.00', img: 'https://via.placeholder.com/400x300?text=Hat' },
+    ];
+
+    const articles = [
+      { title: 'Summer Fashion Trends 2024', desc: 'Explore the hottest summer looks...', img: 'https://via.placeholder.com/400x300?text=Summer' },
+      { title: 'How to Accessorize', desc: 'Tips for the perfect finishing touch...', img: 'https://via.placeholder.com/400x300?text=Accessory' },
+      { title: 'Best Running Shoes Reviewed', desc: 'We put top models to the test...', img: 'https://via.placeholder.com/400x300?text=Shoes' },
+      { title: 'Wardrobe Essentials', desc: 'Must-have pieces for every season...', img: 'https://via.placeholder.com/400x300?text=Wardrobe' },
+    ];
+
+    // Render product cards
+    const prodGrid = document.getElementById('products-grid');
+    products.forEach(p => {
+      const card = document.createElement('div');
+      card.className = 'product-card';
+      card.innerHTML = `
+        <img src="${p.img}" alt="${p.name}" />
+        <div class="info">
+          <h3>${p.name}</h3>
+          <p>${p.price}</p>
+          <button>Add to Cart</button>
+        </div>`;
+      prodGrid.appendChild(card);
+    });
+
+    // Render article cards
+    const artGrid = document.getElementById('articles-grid');
+    articles.forEach(a => {
+      const card = document.createElement('div');
+      card.className = 'article-card';
+      card.innerHTML = `
+        <img src="${a.img}" alt="${a.title}" />
+        <div class="content">
+          <h4>${a.title}</h4>
+          <p>${a.desc}</p>
+          <a href="#">Read More →</a>
+        </div>`;
+      artGrid.appendChild(card);
+    });
+  </script>
+</body>
+</html>
