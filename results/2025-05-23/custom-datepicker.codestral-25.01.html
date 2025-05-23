@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Registration Form</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f8ff;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+        .container {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            width: 300px;
+        }
+        .container h2 {
+            margin-bottom: 20px;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+        }
+        .form-group input {
+            width: 100%;
+            padding: 8px;
+            box-sizing: border-box;
+        }
+        .form-group .date-picker {
+            position: relative;
+        }
+        .form-group .date-picker input {
+            cursor: pointer;
+        }
+        .form-group .date-picker .calendar {
+            display: none;
+            position: absolute;
+            background-color: #fff;
+            border: 1px solid #ccc;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            z-index: 1000;
+        }
+        .form-group .date-picker .calendar table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        .form-group .date-picker .calendar table td {
+            padding: 5px;
+            text-align: center;
+            cursor: pointer;
+        }
+        .form-group .date-picker .calendar table td:hover {
+            background-color: #f0f0f0;
+        }
+        .form-group .date-picker .calendar table th {
+            padding: 5px;
+            text-align: center;
+        }
+        .form-group .date-picker .calendar .prev,
+        .form-group .date-picker .calendar .next {
+            cursor: pointer;
+            padding: 5px;
+        }
+        .form-group .date-picker .calendar .prev:hover,
+        .form-group .date-picker .calendar .next:hover {
+            background-color: #f0f0f0;
+        }
+        .submit-btn {
+            width: 100%;
+            padding: 10px;
+            background-color: #28a745;
+            color: #fff;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        .submit-btn:hover {
+            background-color: #218838;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>User Registration</h2>
+        <form id="registrationForm">
+            <div class="form-group">
+                <label for="username">Username</label>
+                <input type="text" id="username" name="username" required>
+            </div>
+            <div class="form-group">
+                <label for="email">Email</label>
+                <input type="email" id="email" name="email" required>
+            </div>
+            <div class="form-group">
+                <label for="password">Password</label>
+                <input type="password" id="password" name="password" required>
+            </div>
+            <div class="form-group">
+                <label for="dob">Date of Birth</label>
+                <div class="date-picker">
+                    <input type="text" id="dob" name="dob" readonly required>
+                    <div class="calendar" id="calendar">
+                        <div class="header">
+                            <span class="prev" onclick="changeMonth(-1)">&#9664;</span>
+                            <span id="monthYear"></span>
+                            <span class="next" onclick="changeMonth(1)">&#9654;</span>
+                        </div>
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Sun</th>
+                                    <th>Mon</th>
+                                    <th>Tue</th>
+                                    <th>Wed</th>
+                                    <th>Thu</th>
+                                    <th>Fri</th>
+                                    <th>Sat</th>
+                                </tr>
+                            </thead>
+                            <tbody id="calendarBody">
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <button type="submit" class="submit-btn">Register</button>
+        </form>
+    </div>
+    <script>
+        const inputDate = document.getElementById('dob');
+        const calendar = document.getElementById('calendar');
+        const monthYear = document.getElementById('monthYear');
+        const calendarBody = document.getElementById('calendarBody');
+        let currentDate = new Date();
+
+        function showCalendar() {
+            renderCalendar(currentDate);
+            calendar.style.display = 'block';
+        }
+
+        function hideCalendar() {
+            calendar.style.display = 'none';
+        }
+
+        function renderCalendar(date) {
+            const year = date.getFullYear();
+            const month = date.getMonth();
+            const firstDay = new Date(year, month, 1);
+            const lastDay = new Date(year, month + 1, 0);
+            const daysInMonth = lastDay.getDate();
+            const startingDay = firstDay.getDay();
+
+            monthYear.textContent = `${monthNames[month]} ${year}`;
+            calendarBody.innerHTML = '';
+
+            let day = 1;
+            for (let i = 0; i < 6; i++) {
+                const row = document.createElement('tr');
+                for (let j = 0; j < 7; j++) {
+                    if (i === 0 && j < startingDay) {
+                        const cell = document.createElement('td');
+                        row.appendChild(cell);
+                    } else if (day > daysInMonth) {
+                        break;
+                    } else {
+                        const cell = document.createElement('td');
+                        cell.textContent = day;
+                        cell.addEventListener('click', () => {
+                            const selectedDate = new Date(year, month, day);
+                            inputDate.value = `${selectedDate.getFullYear()}-${String(selectedDate.getMonth() + 1).padStart(2, '0')}-${String(selectedDate.getDate()).padStart(2, '0')}`;
+                            hideCalendar();
+                        });
+                        row.appendChild(cell);
+                        day++;
+                    }
+                }
+                calendarBody.appendChild(row);
+            }
+        }
+
+        function changeMonth(change) {
+            currentDate.setMonth(currentDate.getMonth() + change);
+            renderCalendar(currentDate);
+        }
+
+        inputDate.addEventListener('focus', showCalendar);
+        document.addEventListener('click', (event) => {
+            if (!calendar.contains(event.target) && event.target !== inputDate) {
+                hideCalendar();
+            }
+        });
+
+        const monthNames = [
+            'January', 'February', 'March', 'April', 'May', 'June',
+            'July', 'August', 'September', 'October', 'November', 'December'
+        ];
+
+        document.getElementById('registrationForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+            alert('Form submitted successfully!');
+            // Add your form submission logic here
+        });
+    </script>
+</body>
+</html>
