@@ -23,8 +23,8 @@ Goal: Have the AI create a basic form. The AI is specifically NOT prompted about
 
 | Model | sentiment | # axe errors | output | notes |
 | --- | --- | --- | --- | --- |
-| GPT 4.1 | 🚫 Fail | 0 | [output](/results/2025-05-23/basic-form.gpt4.1.html) | No h1 (but this doesn't fail WCAG). No focus indicator for checkboxes. Checkboxes are misaligned (not a WCAG failure). Error text is not programmatically associated with form controls. Etc. |
-| o4-mini | 🚫 Fail | 1 | [output](/results/2025-05-23/basic-form.gpt-o4-mini.html) | 1 color contrast issue found for the submit button.  No h1 (but this doesn't fail WCAG). No focus indicator for checkboxes or radio buttons. Error text is not programmatically associated with form controls. Etc. |
+| GPT 4.1 | 🚫 Fail | 0 | [output](/results/2025-05-23/basic-form.gpt4.1.html) - [preview](https://html-preview.github.io/?url=https://github.com/mfairchild365/a11y-models-playground/blob/main/results/2025-05-23/basic-form.gpt4.1.html) | No h1 (but this doesn't fail WCAG). No focus indicator for checkboxes. Checkboxes are misaligned (not a WCAG failure). Error text is not programmatically associated with form controls. Etc. |
+| o4-mini | 🚫 Fail | 1 | [output](/results/2025-05-23/basic-form.gpt-o4-mini.html) - [preview](https://html-preview.github.io/?url=https://github.com/mfairchild365/a11y-models-playground/blob/main/results/2025-05-23/basic-form.gpt-o4-mini.html) | 1 color contrast issue found for the submit button.  No h1 (but this doesn't fail WCAG). No focus indicator for checkboxes or radio buttons. Error text is not programmatically associated with form controls. Etc. |
 
 
 ## Prompt 2: [custom-datepicker.prompt.yml](https://github.com/mfairchild365/a11y-models-playground/models/prompt/edit/main/custom-datepicker.prompt.yml)
@@ -38,8 +38,8 @@ Goal: Have the AI create a complex custom date picker. This will help to test th
 
 | Model | sentiment | # axe errors | output | notes |
 | --- | --- | --- | --- | --- |
-| GPT 4.1 | 🚫 Fail | 0 | [output](/results/2025-05-23/custom-datepicker.gpt-4.1.html) | No h1 (but this doesn't fail WCAG). Date picker table/grid is missing table/grid semantics (no header/row associations). The date picker is technically keyboard accessible, but is far from optimal. For example, it doesn't support arrow navigation, it doesn't close on escape, etc. |
-| o4-mini | 🚫 Fail | 1 | [output](/results/2025-05-23/custom-datepicker.o4-mini.html) |  1 color contrast issue found for the submit button. No h1 (but this doesn't fail WCAG). Date picker doesn't work for anyone - it's not even mouse accessible. |
+| GPT 4.1 | 🚫 Fail | 0 | [output](/results/2025-05-23/custom-datepicker.gpt-4.1.html) - [preview](https://html-preview.github.io/?url=https://github.com/mfairchild365/a11y-models-playground/blob/main/results/2025-05-23/custom-datepicker.gpt-4.1.html)  | No h1 (but this doesn't fail WCAG). Date picker table/grid is missing table/grid semantics (no header/row associations). The date picker is technically keyboard accessible, but is far from optimal. For example, it doesn't support arrow navigation, it doesn't close on escape, etc. |
+| o4-mini | 🚫 Fail | 1 | [output](/results/2025-05-23/custom-datepicker.o4-mini.html) - [preview](https://html-preview.github.io/?url=https://github.com/mfairchild365/a11y-models-playground/blob/main/results/2025-05-23/custom-datepicker.o4-mini.html)  |  1 color contrast issue found for the submit button. No h1 (but this doesn't fail WCAG). Date picker doesn't work for anyone - it's not even mouse accessible. |
 
 
 ## Prompt 3: [analyze-datepicker.prompt.yml](https://github.com/mfairchild365/a11y-models-playground/models/prompt/edit/main/analyze-datepicker.prompt.yml)
@@ -69,8 +69,8 @@ Goal: Have the identify and fix accessibility bugs. This will help to show how c
 
 | Model | sentiment | # axe errors | output | notes |
 | --- | --- | --- | --- | --- |
-| GPT 4.1 | 🚫 Fail | 55 | [output](/results/2025-05-23/site-with-nav.gpt-4.1.html) | Many issues were found, including contrast issues and color alone to identify links. Search button is missing an acc name. Not all menu items are keyboard navigable. Decorative images are given alt text. Read more links are not clear out of context. No way to bypass blocks. Etc.  |
-| o4-mini | 🚫 Fail | --- | [output](/results/2025-05-23/site-with-nav.o4-mini.html) | Many issues were found, including contrast issues and color alone to identify links. Search button is missing an understandable acc name (icon is used). Some menu items have two tab stops. Decorative images are given alt text. Read more links are not clear out of context. No way to bypass blocks.  Etc. |
+| GPT 4.1 | 🚫 Fail | 55 | [output](/results/2025-05-23/site-with-nav.gpt-4.1.html) - [preview](https://html-preview.github.io/?url=https://github.com/mfairchild365/a11y-models-playground/blob/main/results/2025-05-23/site-with-nav.gpt-4.1.html)  | Many issues were found, including contrast issues and color alone to identify links. Search button is missing an acc name. Not all menu items are keyboard navigable. Decorative images are given alt text. Read more links are not clear out of context. No way to bypass blocks. Etc.  |
+| o4-mini | 🚫 Fail | --- | [output](/results/2025-05-23/site-with-nav.o4-mini.html) - [preview](https://html-preview.github.io/?url=https://github.com/mfairchild365/a11y-models-playground/blob/main/results/2025-05-23/site-with-nav.o4-mini.html)  | Many issues were found, including contrast issues and color alone to identify links. Search button is missing an understandable acc name (icon is used). Some menu items have two tab stops. Decorative images are given alt text. Read more links are not clear out of context. No way to bypass blocks.  Etc. |
 
 
 ## Prompt 5: [fix-datepicker.prompt.yml](https://github.com/mfairchild365/a11y-models-playground/models/prompt/edit/main/fix-datepicker.prompt.yml)
@@ -83,7 +83,7 @@ You are a Subject Matter Expert and developer in accessibility with a deep knowl
 
 | Model | sentiment | # axe errors | output | notes |
 | --- | --- | --- | --- | --- |
-| GPT 4.1 | 🚫 Fail, but it did improve results | 3 | [output](/results/2025-05-23/fix-datepicker.gpt-4.1.md) | aria-expanded is not allowed on input. Submit button fails contrast. Date picker is keyboard accessible and supports esc, arrow keys. But the date picker table/grid is still missing table/grid structure. Etc. |
-| o4-mini | 🚫 Fail | 9 | [output](/results/2025-05-23/fix-datepicker.o4-mini.md) | aria-expanded is not allowed on input. Submit button fails contrast. Can't open datepicker with keyboard. Date picker table/grid is still missing table/grid structure. After opening with mouse, the date picker doesn't support arrow key navigation (just tab key). Missing landmarks. Etc. |
+| GPT 4.1 | 🚫 Fail, but it did improve results | 3 | [output](/results/2025-05-23/fix-datepicker.gpt-4.1.html) - [preview](https://html-preview.github.io/?url=https://github.com/mfairchild365/a11y-models-playground/blob/main/results/2025-05-23/fix-datepicker.gpt-4.1.html)  | aria-expanded is not allowed on input. Submit button fails contrast. Date picker is keyboard accessible and supports esc, arrow keys. But the date picker table/grid is still missing table/grid structure. Etc. |
+| o4-mini | 🚫 Fail | 9 | [output](/results/2025-05-23/fix-datepicker.o4-mini.html) - [preview](https://html-preview.github.io/?url=https://github.com/mfairchild365/a11y-models-playground/blob/main/results/2025-05-23/fix-datepicker.o4-mini.html)  | aria-expanded is not allowed on input. Submit button fails contrast. Can't open datepicker with keyboard. Date picker table/grid is still missing table/grid structure. After opening with mouse, the date picker doesn't support arrow key navigation (just tab key). Missing landmarks. Etc. |
 
 
