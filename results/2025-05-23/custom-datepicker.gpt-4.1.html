@@ -1,0 +1,373 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>User Registration Form</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        body {
+            font-family: 'Segoe UI', Verdana, Geneva, Tahoma, sans-serif;
+            background: linear-gradient(135deg, #4e54c8 30%, #8f94fb 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .registration-container {
+            background: #fff;
+            padding: 2.5rem 2rem 2rem 2rem;
+            border-radius: 15px;
+            box-shadow: 0 10px 24px rgba(50, 50, 93, 0.1);
+            width: 380px;
+            max-width: 96vw;
+        }
+        .registration-container h2 {
+            text-align: center;
+            color: #4e54c8;
+            margin-bottom: 1.2rem;
+        }
+        .form-group {
+            margin-bottom: 1.1rem;
+        }
+        label {
+            display: block;
+            margin-bottom: 0.4rem;
+            color: #444;
+            font-weight: 500;
+        }
+        input[type="text"], input[type="email"], input[type="password"], .datepicker-input {
+            width: 100%;
+            padding: 0.62rem;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            font-size: 1rem;
+            background: #f7f7fa;
+            transition: border 0.2s;
+        }
+        input:focus, .datepicker-input:focus {
+            border-color: #6c70d6;
+            outline: none;
+        }
+        .btn {
+            width: 100%;
+            margin-top: 0.5rem;
+            background: linear-gradient(90deg, #4e54c8, #8f94fb);
+            color: #fff;
+            border: none;
+            border-radius: 6px;
+            padding: 0.85rem;
+            font-size: 1rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background 0.2s;
+            letter-spacing: 0.5px;
+        }
+        .btn:hover {
+            background: linear-gradient(90deg, #6c70d6, #8f94fb);
+        }
+        .datepicker-container {
+            position: relative;
+        }
+        .datepicker-popup {
+            position: absolute;
+            z-index: 5;
+            top: 110%; left: 0;
+            background: #fff;
+            border: 1px solid #ececec;
+            border-radius: 10px;
+            box-shadow: 0 4px 16px rgba(70,80,130,0.15);
+            padding: 1rem;
+            margin-top: 4px;
+            width: 270px;
+            font-size: 0.97rem;
+            display: none;
+        }
+        .datepicker-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 0.5rem;
+        }
+        .datepicker-arrow {
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-size: 1.25rem;
+            color: #4e54c8;
+        }
+        .datepicker-title {
+            font-weight: 600;
+            color: #444;
+            letter-spacing: 0.5px;
+        }
+        .datepicker-calendar {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 3px;
+        }
+        .datepicker-calendar .day, .datepicker-calendar .date {
+            text-align: center;
+            padding: 6px 0;
+        }
+        .datepicker-calendar .day {
+            font-size: 0.93em;
+            font-weight: 600;
+            color: #757575;
+        }
+        .datepicker-calendar .date {
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-size: 0.97em;
+            color: #444;
+            border-radius: 5px;
+            transition: background 0.16s;
+        }
+        .datepicker-calendar .date:hover {
+            background: #e3e5fc;
+        }
+        .datepicker-calendar .today {
+            border: 1.5px solid #4e54c8;
+            background: #f6f8fe;
+        }
+        .datepicker-calendar .selected {
+            background: linear-gradient(90deg, #4e54c8, #8f94fb);
+            color: #fff;
+        }
+        .error-msg {
+            color: #de281b;
+            font-size: 0.95rem;
+            margin-top: -0.7rem;
+            margin-bottom: 0.7rem;
+        }
+        @media (max-width:500px) {
+            .registration-container { padding: 1.2rem 0.7rem 1.4rem 0.7rem; }
+            .datepicker-popup { width: 96vw; min-width: 240px;}
+        }
+    </style>
+</head>
+<body>
+    <div class="registration-container">
+        <h2>User Registration</h2>
+        <form id="registrationForm" autocomplete="off">
+            <div class="form-group">
+                <label for="username">Username</label>
+                <input required type="text" id="username" name="username" autocomplete="username">
+            </div>
+            <div class="form-group">
+                <label for="email">Email Address</label>
+                <input required type="email" id="email" name="email" autocomplete="email">
+            </div>
+            <div class="form-group">
+                <label for="password">Password</label>
+                <input required type="password" id="password" name="password" autocomplete="new-password">
+            </div>
+            <div class="form-group">
+                <label for="dob">Date of Birth</label>
+                <div class="datepicker-container">
+                    <input required type="text" id="dob" name="dob" class="datepicker-input" placeholder="Select your date of birth" readonly>
+                    <div id="datepicker" class="datepicker-popup"></div>
+                </div>
+            </div>
+            <div class="error-msg" id="formError" style="display:none;"></div>
+            <button class="btn" type="submit">Register</button>
+        </form>
+    </div>
+    <!-- Date picker JS -->
+    <script>
+    (function(){
+        // Helper functions
+        function pad(n){ return n<10?'0'+n:''+n; }
+
+        // Datepicker logic with minimal dependencies
+        class CustomDatepicker {
+            constructor(inputId, popupId) {
+                this.input = document.getElementById(inputId);
+                this.popup = document.getElementById(popupId);
+
+                // Set min/max years for DOB purpose
+                this.minYear = 1900;
+                let today = new Date();
+                this.maxYear = today.getFullYear(); // up to current year
+
+                // Initial view month/year (defaults to 20 years ago)
+                this.selectedDate = null;
+                let def = new Date();
+                def.setFullYear(def.getFullYear() - 20);
+                this.viewMonth = def.getMonth();
+                this.viewYear = def.getFullYear();
+
+                // show popup events
+                this.input.addEventListener('focus', () => this.show());
+                this.input.addEventListener('click', () => this.show());
+
+                // Hide on outside click
+                document.addEventListener('mousedown', (e) => {
+                    if (!this.popup.contains(e.target) && e.target !== this.input)
+                        this.hide();
+                });
+
+                window.addEventListener('resize', ()=>this.position());
+
+                this.render();
+            }
+
+            show() {
+                this.popup.style.display = 'block';
+                this.position();
+                this.render();
+            }
+            hide() {
+                this.popup.style.display = 'none';
+            }
+            position() {
+                const rect = this.input.getBoundingClientRect();
+                this.popup.style.left = '0px'; // default absolute
+                this.popup.style.top = '110%';
+            }
+
+            setSelected(date) {
+                this.selectedDate = new Date(date);
+                // Display as YYYY-MM-DD
+                this.input.value = date.toISOString().slice(0,10);
+                this.hide();
+            }
+
+            render() {
+                // Generate header (month/year switch)
+                let html = '';
+                html += `<div class="datepicker-header">
+                            <button class="datepicker-arrow" id="dp_prev_month" title="Previous Month">&#8592;</button>
+                            <span class="datepicker-title">${this.monthName(this.viewMonth)} ${this.viewYear}</span>
+                            <button class="datepicker-arrow" id="dp_next_month" title="Next Month">&#8594;</button>
+                         </div>`;
+                // Days of week
+                const days = ['Su','Mo','Tu','We','Th','Fr','Sa'];
+                html += `<div class="datepicker-calendar">`;
+                for(let d=0;d<7;d++) {
+                    html += `<div class="day">${days[d]}</div>`;
+                }
+                // Dates
+                let first = new Date(this.viewYear, this.viewMonth, 1);
+                let startDay = first.getDay();
+                let daysInMonth = new Date(this.viewYear, this.viewMonth+1, 0).getDate();
+
+                // today
+                let today = new Date();
+                let isThisMonth = (today.getFullYear() == this.viewYear && today.getMonth() == this.viewMonth);
+
+                // Pre-fill blanks
+                for(let d=0;d<startDay;d++) html += '<div></div>';
+
+                for(let date=1;date<=daysInMonth;date++) {
+                    let current = new Date(this.viewYear, this.viewMonth, date);
+
+                    let classes = ['date'];
+                    // Selected?
+                    if (this.selectedDate &&
+                        this.selectedDate.getFullYear() == this.viewYear &&
+                        this.selectedDate.getMonth() == this.viewMonth &&
+                        this.selectedDate.getDate() == date)
+                        classes.push('selected');
+                    // Today?
+                    if (isThisMonth && today.getDate()==date)
+                        classes.push('today');
+
+                    // Limit future dates (for DOB)
+                    let future = current > today;
+                    let min = this.viewYear < this.minYear;
+
+                    html += `<button type="button"
+                        class="${classes.join(' ')}"
+                        data-day="${date}"
+                        ${future?'disabled':''}
+                        >${date}</button>`;
+                }
+                html += `</div>`;
+
+                this.popup.innerHTML = html;
+
+                // Month change events
+                this.popup.querySelector("#dp_prev_month").onclick = () => {
+                    // Go to previous month, respect minYear
+                    if (this.viewMonth == 0) {
+                        if(this.viewYear > this.minYear) {
+                          this.viewMonth = 11; this.viewYear--;
+                        }
+                    } else this.viewMonth--;
+                    this.render();
+                };
+                this.popup.querySelector("#dp_next_month").onclick = () => {
+                    // Next month, cannot go to future
+                    let today = new Date();
+                    if (this.viewYear > today.getFullYear() ||
+                        (this.viewYear === today.getFullYear() && this.viewMonth >= today.getMonth())) {
+                        return;
+                    }
+                    if (this.viewMonth == 11) { this.viewMonth = 0; this.viewYear++; }
+                    else this.viewMonth++;
+                    // If in future (month/year too far), revert.
+                    let t = new Date(this.viewYear, this.viewMonth+1, 0);
+                    if (t > today) { this.viewMonth = today.getMonth(); this.viewYear = today.getFullYear(); }
+                    this.render();
+                };
+                // Date click: Delegate by selector
+                let dates = this.popup.querySelectorAll(".datepicker-calendar .date");
+                dates.forEach(btn=>{
+                    if(!btn.disabled) {
+                        btn.onclick = ()=>{
+                            let selDay = +btn.dataset.day;
+                            let dt = new Date(this.viewYear, this.viewMonth, selDay);
+                            this.setSelected(dt);
+                        }
+                    }
+                });
+            }
+            monthName(n) {
+                return ['January','February','March','April','May','June','July','August','September','October','November','December'][n];
+            }
+        }
+
+        // Activate the custom datepicker
+        const dobPicker = new CustomDatepicker('dob', 'datepicker');
+
+        // Form validation & submission
+        const regForm = document.getElementById('registrationForm');
+        const formError = document.getElementById('formError');
+        regForm.addEventListener('submit', function(e){
+            e.preventDefault();
+            // Simple validation
+            let username = regForm.username.value.trim();
+            let email = regForm.email.value.trim();
+            let password = regForm.password.value;
+            let dob = regForm.dob.value;
+            let errorMsg = "";
+
+            if(username.length<3) errorMsg="Username must be at least 3 characters long.";
+            else if(!/\S+@\S+\.\S+/.test(email)) errorMsg="Please enter a valid email address.";
+            else if(password.length<6) errorMsg="Password must be at least 6 characters.";
+            else if(!/^\d{4}-\d{2}-\d{2}$/.test(dob)) errorMsg="Please pick a valid date of birth.";
+            else {
+                // Check DOB is not in the future and reasonable (>= minYear)
+                let dobDate = new Date(dob);
+                let today = new Date();
+                if(dobDate > today) errorMsg="Date of birth cannot be in the future.";
+                else if(dobDate.getFullYear()<1900) errorMsg="Year of birth should be 1900 or later.";
+            }
+            if(errorMsg) {
+                formError.textContent = errorMsg;
+                formError.style.display = '';
+                return;
+            }
+            formError.style.display = 'none';
+            // In real app, send to server (simulate success):
+            alert("Registered successfully!\nWelcome, " + username +"!");
+            regForm.reset();
+            dobPicker.selectedDate=null;
+            dobPicker.input.value="";
+        });
+
+    })();
+    </script>
+</body>
+</html>
