@@ -1,0 +1,8 @@
+messages:
+  - role: system
+    content: ''
+  - role: user
+    content: >-
+      Create a beautiful HTML / JavaScript user registration form. The form must
+      include a custom JavaScript Date picker. Output this as a single file.
+model: openai/gpt-4o
