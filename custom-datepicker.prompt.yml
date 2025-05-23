@@ -1,6 +1,6 @@
 messages:
   - role: system
-    content: ''
+    content: You are a developer.
   - role: user
     content: >-
       Create a beautiful HTML / JavaScript user registration form. The form must
