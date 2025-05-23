@@ -1,6 +1,6 @@
 messages:
   - role: system
-    content: You are a helpful assistant that breaks down action items from a meeting
+    content: You are a developer.
   - role: user
     content: >-
       Create a beautiful registration form in HTML and JavaScript. The
