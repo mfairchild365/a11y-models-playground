@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <!-- Basic Styling -->
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f4f4f9;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+    }
+    .form-container {
+      background: #fff;
+      padding: 20px 30px;
+      border-radius: 10px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+      max-width: 400px;
+      width: 100%;
+    }
+    h2 {
+      text-align: center;
+      color: #ababab;
+    }
+    .form-group {
+      margin-bottom: 15px;
+    }
+    label {
+      display: block;
+      margin-bottom: 5px;
+      font-weight: bold;
+    }
+    input {
+      width: 100%;
+      padding: 10px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+    }
+    input[type="submit"] {
+      background-color: #5cb85c;
+      color: white;
+      border: none;
+      cursor: pointer;
+    }
+    input[type="submit"]:hover {
+      background-color: #4cae4c;
+    }
+    /* Custom Date Picker Styles */
+    #datepicker-container {
+      position: relative;
+    }
+    #datepicker {
+      position: absolute;
+      top: 100%;
+      left: 0;
+      background: #fff;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      z-index: 1000;
+      display: none;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+    .datepicker-grid {
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      text-align: center;
+      padding: 10px;
+    }
+    .datepicker-header {
+      text-align: center;
+      font-size: 16px;
+      margin: 10px 0;
+    }
+    .datepicker-header button {
+      background: none;
+      border: none;
+      cursor: pointer;
+      font-size: 18px;
+    }
+    .datepicker-day {
+      padding: 8px;
+      cursor: pointer;
+      border-radius: 50%;
+    }
+    .datepicker-day:hover {
+      background-color: #f0f0f0;
+    }
+    .datepicker-day.disabled {
+      color: #ccc;
+      pointer-events: none;
+    }
+    .datepicker-day.selected {
+      background-color: #5cb85c;
+      color: white;
+    }
+  </style>
+</head>
+<body>
+  <div class="form-container">
+    <h2>User Registration</h2>
+    <form id="registrationForm">
+      <div class="form-group">
+        <span>Username:</label>
+        <input type="text" name="username" required>
+      </div>
+      <div class="form-group">
+        <input type="email" name="email" required placeholder="email">
+      </div>
+      <div class="form-group">
+        <label for="dob">Date of Birth:</label>
+        <div id="datepicker-container">
+          <input tabindex=1 type="text" id="dob" name="dob" readonly placeholder="Select your date">
+          <div id="datepicker"></div>
+        </div>
+      </div>
+      <div class="form-group">
+        <input type="submit" value="Register">
+      </div>
+    </form>
+  </div>
+
+  <script>
+    // Custom JavaScript Date Picker
+    const dateInput = document.getElementById('dob');
+    const datePicker = document.getElementById('datepicker');
+    const datePickerContainer = document.getElementById('datepicker-container');
+    const today = new Date();
+
+    // Helper function to generate the calendar
+    function renderDatePicker(year, month) {
+      datePicker.innerHTML = ''; // Clear existing content
+
+      const header = document.createElement('div');
+      header.classList.add('datepicker-header');
+
+      // Navigation buttons and month/year display
+      const prevButton = document.createElement('button');
+      prevButton.textContent = '<';
+      prevButton.addEventListener('click', () => renderDatePicker(year, month - 1));
+
+      const nextButton = document.createElement('button');
+      nextButton.textContent = '>';
+      nextButton.addEventListener('click', () => renderDatePicker(year, month + 1));
+
+      const monthYear = document.createElement('span');
+      const monthNames = [
+        'January', 'February', 'March', 'April',
+        'May', 'June', 'July', 'August',
+        'September', 'October', 'November', 'December'
+      ];
+      monthYear.textContent = `${monthNames[month]} ${year}`;
+
+      header.appendChild(prevButton);
+      header.appendChild(monthYear);
+      header.appendChild(nextButton);
+      datePicker.appendChild(header);
+
+      // Grid for days of the week
+      const daysOfWeek = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+      const grid = document.createElement('div');
+      grid.classList.add('datepicker-grid');
+
+      daysOfWeek.forEach(day => {
+        const dayElement = document.createElement('div');
+        dayElement.textContent = day;
+        dayElement.style.fontWeight = 'bold';
+        grid.appendChild(dayElement);
+      });
+
+      // Get the first day of the month and total days in the month
+      const firstDay = new Date(year, month, 1).getDay();
+      const daysInMonth = new Date(year, month + 1, 0).getDate();
+
+      // Add blank days before the first day
+      for (let i = 0; i < firstDay; i++) {
+        const blank = document.createElement('div');
+        grid.appendChild(blank);
+      }
+
+      // Add days of the month
+      for (let day = 1; day <= daysInMonth; day++) {
+        const dayElement = document.createElement('div');
+        dayElement.textContent = day;
+        dayElement.classList.add('datepicker-day');
+
+        // Highlight today
+        if (year === today.getFullYear() && month === today.getMonth() && day === today.getDate()) {
+          dayElement.classList.add('selected');
+        }
+
+        // Add click event to select a date
+        dayElement.addEventListener('click', () => {
+          dateInput.value = `${year}-${String(month + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
+          datePicker.style.display = 'none'; // Hide date picker
+        });
+
+        grid.appendChild(dayElement);
+      }
+
+      datePicker.appendChild(grid);
+    }
+
+    // Show or hide the date picker
+    dateInput.addEventListener('click', () => {
+      datePicker.style.display = datePicker.style.display === 'block' ? 'none' : 'block';
+      renderDatePicker(today.getFullYear(), today.getMonth()); // Default to this month
+    });
+
+    // Close date picker when clicking outside
+    document.addEventListener('click', (e) => {
+      if (!datePickerContainer.contains(e.target)) {
+        datePicker.style.display = 'none';
+      }
+    });
+  </script>
+</body>
+</html>
