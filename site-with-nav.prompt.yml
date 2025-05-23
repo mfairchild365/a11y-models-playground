@@ -1,6 +1,6 @@
 messages:
   - role: system
-    content: ''
+    content: You are a developer
   - role: user
     content: >-
       Create a beautiful home page for a retail website in HTML and Javascript
