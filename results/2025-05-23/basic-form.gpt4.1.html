@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Conference Workshop Registration</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap');
+    body {
+      background: linear-gradient(120deg, #7f8ff4 0%, #56eade 100%);
+      font-family: 'Roboto', Arial, sans-serif;
+      min-height: 100vh;
+      margin: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .container {
+      background: #fff;
+      border-radius: 16px;
+      box-shadow: 0 8px 32px rgba(44, 88, 222, 0.2), 0 1.5px 4px rgba(0,0,0,.03);
+      padding: 32px 40px 32px 40px;
+      max-width: 440px;
+      width: 100%;
+      box-sizing: border-box;
+      margin: 20px;
+      animation: fadein 1s;
+    }
+    @keyframes fadein {
+      0% { opacity: 0; transform: translateY(40px);}
+      100% { opacity: 1; transform: translateY(0);}
+    }
+    h2 {
+      margin-top: 0;
+      text-align: center;
+      color: #4450d9;
+      letter-spacing: 1px;
+      margin-bottom: 24px;
+      font-weight: 700;
+    }
+    label {
+      display: block;
+      margin-bottom: 6px;
+      margin-top: 20px;
+      letter-spacing: 0.5px;
+      color: #222b55;
+    }
+    .required {
+      color: #e74c3c;
+      margin-left: 2px;
+    }
+    input, select {
+      width: 100%;
+      padding: 8px 12px;
+      border-radius: 8px;
+      border: 1.2px solid #d5dbff;
+      background: #f7f8fd;
+      font-size: 16px;
+      margin-bottom: 4px;
+      transition: border 0.2s;
+      margin-top: 3px;
+    }
+    input:focus, select:focus {
+      outline: none;
+      border-color: #4450d9;
+      background: #f3f6ff;
+    }
+    .workshops {
+      margin-bottom: 12px;
+      margin-top: 10px;
+      display: flex;
+      flex-direction: column;
+    }
+    .workshops label {
+      display: inline-flex;
+      align-items: center;
+      margin: 3px 0;
+      font-weight: 400;
+      color: #384166;
+      margin-left: 0;
+    }
+    .workshops input[type="checkbox"] {
+      margin-right: 8px;
+      accent-color: #4450d9;
+    }
+    .form-message {
+      padding: 10px;
+      border-radius: 8px;
+      color: #fff;
+      background: #47b785;
+      text-align: center;
+      margin-bottom: 16px;
+      display: none;
+      font-size: 1.08em;
+    }
+    .form-error {
+      color: #e74c3c;
+      font-size: 14px;
+      margin: 2px 0 0 0;
+      padding: 0;
+      display: none;
+    }
+    button {
+      margin-top: 22px;
+      width: 100%;
+      padding: 12px;
+      background-color: #5663e6;
+      color: #fff;
+      border: none;
+      border-radius: 8px;
+      font-weight: bold;
+      font-size: 17px;
+      cursor: pointer;
+      transition: background 0.2s;
+      letter-spacing: .5px;
+      box-shadow: 0 2px 8px rgba(70,80,230,0.14);
+    }
+    button:hover {
+      background: #4450d9;
+      box-shadow: 0 3px 15px rgba(70,80,230,0.22);
+    }
+    @media (max-width: 560px) {
+      .container { 
+        padding: 22px 8vw;
+        max-width: 95vw;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h2>Workshop Registration</h2>
+    <div id="form-message" class="form-message"></div>
+    <form id="registrationForm" autocomplete="off" novalidate>
+      <label for="fullname">Full Name <span class="required">*</span></label>
+      <input type="text" id="fullname" name="fullname" required>
+      <div class="form-error" id="error-fullname"></div>
+      
+      <label for="email">Email Address <span class="required">*</span></label>
+      <input type="email" id="email" name="email" required>
+      <div class="form-error" id="error-email"></div>
+      
+      <label for="password">Password <span class="required">*</span></label>
+      <input type="password" id="password" name="password" required minlength="6">
+      <div class="form-error" id="error-password"></div>
+      
+      <label for="confirmPassword">Confirm Password <span class="required">*</span></label>
+      <input type="password" id="confirmPassword" name="confirmPassword" required minlength="6">
+      <div class="form-error" id="error-confirmPassword"></div>
+      
+      <label for="organization">Organization / Company</label>
+      <input type="text" id="organization" name="organization">
+      
+      <label for="role">Your Role</label>
+      <select id="role" name="role">
+        <option value="">Select a role...</option>
+        <option value="Student">Student</option>
+        <option value="Researcher">Researcher</option>
+        <option value="Industry Professional">Industry Professional</option>
+        <option value="Speaker">Speaker</option>
+        <option value="Other">Other</option>
+      </select>
+      
+      <label>Choose Workshops <small style="color: #444;">(Select at least one)</small> <span class="required">*</span></label>
+      <div class="workshops" id="workshopCheckboxes">
+        <label><input type="checkbox" name="workshops" value="AI Innovations"> AI Innovations</label>
+        <label><input type="checkbox" name="workshops" value="Cloud Computing"> Cloud Computing</label>
+        <label><input type="checkbox" name="workshops" value="Cybersecurity Trends"> Cybersecurity Trends</label>
+        <label><input type="checkbox" name="workshops" value="Blockchain Applications"> Blockchain Applications</label>
+        <label><input type="checkbox" name="workshops" value="IoT in Practice"> IoT in Practice</label>
+      </div>
+      <div class="form-error" id="error-workshops"></div>
+      
+      <label for="diet">Dietary Preferences</label>
+      <input type="text" id="diet" name="diet" placeholder="e.g., Vegetarian, Gluten-Free">
+      
+      <button type="submit">Register</button>
+    </form>
+  </div>
+  <script>
+    // Helper function for email validation
+    function validateEmail(email) {
+      // Simple email regex, can be improved if needed
+      const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      return re.test(email);
+    }
+
+    document.getElementById('registrationForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+
+      // Clear previous errors & message
+      Array.from(document.querySelectorAll('.form-error')).forEach(div => div.style.display = "none");
+      const formMsg = document.getElementById('form-message');
+      formMsg.style.display = 'none';
+      formMsg.textContent = "";
+
+      let valid = true;
+
+      // Name
+      const fullname = document.getElementById('fullname');
+      if (fullname.value.trim() === "") {
+        showError('error-fullname', 'Full name is required.');
+        valid = false;
+      }
+
+      // Email
+      const email = document.getElementById('email');
+      if (email.value.trim() === "") {
+        showError('error-email', 'Email is required.');
+        valid = false;
+      } else if (!validateEmail(email.value.trim())) {
+        showError('error-email', 'Please enter a valid email address.');
+        valid = false;
+      }
+
+      // Password
+      const password = document.getElementById('password');
+      if (password.value === "") {
+        showError('error-password', 'Password is required.');
+        valid = false;
+      } else if (password.value.length < 6) {
+        showError('error-password', 'Password should be at least 6 characters.');
+        valid = false;
+      }
+
+      // Confirm Password
+      const confirmPassword = document.getElementById('confirmPassword');
+      if (confirmPassword.value === "") {
+        showError('error-confirmPassword', 'Please confirm your password.');
+        valid = false;
+      } else if (confirmPassword.value !== password.value) {
+        showError('error-confirmPassword', 'Passwords do not match.');
+        valid = false;
+      }
+
+      // Workshops
+      const workshopChecks = Array.from(document.querySelectorAll('input[name="workshops"]:checked'));
+      if (workshopChecks.length === 0) {
+        showError('error-workshops', 'Select at least one workshop.');
+        valid = false;
+      }
+
+      if (!valid) return;
+
+      // Simulate success
+      formMsg.style.background = "#47b785";
+      formMsg.textContent = "✅ Registration successful! We'll contact you by email soon.";
+      formMsg.style.display = 'block';
+      document.getElementById('registrationForm').reset();
+
+      // Optionally: send form data to server with fetch/AJAX here
+    });
+
+    function showError(id, message) {
+      const el = document.getElementById(id);
+      el.textContent = message;
+      el.style.display = "block";
+    }
+  </script>
+</body>
+</html>
