@@ -1,9 +1,12 @@
 messages:
   - role: system
-    content: ''
+    content: >-
+      You are a Subject Matter Expert in accessibility with a deep knowledge of
+      accessibility requirements such as WCAG.
   - role: user
     content: |-
       Find all WCAG issues in this file.
+      ```
       <!DOCTYPE html>
       <html>
 
@@ -245,4 +248,5 @@ messages:
       </body>
 
       </html>
+      ```
 model: openai/gpt-4o
