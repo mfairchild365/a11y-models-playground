@@ -4,7 +4,7 @@ This repo is an effort to determine how well different AI models generate, test,
 
 ## Methodology
 
-For each test, two models were compared. Sentiment was defined based on the output of the prompt. The sentiment is pass/fail for WCAG compliance when the prompt generates code. Otherwise, it reflect the level of helpfulness of the prompt. The code output was analyzed by a subject matter expert in accessibility, but a full WCAG audit was not performed.
+For each test, two models were compared. Sentiment was defined based on the output of the prompt. The sentiment is pass/fail for WCAG compliance when the prompt generates code. Otherwise, it reflect the level of helpfulness of the prompt. The code output was automatically analyzed by [axe devtools](https://github.com/dequelabs/axe-core) and manually by at lease one subject matter expert in accessibility, but a full WCAG audit was not performed.
 
 This is NOT an exhaustive list of accessibility tests. These prompts do not cover all scenarios or accessibility requirements. However, they were chosen to reflect some common scenarios.
 
