@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Conference Workshop Registration</title>
+  <style>
+    /* Base resets */
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: #f0f4f8;
+      display: flex; justify-content: center; align-items: center;
+      min-height: 100vh;
+      padding: 20px;
+    }
+
+    /* Form container */
+    .registration-form {
+      background: #fff;
+      width: 100%;
+      max-width: 500px;
+      border-radius: 8px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+      padding: 30px;
+    }
+    .registration-form h2 {
+      margin-bottom: 20px;
+      color: #333;
+      text-align: center;
+    }
+
+    /* Form layout */
+    .form-group {
+      margin-bottom: 15px;
+    }
+    label {
+      display: block;
+      margin-bottom: 5px;
+      font-weight: 600;
+      color: #444;
+    }
+    input[type="text"],
+    input[type="email"],
+    input[type="tel"],
+    select,
+    textarea {
+      width: 100%;
+      padding: 10px 12px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      font-size: 1rem;
+      transition: border-color .3s;
+    }
+    input:focus,
+    select:focus,
+    textarea:focus {
+      outline: none;
+      border-color: #3f83f8;
+    }
+    .small-note {
+      font-size: 0.85rem;
+      color: #666;
+    }
+
+    /* Checkboxes & radios */
+    .checkbox-group,
+    .radio-group {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+    .checkbox-group label,
+    .radio-group label {
+      display: flex;
+      align-items: center;
+      font-weight: normal;
+    }
+    .checkbox-group input,
+    .radio-group input {
+      margin-right: 6px;
+    }
+
+    /* Error messages */
+    .error {
+      color: #d93025;
+      font-size: 0.85rem;
+      margin-top: 4px;
+      display: none;
+    }
+
+    /* Submit button */
+    .btn-submit {
+      width: 100%;
+      background: #3f83f8;
+      color: #fff;
+      border: none;
+      padding: 12px;
+      font-size: 1.1rem;
+      border-radius: 4px;
+      cursor: pointer;
+      transition: background .3s;
+    }
+    .btn-submit:hover {
+      background: #336fcc;
+    }
+    .success-message {
+      background: #e6f4ea;
+      color: #1e4620;
+      border: 1px solid #bfd8c4;
+      padding: 12px;
+      border-radius: 4px;
+      margin-top: 15px;
+      text-align: center;
+      display: none;
+    }
+  </style>
+</head>
+<body>
+
+  <form id="regForm" class="registration-form" novalidate>
+    <h2>Workshop Registration</h2>
+
+    <div class="form-group">
+      <label for="fullName">Full Name *</label>
+      <input type="text" id="fullName" name="fullName" required />
+      <div class="error">Please enter your name.</div>
+    </div>
+
+    <div class="form-group">
+      <label for="email">Email Address *</label>
+      <input type="email" id="email" name="email" required />
+      <div class="error">Please enter a valid email.</div>
+    </div>
+
+    <div class="form-group">
+      <label for="phone">Phone Number</label>
+      <input type="tel" id="phone" name="phone" placeholder="e.g. +1-555-123-4567" />
+      <div class="error">Please enter a valid phone number.</div>
+    </div>
+
+    <div class="form-group">
+      <label for="affiliation">Affiliation / Company</label>
+      <input type="text" id="affiliation" name="affiliation" />
+    </div>
+
+    <div class="form-group">
+      <label for="position">Position / Title</label>
+      <input type="text" id="position" name="position" />
+    </div>
+
+    <div class="form-group">
+      <label for="workshop">Select Workshop *</label>
+      <select id="workshop" name="workshop" required>
+        <option value="">-- Please choose --</option>
+        <option>Workshop A: AI & Machine Learning</option>
+        <option>Workshop B: Modern Web Development</option>
+        <option>Workshop C: Data & Analytics</option>
+        <option>Workshop D: Cybersecurity Essentials</option>
+      </select>
+      <div class="error">Please select a workshop.</div>
+    </div>
+
+    <div class="form-group">
+      <label>Dietary Preferences</label>
+      <div class="checkbox-group">
+        <label><input type="checkbox" name="diet" value="None" checked /> None</label>
+        <label><input type="checkbox" name="diet" value="Vegetarian" /> Vegetarian</label>
+        <label><input type="checkbox" name="diet" value="Vegan" /> Vegan</label>
+        <label><input type="checkbox" name="diet" value="Gluten-Free" /> Gluten-Free</label>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label>T-shirt Size</label>
+      <div class="radio-group">
+        <label><input type="radio" name="tsize" value="S" /> S</label>
+        <label><input type="radio" name="tsize" value="M" checked /> M</label>
+        <label><input type="radio" name="tsize" value="L" /> L</label>
+        <label><input type="radio" name="tsize" value="XL" /> XL</label>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label for="comments">Additional Requirements / Comments</label>
+      <textarea id="comments" name="comments" rows="4" placeholder="Let us know if you need anything else…"></textarea>
+    </div>
+
+    <button type="submit" class="btn-submit">Register Now</button>
+    <div class="success-message" id="successMsg">
+      Thank you for registering! We’ve sent a confirmation to your email.
+    </div>
+  </form>
+
+  <script>
+    (function(){
+      const form     = document.getElementById('regForm');
+      const success  = document.getElementById('successMsg');
+      const fields   = [
+        { id: 'fullName',  validator: v => v.trim().length > 0 },
+        { id: 'email',     validator: v => /^\S+@\S+\.\S+$/.test(v) },
+        { id: 'workshop',  validator: v => v.trim().length > 0 }
+      ];
+
+      // validate a single field, show/hide its error div
+      function validateField(field) {
+        const input = document.getElementById(field.id);
+        const err   = input.parentNode.querySelector('.error');
+        const isValid = field.validator(input.value);
+
+        if (!isValid) {
+          err.style.display = 'block';
+        } else {
+          err.style.display = 'none';
+        }
+        return isValid;
+      }
+
+      // live validation on blur
+      fields.forEach(f => {
+        const el = document.getElementById(f.id);
+        el.addEventListener('blur', () => validateField(f));
+      });
+
+      form.addEventListener('submit', function(e){
+        e.preventDefault();
+        let allValid = true;
+
+        // check required fields
+        fields.forEach(f => {
+          if (!validateField(f)) allValid = false;
+        });
+
+        // phone is optional but if present should be plausibly formatted
+        const phone = document.getElementById('phone');
+        const phoneErr = phone.parentNode.querySelector('.error');
+        if (phone.value.trim()) {
+          // simple phone check: digits, spaces, +, -, parentheses
+          if (!/^[0-9+\-\s()]{7,}$/.test(phone.value.trim())) {
+            phoneErr.style.display = 'block';
+            allValid = false;
+          } else {
+            phoneErr.style.display = 'none';
+          }
+        } else {
+          phoneErr.style.display = 'none';
+        }
+
+        if (!allValid) {
+          // scroll to first error
+          const firstErr = form.querySelector('.error[style*="block"]');
+          if (firstErr) firstErr.scrollIntoView({ behavior:'smooth', block: 'center' });
+          return;
+        }
+
+        // simulate successful submission
+        form.reset();
+        success.style.display = 'block';
+        setTimeout(() => success.style.display = 'none', 5000);
+      });
+    })();
+  </script>
+</body>
+</html>
