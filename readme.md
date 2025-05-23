@@ -25,7 +25,7 @@ Goal: Have the AI create a basic form. The AI is specifically NOT prompted about
 | --- | --- | --- | --- | --- |
 | GPT 4.1 | 🚫 Fail | 0 | [output](/results/2025-05-23/basic-form.gpt4.1.html) - [preview](https://html-preview.github.io/?url=https://github.com/mfairchild365/a11y-models-playground/blob/main/results/2025-05-23/basic-form.gpt4.1.html) | No h1 (but this doesn't fail WCAG). No focus indicator for checkboxes. Checkboxes are misaligned (not a WCAG failure). Error text is not programmatically associated with form controls. Etc. |
 | o4-mini | 🚫 Fail | 1 | [output](/results/2025-05-23/basic-form.gpt-o4-mini.html) - [preview](https://html-preview.github.io/?url=https://github.com/mfairchild365/a11y-models-playground/blob/main/results/2025-05-23/basic-form.gpt-o4-mini.html) | 1 color contrast issue found for the submit button.  No h1 (but this doesn't fail WCAG). No focus indicator for checkboxes or radio buttons. Error text is not programmatically associated with form controls. Etc. |
-
+| Codestral 25.01 | 🚫 Fail | 1 | [output](/results/2025-05-23/basic-form.codestral-25.01.html) - [preview](https://html-preview.github.io/?url=https://github.com/mfairchild365/a11y-models-playground/blob/main/results/2025-05-23/basic-form.codestral-25.01.html) | Contrast issue on register button. Otherwise, it seems pretty accessible. It is using browser based form validation which may have accessibility limitations. |
 
 ## Prompt 2: [custom-datepicker.prompt.yml](https://github.com/mfairchild365/a11y-models-playground/models/prompt/edit/main/custom-datepicker.prompt.yml)
 
@@ -40,7 +40,7 @@ Goal: Have the AI create a complex custom date picker. This will help to test th
 | --- | --- | --- | --- | --- |
 | GPT 4.1 | 🚫 Fail | 0 | [output](/results/2025-05-23/custom-datepicker.gpt-4.1.html) - [preview](https://html-preview.github.io/?url=https://github.com/mfairchild365/a11y-models-playground/blob/main/results/2025-05-23/custom-datepicker.gpt-4.1.html)  | No h1 (but this doesn't fail WCAG). Date picker table/grid is missing table/grid semantics (no header/row associations). The date picker is technically keyboard accessible, but is far from optimal. For example, it doesn't support arrow navigation, it doesn't close on escape, etc. |
 | o4-mini | 🚫 Fail | 1 | [output](/results/2025-05-23/custom-datepicker.o4-mini.html) - [preview](https://html-preview.github.io/?url=https://github.com/mfairchild365/a11y-models-playground/blob/main/results/2025-05-23/custom-datepicker.o4-mini.html)  |  1 color contrast issue found for the submit button. No h1 (but this doesn't fail WCAG). Date picker doesn't work for anyone - it's not even mouse accessible. |
-
+| Codestral 25.01 | 🚫 Fail | 1 | [output](/results/2025-05-23/custom-datepicker.codestral-25.01.html) - [preview](https://html-preview.github.io/?url=https://github.com/mfairchild365/a11y-models-playground/blob/main/results/2025-05-23/custom-datepicker.codestral-25.01.html)  | Registration button fails contrast. Date picker is not keyboard accessible and is missing correct |
 
 ## Prompt 3: [analyze-datepicker.prompt.yml](https://github.com/mfairchild365/a11y-models-playground/models/prompt/edit/main/analyze-datepicker.prompt.yml)
 
@@ -56,7 +56,7 @@ Goal: Have the AI identify all WCAG issues. This will help to show how capable t
 | --- | --- | --- | --- |
 | GPT 4.1 | 👍 mostly helpful | [output](/results/2025-05-23/analyze-datepicker.gpt-4.1.md) | Most bugs were identified. It however incorrectly identified some SCs as failing. For example, it said that the user name missing a label fails 1.3.1 and 3.3.2. However, it's 4.1.2 that fails since the input doesn't have an acc name. There is a label - it's just not programmatically associated. It also called out some coding and usability best practices which don't technically fail WCAG. It also says that disabled dates fail contrast when no disabled dates are actually shown. Etc. |
 | o4-mini | 😐 somewhat helpful | [output](/results/2025-05-23/analyze-datepicker.o4-mini.md) | Many bugs were identified. However, it called out the missing h1 as failing both 2.4.6 and 2.4.10 which is not accurate. It also says that disabled dates fail contrast when no disabled dates are actually shown. Etc. |
-
+| Codestral 25.01 | 😐 somewhat helpful | [output](/results/2025-05-23/analyze-datepicker.codestral-25.01.md) | Identified many of the accessibility bugs. However, it did have some inaccuracies. For example, it states that using a `span` instead of a `label` fails WCAG 4.1.2, which is false. It says there is no visual feedback after submitting the form, and that fails 3.2.2 On Input, which is false. |
 
 ## Prompt 4: [site-with-nav.prompt.yml](https://github.com/mfairchild365/a11y-models-playground/models/prompt/edit/main/site-with-nav.prompt.yml)
 
@@ -71,7 +71,7 @@ Goal: Have the identify and fix accessibility bugs. This will help to show how c
 | --- | --- | --- | --- | --- |
 | GPT 4.1 | 🚫 Fail | 55 | [output](/results/2025-05-23/site-with-nav.gpt-4.1.html) - [preview](https://html-preview.github.io/?url=https://github.com/mfairchild365/a11y-models-playground/blob/main/results/2025-05-23/site-with-nav.gpt-4.1.html)  | Many issues were found, including contrast issues and color alone to identify links. Search button is missing an acc name. Not all menu items are keyboard navigable. Decorative images are given alt text. Read more links are not clear out of context. No way to bypass blocks. Etc.  |
 | o4-mini | 🚫 Fail | 12 | [output](/results/2025-05-23/site-with-nav.o4-mini.html) - [preview](https://html-preview.github.io/?url=https://github.com/mfairchild365/a11y-models-playground/blob/main/results/2025-05-23/site-with-nav.o4-mini.html)  | Many issues were found, including contrast issues and color alone to identify links. Search button is missing an understandable acc name (icon is used). Some menu items have two tab stops. Decorative images are given alt text. Read more links are not clear out of context. No way to bypass blocks.  Etc. |
-
+| Codestral 25.01 | 🚫 Fail (but did pretty good) | 2 | [output](/results/2025-05-23/site-with-nav.codestral-25.01.html) - [preview](https://html-preview.github.io/?url=https://github.com/mfairchild365/a11y-models-playground/blob/main/results/2025-05-23/site-with-nav.codestral-25.01.html) | axe error were best practices rather than real WCAG failures. These were related to landmarks. Decorative images were assigned alt text. The entire page is very basic compared to what other models created. Basic navigation, product and article cards are not linked, not many colors, etc.  |
 
 ## Prompt 5: [fix-datepicker.prompt.yml](https://github.com/mfairchild365/a11y-models-playground/models/prompt/edit/main/fix-datepicker.prompt.yml)
 
@@ -85,5 +85,5 @@ You are a Subject Matter Expert and developer in accessibility with a deep knowl
 | --- | --- | --- | --- | --- |
 | GPT 4.1 | 🚫 Fail, but it did improve results | 3 | [output](/results/2025-05-23/fix-datepicker.gpt-4.1.html) - [preview](https://html-preview.github.io/?url=https://github.com/mfairchild365/a11y-models-playground/blob/main/results/2025-05-23/fix-datepicker.gpt-4.1.html)  | aria-expanded is not allowed on input. Submit button fails contrast. Date picker is keyboard accessible and supports esc, arrow keys. But the date picker table/grid is still missing table/grid structure. Etc. |
 | o4-mini | 🚫 Fail | 9 | [output](/results/2025-05-23/fix-datepicker.o4-mini.html) - [preview](https://html-preview.github.io/?url=https://github.com/mfairchild365/a11y-models-playground/blob/main/results/2025-05-23/fix-datepicker.o4-mini.html)  | aria-expanded is not allowed on input. Submit button fails contrast. Can't open datepicker with keyboard. Date picker table/grid is still missing table/grid structure. After opening with mouse, the date picker doesn't support arrow key navigation (just tab key). Missing landmarks. Etc. |
-
+| Codestral 25.01 | 🚫 Fail | 7 | [output](/results/2025-05-23/fix-datepicker.codestral-25.01.html) - [preview](https://html-preview.github.io/?url=https://github.com/mfairchild365/a11y-models-playground/blob/main/results/2025-05-23/fix-datepicker.codestral-25.01.html) | Contrast fails for the heading and button. The date picker is still not keyboard accessible. |
 
