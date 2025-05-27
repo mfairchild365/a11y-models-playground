@@ -1,0 +1,645 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>User Registration Form</title>
+  <!-- Basic Styling -->
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f4f4f9;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+    }
+    .form-container {
+      background: #fff;
+      padding: 20px 30px;
+      border-radius: 10px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+      max-width: 400px;
+      width: 100%;
+    }
+    h2 {
+      text-align: center;
+      color: #333333; /* Fixed contrast from #ababab */
+    }
+    .form-group {
+      margin-bottom: 15px;
+    }
+    label {
+      display: block;
+      margin-bottom: 5px;
+      font-weight: bold;
+    }
+    input {
+      width: 100%;
+      padding: 10px;
+      border: 1px solid #666; /* Darker border for better contrast */
+      border-radius: 5px;
+      font-size: 16px; /* Prevent zoom on mobile */
+    }
+    input:focus {
+      outline: 3px solid #005fcc;
+      outline-offset: 2px;
+    }
+    input[type="submit"] {
+      background-color: #237a23; /* Darker green for better contrast */
+      color: white;
+      border: none;
+      cursor: pointer;
+      font-size: 16px;
+      padding: 12px;
+    }
+    input[type="submit"]:hover {
+      background-color: #1a5a1a;
+    }
+    input[type="submit"]:focus {
+      outline: 3px solid #005fcc;
+      outline-offset: 2px;
+    }
+    /* Custom Date Picker Styles */
+    #datepicker-container {
+      position: relative;
+    }
+    #datepicker {
+      position: absolute;
+      top: 100%;
+      left: 0;
+      background: #fff;
+      border: 1px solid #666;
+      border-radius: 5px;
+      z-index: 1000;
+      display: none;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      min-width: 280px;
+    }
+    .datepicker-grid {
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      text-align: center;
+      padding: 10px;
+      gap: 2px;
+    }
+    .datepicker-header {
+      text-align: center;
+      font-size: 16px;
+      margin: 10px 0;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0 10px;
+    }
+    .datepicker-header button {
+      background: none;
+      border: 1px solid #666;
+      cursor: pointer;
+      font-size: 18px;
+      padding: 5px 10px;
+      border-radius: 3px;
+      min-width: 40px;
+    }
+    .datepicker-header button:hover {
+      background-color: #f0f0f0;
+    }
+    .datepicker-header button:focus {
+      outline: 3px solid #005fcc;
+      outline-offset: 2px;
+    }
+    .datepicker-day, .datepicker-weekday {
+      padding: 8px;
+      border-radius: 50%;
+      min-width: 30px;
+      min-height: 30px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .datepicker-day {
+      cursor: pointer;
+      border: 2px solid transparent;
+    }
+    .datepicker-day:hover:not(.disabled) {
+      background-color: #e0e0e0;
+    }
+    .datepicker-day:focus {
+      outline: 3px solid #005fcc;
+      outline-offset: 2px;
+    }
+    .datepicker-day.disabled {
+      color: #999;
+      cursor: not-allowed;
+    }
+    .datepicker-day.selected {
+      background-color: #237a23;
+      color: white;
+    }
+    .datepicker-day.today {
+      border: 2px solid #237a23;
+      font-weight: bold;
+    }
+    .datepicker-weekday {
+      font-weight: bold;
+      font-size: 14px;
+    }
+    .sr-only {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      padding: 0;
+      margin: -1px;
+      overflow: hidden;
+      clip: rect(0, 0, 0, 0);
+      white-space: nowrap;
+      border: 0;
+    }
+    .error-message {
+      color: #d32f2f;
+      font-size: 14px;
+      margin-top: 5px;
+      display: none;
+    }
+    .error input {
+      border-color: #d32f2f;
+    }
+    #calendar-help {
+      font-size: 14px;
+      color: #666;
+      margin-top: 5px;
+    }
+  </style>
+</head>
+<body>
+  <div class="form-container">
+    <h2>User Registration</h2>
+    <form id="registrationForm" novalidate>
+      <div class="form-group">
+        <label for="username">Username:</label>
+        <input type="text" id="username" name="username" required aria-required="true" aria-describedby="username-error">
+        <span id="username-error" class="error-message" role="alert" aria-live="polite">Please enter a username</span>
+      </div>
+      <div class="form-group">
+        <label for="email">Email:</label>
+        <input type="email" id="email" name="email" required aria-required="true" aria-describedby="email-error">
+        <span id="email-error" class="error-message" role="alert" aria-live="polite">Please enter a valid email address</span>
+      </div>
+      <div class="form-group">
+        <label for="dob">Date of Birth:</label>
+        <div id="datepicker-container">
+          <input 
+            type="text" 
+            id="dob" 
+            name="dob" 
+            placeholder="YYYY-MM-DD or click to select"
+            aria-describedby="calendar-help dob-error"
+            aria-haspopup="dialog"
+            aria-expanded="false"
+            aria-controls="datepicker"
+            autocomplete="bday">
+          <span id="calendar-help">Format: YYYY-MM-DD. Press Space or Enter to open calendar.</span>
+          <span id="dob-error" class="error-message" role="alert" aria-live="polite">Please select your date of birth</span>
+          <div id="datepicker" role="dialog" aria-modal="true" aria-label="Calendar date picker">
+            <div class="sr-only" aria-live="polite" id="calendar-announcement"></div>
+          </div>
+        </div>
+      </div>
+      <div class="form-group">
+        <input type="submit" value="Register" aria-label="Submit registration form">
+      </div>
+    </form>
+  </div>
+
+  <script>
+    // Custom JavaScript Date Picker with Accessibility
+    const dateInput = document.getElementById('dob');
+    const datePicker = document.getElementById('datepicker');
+    const datePickerContainer = document.getElementById('datepicker-container');
+    const calendarAnnouncement = document.getElementById('calendar-announcement');
+    const today = new Date();
+    let currentYear = today.getFullYear();
+    let currentMonth = today.getMonth();
+    let focusedDate = null;
+
+    // Helper function to generate the calendar
+    function renderDatePicker(year, month) {
+      datePicker.innerHTML = ''; // Clear existing content
+      
+      // Add announcement div back
+      const announcementDiv = document.createElement('div');
+      announcementDiv.className = 'sr-only';
+      announcementDiv.setAttribute('aria-live', 'polite');
+      announcementDiv.id = 'calendar-announcement';
+      datePicker.appendChild(announcementDiv);
+
+      // Adjust month/year if needed
+      if (month < 0) {
+        month = 11;
+        year--;
+      } else if (month > 11) {
+        month = 0;
+        year++;
+      }
+      currentYear = year;
+      currentMonth = month;
+
+      const header = document.createElement('div');
+      header.classList.add('datepicker-header');
+
+      // Navigation buttons and month/year display
+      const prevButton = document.createElement('button');
+      prevButton.innerHTML = '&lt;';
+      prevButton.setAttribute('aria-label', 'Previous month');
+      prevButton.addEventListener('click', () => {
+        renderDatePicker(year, month - 1);
+        announceCalendarChange();
+      });
+
+      const nextButton = document.createElement('button');
+      nextButton.innerHTML = '&gt;';
+      nextButton.setAttribute('aria-label', 'Next month');
+      nextButton.addEventListener('click', () => {
+        renderDatePicker(year, month + 1);
+        announceCalendarChange();
+      });
+
+      const monthYear = document.createElement('span');
+      monthYear.setAttribute('aria-live', 'polite');
+      monthYear.setAttribute('aria-atomic', 'true');
+      const monthNames = [
+        'January', 'February', 'March', 'April',
+        'May', 'June', 'July', 'August',
+        'September', 'October', 'November', 'December'
+      ];
+      monthYear.textContent = `${monthNames[month]} ${year}`;
+      monthYear.id = 'calendar-month-year';
+
+      header.appendChild(prevButton);
+      header.appendChild(monthYear);
+      header.appendChild(nextButton);
+      datePicker.appendChild(header);
+
+      // Grid for days of the week
+      const daysOfWeek = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+      const grid = document.createElement('div');
+      grid.classList.add('datepicker-grid');
+      grid.setAttribute('role', 'grid');
+      grid.setAttribute('aria-labelledby', 'calendar-month-year');
+
+      // Add weekday headers
+      const weekdayRow = document.createElement('div');
+      weekdayRow.setAttribute('role', 'row');
+      weekdayRow.style.display = 'contents';
+      
+      daysOfWeek.forEach(day => {
+        const dayElement = document.createElement('div');
+        dayElement.textContent = day;
+        dayElement.classList.add('datepicker-weekday');
+        dayElement.setAttribute('role', 'columnheader');
+        dayElement.setAttribute('aria-label', getDayFullName(day));
+        grid.appendChild(dayElement);
+      });
+
+      // Get the first day of the month and total days in the month
+      const firstDay = new Date(year, month, 1).getDay();
+      const daysInMonth = new Date(year, month + 1, 0).getDate();
+      const lastMonthDays = new Date(year, month, 0).getDate();
+
+      // Add days from previous month
+      for (let i = firstDay - 1; i >= 0; i--) {
+        const dayElement = createDayElement(lastMonthDays - i, year, month - 1, true);
+        grid.appendChild(dayElement);
+      }
+
+      // Add days of the current month
+      for (let day = 1; day <= daysInMonth; day++) {
+        const dayElement = createDayElement(day, year, month, false);
+        grid.appendChild(dayElement);
+      }
+
+      // Add days from next month to fill the grid
+      const totalCells = grid.children.length - 7; // Subtract weekday headers
+      const remainingCells = 35 - totalCells;
+      for (let day = 1; day <= remainingCells; day++) {
+        const dayElement = createDayElement(day, year, month + 1, true);
+        grid.appendChild(dayElement);
+      }
+
+      datePicker.appendChild(grid);
+
+      // Set initial focus
+      if (!focusedDate) {
+        focusedDate = new Date(year, month, 1);
+      }
+      setFocusToDate(focusedDate);
+    }
+
+    function createDayElement(day, year, month, isOtherMonth) {
+      const dayElement = document.createElement('button');
+      dayElement.textContent = day;
+      dayElement.classList.add('datepicker-day');
+      dayElement.setAttribute('role', 'gridcell');
+      dayElement.setAttribute('tabindex', '-1');
+      
+      const date = new Date(year, month, day);
+      const dateString = formatDate(date);
+      dayElement.setAttribute('data-date', dateString);
+      dayElement.setAttribute('aria-label', getDateAriaLabel(date));
+      
+      if (isOtherMonth) {
+        dayElement.classList.add('disabled');
+        dayElement.setAttribute('aria-disabled', 'true');
+      }
+
+      // Check if it's today
+      if (year === today.getFullYear() && month === today.getMonth() && day === today.getDate()) {
+        dayElement.classList.add('today');
+        dayElement.setAttribute('aria-current', 'date');
+      }
+
+      // Check if it's the selected date
+      if (dateInput.value === dateString) {
+        dayElement.classList.add('selected');
+        dayElement.setAttribute('aria-selected', 'true');
+      }
+
+      // Add click event to select a date
+      if (!isOtherMonth) {
+        dayElement.addEventListener('click', () => selectDate(date));
+      }
+
+      return dayElement;
+    }
+
+    function getDayFullName(abbreviation) {
+      const dayNames = {
+        'Sun': 'Sunday',
+        'Mon': 'Monday',
+        'Tue': 'Tuesday',
+        'Wed': 'Wednesday',
+        'Thu': 'Thursday',
+        'Fri': 'Friday',
+        'Sat': 'Saturday'
+      };
+      return dayNames[abbreviation];
+    }
+
+    function getDateAriaLabel(date) {
+      const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+      return date.toLocaleDateString('en-US', options);
+    }
+
+    function formatDate(date) {
+      const year = date.getFullYear();
+      const month = String(date.getMonth() + 1).padStart(2, '0');
+      const day = String(date.getDate()).padStart(2, '0');
+      return `${year}-${month}-${day}`;
+    }
+
+    function selectDate(date) {
+      dateInput.value = formatDate(date);
+      closeDatePicker();
+      announceSelection(date);
+      validateField(dateInput);
+    }
+
+    function announceSelection(date) {
+      calendarAnnouncement.textContent = `Selected ${getDateAriaLabel(date)}`;
+    }
+
+    function announceCalendarChange() {
+      const monthNames = [
+        'January', 'February', 'March', 'April',
+        'May', 'June', 'July', 'August',
+        'September', 'October', 'November', 'December'
+      ];
+      calendarAnnouncement.textContent = `Now showing ${monthNames[currentMonth]} ${currentYear}`;
+    }
+
+    function setFocusToDate(date) {
+      const dateString = formatDate(date);
+      const dayButton = datePicker.querySelector(`[data-date="${dateString}"]:not(.disabled)`);
+      if (dayButton) {
+        dayButton.setAttribute('tabindex', '0');
+        dayButton.focus();
+      }
+    }
+
+    function moveFocus(direction) {
+      const currentFocus = document.activeElement;
+      if (!currentFocus.classList.contains('datepicker-day')) return;
+
+      const allDays = Array.from(datePicker.querySelectorAll('.datepicker-day:not(.disabled)'));
+      const currentIndex = allDays.indexOf(currentFocus);
+      let newIndex = currentIndex;
+
+      switch(direction) {
+        case 'ArrowRight':
+          newIndex = currentIndex + 1;
+          break;
+        case 'ArrowLeft':
+          newIndex = currentIndex - 1;
+          break;
+        case 'ArrowDown':
+          newIndex = currentIndex + 7;
+          break;
+        case 'ArrowUp':
+          newIndex = currentIndex - 7;
+          break;
+        case 'Home':
+          newIndex = 0;
+          break;
+        case 'End':
+          newIndex = allDays.length - 1;
+          break;
+      }
+
+      if (newIndex >= 0 && newIndex < allDays.length) {
+        currentFocus.setAttribute('tabindex', '-1');
+        allDays[newIndex].setAttribute('tabindex', '0');
+        allDays[newIndex].focus();
+        focusedDate = new Date(allDays[newIndex].getAttribute('data-date'));
+      } else if (direction === 'ArrowLeft' && currentIndex === 0) {
+        // Go to previous month
+        renderDatePicker(currentYear, currentMonth - 1);
+        const newAllDays = Array.from(datePicker.querySelectorAll('.datepicker-day:not(.disabled)'));
+        const lastDay = newAllDays[newAllDays.length - 1];
+        lastDay.setAttribute('tabindex', '0');
+        lastDay.focus();
+        focusedDate = new Date(lastDay.getAttribute('data-date'));
+      } else if (direction === 'ArrowRight' && currentIndex === allDays.length - 1) {
+        // Go to next month
+        renderDatePicker(currentYear, currentMonth + 1);
+        const firstDay = datePicker.querySelector('.datepicker-day:not(.disabled)');
+        firstDay.setAttribute('tabindex', '0');
+        firstDay.focus();
+        focusedDate = new Date(firstDay.getAttribute('data-date'));
+      }
+    }
+
+    // Show or hide the date picker
+    function openDatePicker() {
+      datePicker.style.display = 'block';
+      dateInput.setAttribute('aria-expanded', 'true');
+      renderDatePicker(currentYear, currentMonth);
+      
+      // Trap focus
+      setTimeout(() => {
+        const firstFocusable = datePicker.querySelector('button');
+        if (firstFocusable) firstFocusable.focus();
+      }, 0);
+    }
+
+    function closeDatePicker() {
+      datePicker.style.display = 'none';
+      dateInput.setAttribute('aria-expanded', 'false');
+      dateInput.focus();
+    }
+
+    // Keyboard support for date input
+    dateInput.addEventListener('keydown', (e) => {
+      if (e.key === ' ' || e.key === 'Enter') {
+        e.preventDefault();
+        if (datePicker.style.display === 'none') {
+          openDatePicker();
+        } else {
+          closeDatePicker();
+        }
+      }
+    });
+
+    dateInput.addEventListener('click', () => {
+      if (datePicker.style.display === 'none') {
+        openDatePicker();
+      } else {
+        closeDatePicker();
+      }
+    });
+
+    // Keyboard navigation in calendar
+    datePicker.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') {
+        closeDatePicker();
+        return;
+      }
+
+      if (['ArrowLeft', 'ArrowRight', 'ArrowUp', 'ArrowDown', 'Home', 'End'].includes(e.key)) {
+        e.preventDefault();
+        moveFocus(e.key);
+      }
+
+      if (e.key === 'Enter' || e.key === ' ') {
+        e.preventDefault();
+        const focused = document.activeElement;
+        if (focused.classList.contains('datepicker-day') && !focused.classList.contains('disabled')) {
+          selectDate(new Date(focused.getAttribute('data-date')));
+        }
+      }
+
+      if (e.key === 'PageUp') {
+        e.preventDefault();
+        renderDatePicker(currentYear, currentMonth - 1);
+        announceCalendarChange();
+      }
+
+      if (e.key === 'PageDown') {
+        e.preventDefault();
+        renderDatePicker(currentYear, currentMonth + 1);
+        announceCalendarChange();
+      }
+    });
+
+    // Close date picker when clicking outside
+    document.addEventListener('click', (e) => {
+      if (!datePickerContainer.contains(e.target)) {
+        closeDatePicker();
+      }
+    });
+
+    // Form validation
+    function validateField(field) {
+      const errorElement = document.getElementById(field.id + '-error');
+      const formGroup = field.closest('.form-group');
+      
+      if (!field.value.trim()) {
+        formGroup.classList.add('error');
+        errorElement.style.display = 'block';
+        field.setAttribute('aria-invalid', 'true');
+        return false;
+      } else if (field.type === 'email' && !isValidEmail(field.value)) {
+        formGroup.classList.add('error');
+        errorElement.style.display = 'block';
+        field.setAttribute('aria-invalid', 'true');
+        return false;
+      } else {
+        formGroup.classList.remove('error');
+        errorElement.style.display = 'none';
+        field.setAttribute('aria-invalid', 'false');
+        return true;
+      }
+    }
+
+    function isValidEmail(email) {
+      const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      return re.test(email);
+    }
+
+    // Add blur validation
+    document.getElementById('username').addEventListener('blur', function() {
+      validateField(this);
+    });
+
+    document.getElementById('email').addEventListener('blur', function() {
+      validateField(this);
+    });
+
+    document.getElementById('dob').addEventListener('blur', function() {
+      validateField(this);
+    });
+
+    // Form submission
+    document.getElementById('registrationForm').addEventListener('submit', (e) => {
+      e.preventDefault();
+      
+      const username = document.getElementById('username');
+      const email = document.getElementById('email');
+      const dob = document.getElementById('dob');
+      
+      let isValid = true;
+      isValid = validateField(username) && isValid;
+      isValid = validateField(email) && isValid;
+      isValid = validateField(dob) && isValid;
+      
+      if (isValid) {
+        // Form is valid, you can submit it
+        alert('Form submitted successfully!');
+      } else {
+        // Focus on first error field
+        const firstError = document.querySelector('.error input');
+        if (firstError) firstError.focus();
+      }
+    });
+
+    // Allow manual date entry
+    dateInput.addEventListener('input', function() {
+      this.removeAttribute('readonly');
+    });
+
+    dateInput.addEventListener('change', function() {
+      // Validate date format
+      const datePattern = /^\d{4}-\d{2}-\d{2}$/;
+      if (datePattern.test(this.value)) {
+        const date = new Date(this.value);
+        if (!isNaN(date.getTime())) {
+          currentYear = date.getFullYear();
+          currentMonth = date.getMonth();
+          focusedDate = date;
+        }
+      }
+    });
+  </script>
+</body>
+</html>

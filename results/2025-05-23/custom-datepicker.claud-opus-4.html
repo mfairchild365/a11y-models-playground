@@ -1,0 +1,544 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Registration</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .container {
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.15);
+            padding: 40px;
+            max-width: 500px;
+            width: 100%;
+        }
+
+        h1 {
+            color: #333;
+            margin-bottom: 30px;
+            text-align: center;
+            font-size: 2.5rem;
+        }
+
+        .form-group {
+            margin-bottom: 25px;
+            position: relative;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            color: #555;
+            font-weight: 500;
+            font-size: 0.95rem;
+        }
+
+        input[type="text"],
+        input[type="email"],
+        input[type="password"],
+        input[type="tel"],
+        select {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            font-size: 16px;
+            transition: all 0.3s ease;
+            background: #fafafa;
+        }
+
+        input[type="text"]:focus,
+        input[type="email"]:focus,
+        input[type="password"]:focus,
+        input[type="tel"]:focus,
+        select:focus {
+            outline: none;
+            border-color: #667eea;
+            background: white;
+            box-shadow: 0 0 0 4px rgba(102, 126, 234, 0.1);
+        }
+
+        /* Date Picker Styles */
+        .date-input-wrapper {
+            position: relative;
+        }
+
+        .date-input {
+            cursor: pointer;
+            background: #fafafa url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="%23667eea" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>') no-repeat right 15px center;
+            padding-right: 45px;
+        }
+
+        .datepicker {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            right: 0;
+            background: white;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+            padding: 20px;
+            display: none;
+            z-index: 1000;
+            margin-top: 5px;
+        }
+
+        .datepicker.active {
+            display: block;
+        }
+
+        .datepicker-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .datepicker-nav {
+            background: none;
+            border: none;
+            font-size: 20px;
+            cursor: pointer;
+            color: #667eea;
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background 0.3s ease;
+        }
+
+        .datepicker-nav:hover {
+            background: #f0f0f0;
+        }
+
+        .datepicker-month-year {
+            font-weight: 600;
+            color: #333;
+            font-size: 1.1rem;
+        }
+
+        .datepicker-days {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 5px;
+            margin-bottom: 10px;
+        }
+
+        .day-label {
+            text-align: center;
+            font-weight: 600;
+            color: #999;
+            font-size: 0.8rem;
+            padding: 10px 0;
+        }
+
+        .datepicker-dates {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 5px;
+        }
+
+        .date-cell {
+            aspect-ratio: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: none;
+            background: none;
+            cursor: pointer;
+            border-radius: 50%;
+            font-size: 0.9rem;
+            color: #333;
+            transition: all 0.3s ease;
+        }
+
+        .date-cell:hover:not(.other-month):not(.selected) {
+            background: #f0f0f0;
+        }
+
+        .date-cell.other-month {
+            color: #ccc;
+        }
+
+        .date-cell.selected {
+            background: #667eea;
+            color: white;
+            font-weight: 600;
+        }
+
+        .date-cell.today {
+            border: 2px solid #667eea;
+        }
+
+        .btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            font-size: 18px;
+            border-radius: 10px;
+            cursor: pointer;
+            width: 100%;
+            font-weight: 600;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            margin-top: 10px;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(102, 126, 234, 0.3);
+        }
+
+        .btn:active {
+            transform: translateY(0);
+        }
+
+        .error {
+            color: #dc3545;
+            font-size: 0.875rem;
+            margin-top: 5px;
+            display: none;
+        }
+
+        .success-message {
+            background: #d4edda;
+            border: 1px solid #c3e6cb;
+            color: #155724;
+            padding: 15px;
+            border-radius: 10px;
+            text-align: center;
+            display: none;
+            margin-bottom: 20px;
+        }
+
+        @media (max-width: 600px) {
+            .container {
+                padding: 25px;
+            }
+
+            h1 {
+                font-size: 2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Create Account</h1>
+        
+        <div class="success-message" id="successMessage">
+            Registration successful! Welcome aboard!
+        </div>
+
+        <form id="registrationForm">
+            <div class="form-group">
+                <label for="firstName">First Name</label>
+                <input type="text" id="firstName" name="firstName" required>
+                <span class="error" id="firstNameError">Please enter your first name</span>
+            </div>
+
+            <div class="form-group">
+                <label for="lastName">Last Name</label>
+                <input type="text" id="lastName" name="lastName" required>
+                <span class="error" id="lastNameError">Please enter your last name</span>
+            </div>
+
+            <div class="form-group">
+                <label for="email">Email Address</label>
+                <input type="email" id="email" name="email" required>
+                <span class="error" id="emailError">Please enter a valid email address</span>
+            </div>
+
+            <div class="form-group">
+                <label for="password">Password</label>
+                <input type="password" id="password" name="password" required minlength="8">
+                <span class="error" id="passwordError">Password must be at least 8 characters</span>
+            </div>
+
+            <div class="form-group">
+                <label for="phone">Phone Number</label>
+                <input type="tel" id="phone" name="phone" placeholder="(555) 123-4567">
+            </div>
+
+            <div class="form-group">
+                <label for="birthdate">Date of Birth</label>
+                <div class="date-input-wrapper">
+                    <input type="text" id="birthdate" name="birthdate" class="date-input" readonly placeholder="Select date" required>
+                    <div class="datepicker" id="datepicker">
+                        <div class="datepicker-header">
+                            <button type="button" class="datepicker-nav" id="prevMonth">‹</button>
+                            <div class="datepicker-month-year" id="monthYear"></div>
+                            <button type="button" class="datepicker-nav" id="nextMonth">›</button>
+                        </div>
+                        <div class="datepicker-days">
+                            <div class="day-label">Sun</div>
+                            <div class="day-label">Mon</div>
+                            <div class="day-label">Tue</div>
+                            <div class="day-label">Wed</div>
+                            <div class="day-label">Thu</div>
+                            <div class="day-label">Fri</div>
+                            <div class="day-label">Sat</div>
+                        </div>
+                        <div class="datepicker-dates" id="dates"></div>
+                    </div>
+                </div>
+                <span class="error" id="birthdateError">Please select your date of birth</span>
+            </div>
+
+            <div class="form-group">
+                <label for="country">Country</label>
+                <select id="country" name="country" required>
+                    <option value="">Select a country</option>
+                    <option value="us">United States</option>
+                    <option value="ca">Canada</option>
+                    <option value="uk">United Kingdom</option>
+                    <option value="au">Australia</option>
+                    <option value="de">Germany</option>
+                    <option value="fr">France</option>
+                    <option value="jp">Japan</option>
+                    <option value="other">Other</option>
+                </select>
+                <span class="error" id="countryError">Please select your country</span>
+            </div>
+
+            <button type="submit" class="btn">Register</button>
+        </form>
+    </div>
+
+    <script>
+        // Date Picker Implementation
+        class DatePicker {
+            constructor(inputId) {
+                this.input = document.getElementById(inputId);
+                this.datepicker = document.getElementById('datepicker');
+                this.monthYearElement = document.getElementById('monthYear');
+                this.datesElement = document.getElementById('dates');
+                
+                this.currentDate = new Date();
+                this.selectedDate = null;
+                this.today = new Date();
+                
+                this.months = ['January', 'February', 'March', 'April', 'May', 'June', 
+                               'July', 'August', 'September', 'October', 'November', 'December'];
+                
+                this.init();
+            }
+            
+            init() {
+                this.input.addEventListener('click', () => this.toggle());
+                document.getElementById('prevMonth').addEventListener('click', () => this.changeMonth(-1));
+                document.getElementById('nextMonth').addEventListener('click', () => this.changeMonth(1));
+                
+                // Close datepicker when clicking outside
+                document.addEventListener('click', (e) => {
+                    if (!this.input.contains(e.target) && !this.datepicker.contains(e.target)) {
+                        this.close();
+                    }
+                });
+                
+                this.render();
+            }
+            
+            toggle() {
+                this.datepicker.classList.toggle('active');
+            }
+            
+            close() {
+                this.datepicker.classList.remove('active');
+            }
+            
+            changeMonth(direction) {
+                this.currentDate.setMonth(this.currentDate.getMonth() + direction);
+                this.render();
+            }
+            
+            render() {
+                const year = this.currentDate.getFullYear();
+                const month = this.currentDate.getMonth();
+                
+                this.monthYearElement.textContent = `${this.months[month]} ${year}`;
+                
+                // Clear dates
+                this.datesElement.innerHTML = '';
+                
+                // Get first day of month and number of days
+                const firstDay = new Date(year, month, 1).getDay();
+                const daysInMonth = new Date(year, month + 1, 0).getDate();
+                const daysInPrevMonth = new Date(year, month, 0).getDate();
+                
+                // Add previous month's trailing days
+                for (let i = firstDay - 1; i >= 0; i--) {
+                    this.createDateCell(daysInPrevMonth - i, true);
+                }
+                
+                // Add current month's days
+                for (let day = 1; day <= daysInMonth; day++) {
+                    this.createDateCell(day, false);
+                }
+                
+                // Add next month's leading days
+                const totalCells = firstDay + daysInMonth;
+                const remainingCells = totalCells % 7 === 0 ? 0 : 7 - (totalCells % 7);
+                for (let day = 1; day <= remainingCells; day++) {
+                    this.createDateCell(day, true);
+                }
+            }
+            
+            createDateCell(day, isOtherMonth) {
+                const cell = document.createElement('button');
+                cell.type = 'button';
+                cell.className = 'date-cell';
+                cell.textContent = day;
+                
+                if (isOtherMonth) {
+                    cell.classList.add('other-month');
+                } else {
+                    const cellDate = new Date(this.currentDate.getFullYear(), this.currentDate.getMonth(), day);
+                    
+                    // Check if it's today
+                    if (this.isToday(cellDate)) {
+                        cell.classList.add('today');
+                    }
+                    
+                    // Check if it's selected
+                    if (this.selectedDate && this.isSameDate(cellDate, this.selectedDate)) {
+                        cell.classList.add('selected');
+                    }
+                    
+                    cell.addEventListener('click', () => this.selectDate(cellDate));
+                }
+                
+                this.datesElement.appendChild(cell);
+            }
+            
+            selectDate(date) {
+                this.selectedDate = date;
+                this.input.value = this.formatDate(date);
+                this.render();
+                this.close();
+            }
+            
+            formatDate(date) {
+                const month = String(date.getMonth() + 1).padStart(2, '0');
+                const day = String(date.getDate()).padStart(2, '0');
+                const year = date.getFullYear();
+                return `${month}/${day}/${year}`;
+            }
+            
+            isToday(date) {
+                return this.isSameDate(date, this.today);
+            }
+            
+            isSameDate(date1, date2) {
+                return date1.getFullYear() === date2.getFullYear() &&
+                       date1.getMonth() === date2.getMonth() &&
+                       date1.getDate() === date2.getDate();
+            }
+        }
+        
+        // Initialize date picker
+        const datePicker = new DatePicker('birthdate');
+        
+        // Form validation
+        document.getElementById('registrationForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            // Reset errors
+            document.querySelectorAll('.error').forEach(error => {
+                error.style.display = 'none';
+            });
+            
+            let isValid = true;
+            
+            // Validate first name
+            const firstName = document.getElementById('firstName');
+            if (firstName.value.trim() === '') {
+                document.getElementById('firstNameError').style.display = 'block';
+                isValid = false;
+            }
+            
+            // Validate last name
+            const lastName = document.getElementById('lastName');
+            if (lastName.value.trim() === '') {
+                document.getElementById('lastNameError').style.display = 'block';
+                isValid = false;
+            }
+            
+            // Validate email
+            const email = document.getElementById('email');
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (!emailRegex.test(email.value)) {
+                document.getElementById('emailError').style.display = 'block';
+                isValid = false;
+            }
+            
+            // Validate password
+            const password = document.getElementById('password');
+            if (password.value.length < 8) {
+                document.getElementById('passwordError').style.display = 'block';
+                isValid = false;
+            }
+            
+            // Validate birthdate
+            const birthdate = document.getElementById('birthdate');
+            if (birthdate.value === '') {
+                document.getElementById('birthdateError').style.display = 'block';
+                isValid = false;
+            }
+            
+            // Validate country
+            const country = document.getElementById('country');
+            if (country.value === '') {
+                document.getElementById('countryError').style.display = 'block';
+                isValid = false;
+            }
+            
+            if (isValid) {
+                // Show success message
+                document.getElementById('successMessage').style.display = 'block';
+                
+                // Reset form after delay
+                setTimeout(() => {
+                    this.reset();
+                    document.getElementById('successMessage').style.display = 'none';
+                }, 3000);
+            }
+        });
+        
+        // Phone number formatting
+        document.getElementById('phone').addEventListener('input', function(e) {
+            let value = e.target.value.replace(/\D/g, '');
+            if (value.length > 0) {
+                if (value.length <= 3) {
+                    value = `(${value}`;
+                } else if (value.length <= 6) {
+                    value = `(${value.slice(0, 3)}) ${value.slice(3)}`;
+                } else {
+                    value = `(${value.slice(0, 3)}) ${value.slice(3, 6)}-${value.slice(6, 10)}`;
+                }
+            }
+            e.target.value = value;
+        });
+    </script>
+</body>
+</html>
