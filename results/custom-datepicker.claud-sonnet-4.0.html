@@ -1,0 +1,1128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Registration - Create Your Account</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary-color: #667eea;
+            --primary-dark: #5a67d8;
+            --secondary-color: #764ba2;
+            --accent-color: #f093fb;
+            --success-color: #48bb78;
+            --error-color: #f56565;
+            --warning-color: #ed8936;
+            --text-primary: #2d3748;
+            --text-secondary: #4a5568;
+            --text-light: #718096;
+            --background: #f7fafc;
+            --white: #ffffff;
+            --gray-100: #f7fafc;
+            --gray-200: #edf2f7;
+            --gray-300: #e2e8f0;
+            --gray-400: #cbd5e0;
+            --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.1);
+            --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.1);
+            --shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.1);
+            --shadow-xl: 0 20px 25px rgba(0, 0, 0, 0.1);
+            --border-radius: 8px;
+            --border-radius-lg: 12px;
+            --transition: all 0.3s ease;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+            color: var(--text-primary);
+            line-height: 1.6;
+            min-height: 100vh;
+            padding: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .container {
+            max-width: 1000px;
+            width: 100%;
+            background: var(--white);
+            border-radius: var(--border-radius-lg);
+            box-shadow: var(--shadow-xl);
+            overflow: hidden;
+            display: grid;
+            grid-template-columns: 1fr 1.2fr;
+            min-height: 700px;
+        }
+
+        .sidebar {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: var(--white);
+            padding: 60px 40px;
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .sidebar::before {
+            content: '';
+            position: absolute;
+            top: -100px;
+            right: -100px;
+            width: 300px;
+            height: 300px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            z-index: 1;
+        }
+
+        .sidebar::after {
+            content: '';
+            position: absolute;
+            bottom: -50px;
+            left: -50px;
+            width: 200px;
+            height: 200px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 50%;
+            z-index: 1;
+        }
+
+        .sidebar-content {
+            position: relative;
+            z-index: 2;
+            text-align: center;
+        }
+
+        .logo {
+            font-size: 3rem;
+            margin-bottom: 20px;
+        }
+
+        .sidebar-title {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 20px;
+            line-height: 1.2;
+        }
+
+        .sidebar-subtitle {
+            font-size: 1.2rem;
+            opacity: 0.9;
+            margin-bottom: 40px;
+            line-height: 1.5;
+        }
+
+        .features-list {
+            text-align: left;
+            list-style: none;
+        }
+
+        .feature-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+            font-size: 1rem;
+            opacity: 0.9;
+        }
+
+        .feature-icon {
+            margin-right: 15px;
+            font-size: 1.2rem;
+        }
+
+        .form-section {
+            padding: 60px 40px;
+            overflow-y: auto;
+        }
+
+        .form-header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .form-title {
+            font-size: 2.2rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 10px;
+        }
+
+        .form-subtitle {
+            color: var(--text-secondary);
+            font-size: 1.1rem;
+        }
+
+        .form-group {
+            margin-bottom: 25px;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: var(--text-primary);
+            font-size: 0.95rem;
+        }
+
+        .required {
+            color: var(--error-color);
+        }
+
+        input, select {
+            width: 100%;
+            padding: 14px 16px;
+            border: 2px solid var(--gray-300);
+            border-radius: var(--border-radius);
+            font-size: 1rem;
+            transition: var(--transition);
+            background: var(--white);
+            font-family: inherit;
+        }
+
+        input:focus, select:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        input.error, select.error {
+            border-color: var(--error-color);
+        }
+
+        .input-group {
+            position: relative;
+        }
+
+        .input-icon {
+            position: absolute;
+            left: 16px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-light);
+            pointer-events: none;
+            font-size: 1.1rem;
+        }
+
+        .input-with-icon {
+            padding-left: 48px;
+        }
+
+        .error-message {
+            color: var(--error-color);
+            font-size: 0.85rem;
+            margin-top: 6px;
+            opacity: 0;
+            transition: var(--transition);
+        }
+
+        .error-message.show {
+            opacity: 1;
+        }
+
+        /* Custom Date Picker Styles */
+        .datepicker-container {
+            position: relative;
+        }
+
+        .datepicker-input {
+            cursor: pointer;
+            position: relative;
+        }
+
+        .datepicker-icon {
+            position: absolute;
+            right: 16px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-light);
+            pointer-events: none;
+            font-size: 1.1rem;
+        }
+
+        .datepicker {
+            position: absolute;
+            top: calc(100% + 8px);
+            left: 0;
+            right: 0;
+            background: var(--white);
+            border: 1px solid var(--gray-300);
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow-lg);
+            z-index: 1000;
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(-10px);
+            transition: var(--transition);
+            max-width: 320px;
+        }
+
+        .datepicker.show {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+        }
+
+        .datepicker-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px;
+            border-bottom: 1px solid var(--gray-200);
+        }
+
+        .datepicker-nav {
+            background: none;
+            border: none;
+            color: var(--text-secondary);
+            cursor: pointer;
+            padding: 8px;
+            border-radius: 50%;
+            transition: var(--transition);
+            font-size: 1.2rem;
+            width: 36px;
+            height: 36px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .datepicker-nav:hover {
+            background: var(--gray-100);
+            color: var(--primary-color);
+        }
+
+        .datepicker-title {
+            font-weight: 600;
+            font-size: 1.1rem;
+            color: var(--text-primary);
+        }
+
+        .datepicker-calendar {
+            padding: 20px;
+        }
+
+        .weekdays {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 2px;
+            margin-bottom: 10px;
+        }
+
+        .weekday {
+            text-align: center;
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: var(--text-light);
+            padding: 8px 4px;
+        }
+
+        .days {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 2px;
+        }
+
+        .day {
+            aspect-ratio: 1;
+            border: none;
+            background: none;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.95rem;
+            border-radius: 6px;
+            transition: var(--transition);
+            color: var(--text-primary);
+        }
+
+        .day:hover:not(.disabled):not(.other-month) {
+            background: var(--gray-100);
+        }
+
+        .day.selected {
+            background: var(--primary-color);
+            color: var(--white);
+            font-weight: 600;
+        }
+
+        .day.today:not(.selected) {
+            background: var(--accent-color);
+            color: var(--white);
+            font-weight: 600;
+        }
+
+        .day.disabled {
+            color: var(--gray-400);
+            cursor: not-allowed;
+        }
+
+        .day.other-month {
+            color: var(--gray-400);
+        }
+
+        .password-strength {
+            margin-top: 8px;
+        }
+
+        .strength-bar {
+            height: 4px;
+            background: var(--gray-200);
+            border-radius: 2px;
+            overflow: hidden;
+            margin-bottom: 6px;
+        }
+
+        .strength-fill {
+            height: 100%;
+            transition: var(--transition);
+            border-radius: 2px;
+        }
+
+        .strength-text {
+            font-size: 0.8rem;
+            font-weight: 500;
+        }
+
+        .checkbox-group {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            margin-top: 20px;
+        }
+
+        .checkbox-group input[type="checkbox"] {
+            width: auto;
+            margin-top: 2px;
+            accent-color: var(--primary-color);
+        }
+
+        .checkbox-group label {
+            margin-bottom: 0;
+            font-weight: 400;
+            line-height: 1.5;
+        }
+
+        .submit-btn {
+            width: 100%;
+            background: linear-gradient(135deg, var(--primary-color), var(--primary-dark));
+            color: var(--white);
+            border: none;
+            padding: 16px;
+            border-radius: var(--border-radius);
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+            margin-top: 30px;
+        }
+
+        .submit-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-md);
+        }
+
+        .submit-btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .login-link {
+            text-align: center;
+            margin-top: 25px;
+            color: var(--text-secondary);
+        }
+
+        .login-link a {
+            color: var(--primary-color);
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        .login-link a:hover {
+            text-decoration: underline;
+        }
+
+        /* Success Animation */
+        .success-message {
+            display: none;
+            text-align: center;
+            padding: 40px;
+            animation: fadeInUp 0.5s ease-out;
+        }
+
+        .success-message.show {
+            display: block;
+        }
+
+        .success-icon {
+            font-size: 4rem;
+            color: var(--success-color);
+            margin-bottom: 20px;
+        }
+
+        .success-title {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 15px;
+        }
+
+        .success-text {
+            font-size: 1.1rem;
+            color: var(--text-secondary);
+            margin-bottom: 30px;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .container {
+                grid-template-columns: 1fr;
+                margin: 10px;
+                max-height: 90vh;
+            }
+
+            .sidebar {
+                padding: 40px 30px;
+                min-height: auto;
+            }
+
+            .sidebar-title {
+                font-size: 2rem;
+            }
+
+            .form-section {
+                padding: 40px 30px;
+            }
+
+            .form-row {
+                grid-template-columns: 1fr;
+                gap: 0;
+            }
+
+            .datepicker {
+                left: 50%;
+                right: auto;
+                transform: translateX(-50%) translateY(-10px);
+            }
+
+            .datepicker.show {
+                transform: translateX(-50%) translateY(0);
+            }
+        }
+
+        @media (max-width: 480px) {
+            body {
+                padding: 10px;
+            }
+
+            .sidebar {
+                padding: 30px 20px;
+            }
+
+            .form-section {
+                padding: 30px 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Sidebar -->
+        <div class="sidebar">
+            <div class="sidebar-content">
+                <div class="logo">🚀</div>
+                <h1 class="sidebar-title">Join Our Platform</h1>
+                <p class="sidebar-subtitle">Create your account and unlock amazing features</p>
+                
+                <ul class="features-list">
+                    <li class="feature-item">
+                        <span class="feature-icon">✨</span>
+                        <span>Access to premium content</span>
+                    </li>
+                    <li class="feature-item">
+                        <span class="feature-icon">🛡️</span>
+                        <span>Advanced security features</span>
+                    </li>
+                    <li class="feature-item">
+                        <span class="feature-icon">📊</span>
+                        <span>Detailed analytics dashboard</span>
+                    </li>
+                    <li class="feature-item">
+                        <span class="feature-icon">💬</span>
+                        <span>24/7 customer support</span>
+                    </li>
+                    <li class="feature-item">
+                        <span class="feature-icon">🌟</span>
+                        <span>Regular feature updates</span>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Form Section -->
+        <div class="form-section">
+            <div class="form-header">
+                <h1 class="form-title">Create Account</h1>
+                <p class="form-subtitle">Fill in your details to get started</p>
+            </div>
+
+            <form id="registrationForm">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="firstName">First Name <span class="required">*</span></label>
+                        <div class="input-group">
+                            <span class="input-icon">👤</span>
+                            <input type="text" id="firstName" name="firstName" class="input-with-icon" placeholder="Enter your first name" required>
+                        </div>
+                        <div class="error-message" id="firstNameError">Please enter your first name</div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="lastName">Last Name <span class="required">*</span></label>
+                        <div class="input-group">
+                            <span class="input-icon">👤</span>
+                            <input type="text" id="lastName" name="lastName" class="input-with-icon" placeholder="Enter your last name" required>
+                        </div>
+                        <div class="error-message" id="lastNameError">Please enter your last name</div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="email">Email Address <span class="required">*</span></label>
+                    <div class="input-group">
+                        <span class="input-icon">📧</span>
+                        <input type="email" id="email" name="email" class="input-with-icon" placeholder="Enter your email address" required>
+                    </div>
+                    <div class="error-message" id="emailError">Please enter a valid email address</div>
+                </div>
+
+                <div class="form-group">
+                    <label for="dateOfBirth">Date of Birth <span class="required">*</span></label>
+                    <div class="datepicker-container">
+                        <input type="text" id="dateOfBirth" name="dateOfBirth" class="datepicker-input" placeholder="Select your date of birth" readonly required>
+                        <span class="datepicker-icon">📅</span>
+                        <div class="datepicker" id="datepicker">
+                            <div class="datepicker-header">
+                                <button type="button" class="datepicker-nav" id="prevMonth">‹</button>
+                                <div class="datepicker-title" id="monthYear"></div>
+                                <button type="button" class="datepicker-nav" id="nextMonth">›</button>
+                            </div>
+                            <div class="datepicker-calendar">
+                                <div class="weekdays">
+                                    <div class="weekday">Sun</div>
+                                    <div class="weekday">Mon</div>
+                                    <div class="weekday">Tue</div>
+                                    <div class="weekday">Wed</div>
+                                    <div class="weekday">Thu</div>
+                                    <div class="weekday">Fri</div>
+                                    <div class="weekday">Sat</div>
+                                </div>
+                                <div class="days" id="daysContainer"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="error-message" id="dateOfBirthError">Please select your date of birth</div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="phone">Phone Number</label>
+                        <div class="input-group">
+                            <span class="input-icon">📞</span>
+                            <input type="tel" id="phone" name="phone" class="input-with-icon" placeholder="Enter your phone number">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="country">Country <span class="required">*</span></label>
+                        <select id="country" name="country" required>
+                            <option value="">Select your country</option>
+                            <option value="US">United States</option>
+                            <option value="CA">Canada</option>
+                            <option value="UK">United Kingdom</option>
+                            <option value="AU">Australia</option>
+                            <option value="DE">Germany</option>
+                            <option value="FR">France</option>
+                            <option value="JP">Japan</option>
+                            <option value="IN">India</option>
+                            <option value="BR">Brazil</option>
+                            <option value="MX">Mexico</option>
+                        </select>
+                        <div class="error-message" id="countryError">Please select your country</div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="password">Password <span class="required">*</span></label>
+                    <div class="input-group">
+                        <span class="input-icon">🔒</span>
+                        <input type="password" id="password" name="password" class="input-with-icon" placeholder="Create a strong password" required>
+                    </div>
+                    <div class="password-strength">
+                        <div class="strength-bar">
+                            <div class="strength-fill" id="strengthFill"></div>
+                        </div>
+                        <div class="strength-text" id="strengthText">Password strength: None</div>
+                    </div>
+                    <div class="error-message" id="passwordError">Password must be at least 8 characters long</div>
+                </div>
+
+                <div class="form-group">
+                    <label for="confirmPassword">Confirm Password <span class="required">*</span></label>
+                    <div class="input-group">
+                        <span class="input-icon">🔒</span>
+                        <input type="password" id="confirmPassword" name="confirmPassword" class="input-with-icon" placeholder="Confirm your password" required>
+                    </div>
+                    <div class="error-message" id="confirmPasswordError">Passwords do not match</div>
+                </div>
+
+                <div class="checkbox-group">
+                    <input type="checkbox" id="terms" name="terms" required>
+                    <label for="terms">I agree to the <a href="#" style="color: var(--primary-color);">Terms of Service</a> and <a href="#" style="color: var(--primary-color);">Privacy Policy</a> <span class="required">*</span></label>
+                </div>
+                <div class="error-message" id="termsError">Please agree to the terms and conditions</div>
+
+                <div class="checkbox-group">
+                    <input type="checkbox" id="newsletter" name="newsletter">
+                    <label for="newsletter">Subscribe to our newsletter for updates and promotions</label>
+                </div>
+
+                <button type="submit" class="submit-btn" id="submitBtn">Create Account</button>
+
+                <div class="login-link">
+                    Already have an account? <a href="#">Sign in here</a>
+                </div>
+            </form>
+
+            <!-- Success Message -->
+            <div class="success-message" id="successMessage">
+                <div class="success-icon">✅</div>
+                <h2 class="success-title">Account Created Successfully!</h2>
+                <p class="success-text">Welcome aboard! A confirmation email has been sent to your email address. Please verify your account to get started.</p>
+                <button class="submit-btn" onclick="resetForm()">Create Another Account</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Date Picker Implementation
+        class DatePicker {
+            constructor(inputElement) {
+                this.input = inputElement;
+                this.datepicker = document.getElementById('datepicker');
+                this.monthYear = document.getElementById('monthYear');
+                this.daysContainer = document.getElementById('daysContainer');
+                this.prevBtn = document.getElementById('prevMonth');
+                this.nextBtn = document.getElementById('nextMonth');
+                
+                this.currentDate = new Date();
+                this.selectedDate = null;
+                this.currentMonth = this.currentDate.getMonth();
+                this.currentYear = this.currentDate.getFullYear();
+                
+                this.monthNames = [
+                    'January', 'February', 'March', 'April', 'May', 'June',
+                    'July', 'August', 'September', 'October', 'November', 'December'
+                ];
+                
+                this.init();
+            }
+            
+            init() {
+                this.input.addEventListener('click', () => this.show());
+                this.prevBtn.addEventListener('click', () => this.previousMonth());
+                this.nextBtn.addEventListener('click', () => this.nextMonth());
+                document.addEventListener('click', (e) => this.handleOutsideClick(e));
+                
+                this.render();
+            }
+            
+            show() {
+                this.datepicker.classList.add('show');
+                this.render();
+            }
+            
+            hide() {
+                this.datepicker.classList.remove('show');
+            }
+            
+            handleOutsideClick(e) {
+                if (!this.input.contains(e.target) && !this.datepicker.contains(e.target)) {
+                    this.hide();
+                }
+            }
+            
+            previousMonth() {
+                this.currentMonth--;
+                if (this.currentMonth < 0) {
+                    this.currentMonth = 11;
+                    this.currentYear--;
+                }
+                this.render();
+            }
+            
+            nextMonth() {
+                this.currentMonth++;
+                if (this.currentMonth > 11) {
+                    this.currentMonth = 0;
+                    this.currentYear++;
+                }
+                this.render();
+            }
+            
+            render() {
+                this.monthYear.textContent = `${this.monthNames[this.currentMonth]} ${this.currentYear}`;
+                this.renderDays();
+            }
+            
+            renderDays() {
+                this.daysContainer.innerHTML = '';
+                
+                const firstDay = new Date(this.currentYear, this.currentMonth, 1).getDay();
+                const daysInMonth = new Date(this.currentYear, this.currentMonth + 1, 0).getDate();
+                const daysInPrevMonth = new Date(this.currentYear, this.currentMonth, 0).getDate();
+                
+                // Previous month's days
+                for (let i = firstDay - 1; i >= 0; i--) {
+                    const day = daysInPrevMonth - i;
+                    const dayElement = this.createDayElement(day, 'other-month');
+                    this.daysContainer.appendChild(dayElement);
+                }
+                
+                // Current month's days
+                for (let day = 1; day <= daysInMonth; day++) {
+                    const dayElement = this.createDayElement(day, 'current-month');
+                    
+                    // Check if it's today
+                    const today = new Date();
+                    if (this.currentYear === today.getFullYear() && 
+                        this.currentMonth === today.getMonth() && 
+                        day === today.getDate()) {
+                        dayElement.classList.add('today');
+                    }
+                    
+                    // Check if it's selected
+                    if (this.selectedDate && 
+                        this.selectedDate.getFullYear() === this.currentYear &&
+                        this.selectedDate.getMonth() === this.currentMonth &&
+                        this.selectedDate.getDate() === day) {
+                        dayElement.classList.add('selected');
+                    }
+                    
+                    // Disable future dates beyond today
+                    const dayDate = new Date(this.currentYear, this.currentMonth, day);
+                    if (dayDate > new Date()) {
+                        dayElement.classList.add('disabled');
+                    } else {
+                        dayElement.addEventListener('click', () => this.selectDate(day));
+                    }
+                    
+                    this.daysContainer.appendChild(dayElement);
+                }
+                
+                // Next month's days to fill the grid
+                const totalCells = Math.ceil((firstDay + daysInMonth) / 7) * 7;
+                const remainingCells = totalCells - (firstDay + daysInMonth);
+                
+                for (let day = 1; day <= remainingCells; day++) {
+                    const dayElement = this.createDayElement(day, 'other-month');
+                    this.daysContainer.appendChild(dayElement);
+                }
+            }
+            
+            createDayElement(day, type) {
+                const dayElement = document.createElement('button');
+                dayElement.type = 'button';
+                dayElement.classList.add('day');
+                dayElement.textContent = day;
+                
+                if (type === 'other-month') {
+                    dayElement.classList.add('other-month');
+                }
+                
+                return dayElement;
+            }
+            
+            selectDate(day) {
+                this.selectedDate = new Date(this.currentYear, this.currentMonth, day);
+                this.input.value = this.formatDate(this.selectedDate);
+                this.hide();
+                this.clearError();
+            }
+            
+            formatDate(date) {
+                const options = { year: 'numeric', month: 'long', day: 'numeric' };
+                return date.toLocaleDateString('en-US', options);
+            }
+            
+            clearError() {
+                this.input.classList.remove('error');
+                document.getElementById('dateOfBirthError').classList.remove('show');
+            }
+        }
+
+        // Password Strength Checker
+        class PasswordStrength {
+            constructor(passwordInput) {
+                this.passwordInput = passwordInput;
+                this.strengthFill = document.getElementById('strengthFill');
+                this.strengthText = document.getElementById('strengthText');
+                
+                this.passwordInput.addEventListener('input', () => this.checkStrength());
+            }
+            
+            checkStrength() {
+                const password = this.passwordInput.value;
+                const strength = this.calculateStrength(password);
+                
+                this.updateDisplay(strength);
+            }
+            
+            calculateStrength(password) {
+                let score = 0;
+                
+                if (password.length >= 8) score += 1;
+                if (password.length >= 12) score += 1;
+                if (/[a-z]/.test(password)) score += 1;
+                if (/[A-Z]/.test(password)) score += 1;
+                if (/[0-9]/.test(password)) score += 1;
+                if (/[^A-Za-z0-9]/.test(password)) score += 1;
+                
+                return Math.min(score, 4);
+            }
+            
+            updateDisplay(strength) {
+                const colors = ['#f56565', '#ed8936', '#ecc94b', '#68d391', '#48bb78'];
+                const texts = ['Weak', 'Fair', 'Good', 'Strong', 'Very Strong'];
+                const widths = [20, 40, 60, 80, 100];
+                
+                if (strength === 0) {
+                    this.strengthFill.style.width = '0%';
+                    this.strengthText.textContent = 'Password strength: None';
+                    this.strengthText.style.color = '#718096';
+                } else {
+                    this.strengthFill.style.width = widths[strength - 1] + '%';
+                    this.strengthFill.style.backgroundColor = colors[strength - 1];
+                    this.strengthText.textContent = `Password strength: ${texts[strength - 1]}`;
+                    this.strengthText.style.color = colors[strength - 1];
+                }
+            }
+        }
+
+        // Form Validation
+        class FormValidator {
+            constructor(form) {
+                this.form = form;
+                this.errors = {};
+                
+                this.setupValidation();
+            }
+            
+            setupValidation() {
+                const inputs = this.form.querySelectorAll('input, select');
+                inputs.forEach(input => {
+                    input.addEventListener('blur', () => this.validateField(input));
+                    input.addEventListener('input', () => this.clearError(input));
+                });
+            }
+            
+            validateField(field) {
+                const value = field.value.trim();
+                const name = field.name;
+                let isValid = true;
+                let errorMessage = '';
+                
+                switch (name) {
+                    case 'firstName':
+                    case 'lastName':
+                        if (!value) {
+                            isValid = false;
+                            errorMessage = `Please enter your ${name === 'firstName' ? 'first' : 'last'} name`;
+                        }
+                        break;
+                        
+                    case 'email':
+                        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                        if (!value) {
+                            isValid = false;
+                            errorMessage = 'Please enter your email address';
+                        } else if (!emailRegex.test(value)) {
+                            isValid = false;
+                            errorMessage = 'Please enter a valid email address';
+                        }
+                        break;
+                        
+                    case 'dateOfBirth':
+                        if (!value) {
+                            isValid = false;
+                            errorMessage = 'Please select your date of birth';
+                        }
+                        break;
+                        
+                    case 'country':
+                        if (!value) {
+                            isValid = false;
+                            errorMessage = 'Please select your country';
+                        }
+                        break;
+                        
+                    case 'password':
+                        if (!value) {
+                            isValid = false;
+                            errorMessage = 'Please enter a password';
+                        } else if (value.length < 8) {
+                            isValid = false;
+                            errorMessage = 'Password must be at least 8 characters long';
+                        }
+                        break;
+                        
+                    case 'confirmPassword':
+                        const password = this.form.querySelector('#password').value;
+                        if (!value) {
+                            isValid = false;
+                            errorMessage = 'Please confirm your password';
+                        } else if (value !== password) {
+                            isValid = false;
+                            errorMessage = 'Passwords do not match';
+                        }
+                        break;
+                        
+                    case 'terms':
+                        if (!field.checked) {
+                            isValid = false;
+                            errorMessage = 'Please agree to the terms and conditions';
+                        }
+                        break;
+                }
+                
+                this.showError(field, isValid, errorMessage);
+                return isValid;
+            }
+            
+            showError(field, isValid, errorMessage) {
+                const errorElement = document.getElementById(field.name + 'Error');
+                
+                if (!isValid) {
+                    field.classList.add('error');
+                    if (errorElement) {
+                        errorElement.textContent = errorMessage;
+                        errorElement.classList.add('show');
+                    }
+                    this.errors[field.name] = errorMessage;
+                } else {
+                    field.classList.remove('error');
+                    if (errorElement) {
+                        errorElement.classList.remove('show');
+                    }
+                    delete this.errors[field.name];
+                }
+            }
+            
+            clearError(field) {
+                field.classList.remove('error');
+                const errorElement = document.getElementById(field.name + 'Error');
+                if (errorElement) {
+                    errorElement.classList.remove('show');
+                }
+                delete this.errors[field.name];
+            }
+            
+            validateForm() {
+                const requiredFields = this.form.querySelectorAll('[required]');
+                let isValid = true;
+                
+                requiredFields.forEach(field => {
+                    if (!this.validateField(field)) {
+                        isValid = false;
+                    }
+                });
+                
+                return isValid && Object.keys(this.errors).length === 0;
+            }
+        }
+
+        // Initialize components
+        document.addEventListener('DOMContentLoaded', function() {
+            const form = document.getElementById('registrationForm');
+            const dateInput = document.getElementById('dateOfBirth');
+            const passwordInput = document.getElementById('password');
+            const successMessage = document.getElementById('successMessage');
+            
+            // Initialize components
+            const datePicker = new DatePicker(dateInput);
+            const passwordStrength = new PasswordStrength(passwordInput);
+            const validator = new FormValidator(form);
+            
+            // Form submission
+            form.addEventListener('submit', function(e) {
+                e.preventDefault();
+                
+                if (validator.validateForm()) {
+                    // Simulate form submission
+                    const submitBtn = document.getElementById('submitBtn');
+                    submitBtn.disabled = true;
+                    submitBtn.textContent = 'Creating Account...';
+                    
+                    setTimeout(() => {
+                        form.style.display = 'none';
+                        successMessage.classList.add('show');
+                    }, 2000);
+                }
+            });
+        });
+
+        // Reset form function
+        function resetForm() {
+            const form = document.getElementById('registrationForm');
+            const successMessage = document.getElementById('successMessage');
+            const submitBtn = document.getElementById('submitBtn');
+            
+            form.reset();
+            form.style.display = 'block';
+            successMessage.classList.remove('show');
+            submitBtn.disabled = false;
+            submitBtn.textContent = 'Create Account';
+            
+            // Clear all errors
+            const errors = document.querySelectorAll('.error-message');
+            errors.forEach(error => error.classList.remove('show'));
+            
+            const inputs = document.querySelectorAll('input, select');
+            inputs.forEach(input => input.classList.remove('error'));
+            
+            // Reset password strength
+            document.getElementById('strengthFill').style.width = '0%';
+            document.getElementById('strengthText').textContent = 'Password strength: None';
+            document.getElementById('strengthText').style.color = '#718096';
+        }
+    </script>
+</body>
+</html>

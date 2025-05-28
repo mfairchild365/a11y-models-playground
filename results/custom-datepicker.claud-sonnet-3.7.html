@@ -1,0 +1,875 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>User Registration Form</title>
+  <style>
+    :root {
+      --primary-color: #4361ee;
+      --primary-light: #4895ef;
+      --primary-dark: #3f37c9;
+      --secondary-color: #f72585;
+      --text-color: #333;
+      --text-light: #666;
+      --background-color: #f9fafb;
+      --white: #fff;
+      --border-color: #e1e5ea;
+      --success-color: #06d6a0;
+      --error-color: #ef476f;
+      --box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      --border-radius: 8px;
+      --border-radius-sm: 4px;
+      --transition: all 0.3s ease;
+    }
+    
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background-color: var(--background-color);
+      color: var(--text-color);
+      line-height: 1.6;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+    }
+    
+    .container {
+      max-width: 1000px;
+      width: 100%;
+      display: flex;
+      border-radius: var(--border-radius);
+      overflow: hidden;
+      box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
+      background-color: var(--white);
+    }
+    
+    .form-sidebar {
+      width: 40%;
+      background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-dark) 100%);
+      padding: 40px;
+      color: white;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .sidebar-pattern {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      opacity: 0.1;
+      background-image: linear-gradient(30deg, rgba(255, 255, 255, 0.1) 12%, transparent 12.5%, transparent 87%, rgba(255, 255, 255, 0.1) 87.5%, rgba(255, 255, 255, 0.1)),
+                        linear-gradient(150deg, rgba(255, 255, 255, 0.1) 12%, transparent 12.5%, transparent 87%, rgba(255, 255, 255, 0.1) 87.5%, rgba(255, 255, 255, 0.1)),
+                        linear-gradient(30deg, rgba(255, 255, 255, 0.1) 12%, transparent 12.5%, transparent 87%, rgba(255, 255, 255, 0.1) 87.5%, rgba(255, 255, 255, 0.1)),
+                        linear-gradient(150deg, rgba(255, 255, 255, 0.1) 12%, transparent 12.5%, transparent 87%, rgba(255, 255, 255, 0.1) 87.5%, rgba(255, 255, 255, 0.1));
+      background-size: 20px 40px;
+      z-index: 0;
+    }
+    
+    .sidebar-content {
+      position: relative;
+      z-index: 1;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+    }
+    
+    .logo {
+      font-size: 26px;
+      font-weight: 800;
+      margin-bottom: 50px;
+    }
+    
+    .logo span {
+      color: var(--secondary-color);
+    }
+    
+    .sidebar-title {
+      font-size: 32px;
+      font-weight: 700;
+      margin-bottom: 20px;
+    }
+    
+    .sidebar-text {
+      opacity: 0.8;
+      margin-bottom: 30px;
+      line-height: 1.7;
+    }
+    
+    .testimonial {
+      background: rgba(255, 255, 255, 0.1);
+      padding: 20px;
+      border-radius: 10px;
+      margin-top: auto;
+    }
+    
+    .testimonial-text {
+      font-style: italic;
+      margin-bottom: 15px;
+      opacity: 0.9;
+      font-size: 14px;
+    }
+    
+    .testimonial-author {
+      display: flex;
+      align-items: center;
+    }
+    
+    .testimonial-avatar {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background-color: var(--secondary-color);
+      margin-right: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+    }
+    
+    .testimonial-name {
+      font-weight: 600;
+      font-size: 14px;
+    }
+    
+    .testimonial-role {
+      font-size: 12px;
+      opacity: 0.8;
+    }
+    
+    .form-container {
+      width: 60%;
+      padding: 40px;
+      overflow-y: auto;
+      max-height: 700px;
+    }
+    
+    .form-header {
+      margin-bottom: 30px;
+    }
+    
+    h1 {
+      font-size: 24px;
+      font-weight: 700;
+      margin-bottom: 10px;
+      color: var(--text-color);
+    }
+    
+    .form-header p {
+      color: var(--text-light);
+    }
+    
+    .form-group {
+      margin-bottom: 25px;
+    }
+    
+    label {
+      display: block;
+      margin-bottom: 8px;
+      font-weight: 600;
+      font-size: 15px;
+    }
+    
+    .input-group {
+      position: relative;
+    }
+    
+    .input-icon {
+      position: absolute;
+      left: 15px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--text-light);
+      font-size: 18px;
+    }
+    
+    .input-field {
+      width: 100%;
+      padding: 12px 15px 12px 45px;
+      border: 1px solid var(--border-color);
+      border-radius: var(--border-radius-sm);
+      font-size: 16px;
+      transition: var(--transition);
+    }
+    
+    .input-field:focus {
+      outline: none;
+      border-color: var(--primary-color);
+      box-shadow: 0 0 0 3px rgba(67, 97, 238, 0.15);
+    }
+    
+    .input-field::placeholder {
+      color: #adb5bd;
+    }
+    
+    .error-message {
+      font-size: 13px;
+      color: var(--error-color);
+      margin-top: 5px;
+      display: none;
+    }
+    
+    .input-field.error {
+      border-color: var(--error-color);
+    }
+    
+    .input-field.error:focus {
+      box-shadow: 0 0 0 3px rgba(239, 71, 111, 0.15);
+    }
+    
+    .error .error-message {
+      display: block;
+    }
+    
+    .form-row {
+      display: flex;
+      gap: 20px;
+    }
+    
+    .form-row .form-group {
+      flex: 1;
+    }
+    
+    /* Custom Date Picker Styles */
+    .date-picker-container {
+      position: relative;
+    }
+    
+    .date-picker-input {
+      cursor: pointer;
+      background-color: var(--white);
+      caret-color: transparent;
+    }
+    
+    .calendar {
+      position: absolute;
+      left: 0;
+      top: calc(100% + 5px);
+      width: 300px;
+      background: var(--white);
+      box-shadow: var(--box-shadow);
+      border-radius: var(--border-radius);
+      z-index: 10;
+      opacity: 0;
+      transform: translateY(-10px);
+      pointer-events: none;
+      transition: opacity 0.2s, transform 0.2s;
+      padding: 20px;
+    }
+    
+    .calendar.open {
+      opacity: 1;
+      transform: translateY(0);
+      pointer-events: auto;
+    }
+    
+    .calendar-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 15px;
+    }
+    
+    .calendar-nav {
+      display: flex;
+      gap: 10px;
+    }
+    
+    .calendar-btn {
+      background: none;
+      border: none;
+      font-size: 16px;
+      cursor: pointer;
+      width: 30px;
+      height: 30px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 50%;
+      transition: var(--transition);
+    }
+    
+    .calendar-btn:hover {
+      background-color: var(--background-color);
+    }
+    
+    .calendar-month {
+      font-weight: 600;
+      font-size: 16px;
+    }
+    
+    .weekdays {
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      text-align: center;
+      font-weight: 600;
+      color: var(--text-light);
+      font-size: 13px;
+      margin-bottom: 10px;
+    }
+    
+    .days {
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      gap: 5px;
+    }
+    
+    .day {
+      width: 100%;
+      aspect-ratio: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 14px;
+      cursor: pointer;
+      border-radius: 50%;
+      transition: var(--transition);
+    }
+    
+    .day:hover:not(.empty):not(.disabled) {
+      background-color: var(--background-color);
+    }
+    
+    .day.today {
+      border: 2px solid var(--primary-color);
+      font-weight: 600;
+    }
+    
+    .day.selected {
+      background-color: var(--primary-color);
+      color: white;
+      font-weight: 600;
+    }
+    
+    .day.disabled {
+      opacity: 0.3;
+      cursor: not-allowed;
+    }
+    
+    .day.empty {
+      cursor: default;
+    }
+    
+    .checkbox-group {
+      display: flex;
+      align-items: center;
+    }
+    
+    .checkbox-container {
+      display: flex;
+      align-items: center;
+      cursor: pointer;
+    }
+    
+    .checkbox-container input {
+      position: absolute;
+      opacity: 0;
+      cursor: pointer;
+    }
+    
+    .checkmark {
+      height: 20px;
+      width: 20px;
+      border: 2px solid var(--border-color);
+      border-radius: 4px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-right: 10px;
+      transition: var(--transition);
+    }
+    
+    .checkbox-container:hover .checkmark {
+      border-color: var(--primary-color);
+    }
+    
+    .checkbox-container input:checked ~ .checkmark {
+      background-color: var(--primary-color);
+      border-color: var(--primary-color);
+    }
+    
+    .checkmark::after {
+      content: "";
+      width: 5px;
+      height: 10px;
+      border: solid white;
+      border-width: 0 2px 2px 0;
+      transform: rotate(45deg);
+      display: none;
+    }
+    
+    .checkbox-container input:checked ~ .checkmark::after {
+      display: block;
+    }
+    
+    .btn {
+      display: inline-block;
+      background: var(--primary-color);
+      color: white;
+      border: none;
+      padding: 12px 25px;
+      border-radius: var(--border-radius-sm);
+      font-size: 16px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: var(--transition);
+      width: 100%;
+      text-align: center;
+    }
+    
+    .btn:hover {
+      background: var(--primary-dark);
+      transform: translateY(-2px);
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    }
+    
+    .btn:active {
+      transform: translateY(0);
+    }
+    
+    /* Success Message */
+    .success-message {
+      display: none;
+      text-align: center;
+      padding: 30px;
+    }
+    
+    .success-message.show {
+      display: block;
+      animation: fadeIn 0.5s;
+    }
+    
+    .success-icon {
+      font-size: 60px;
+      color: var(--success-color);
+      margin-bottom: 20px;
+    }
+    
+    /* Media Queries */
+    @media (max-width: 900px) {
+      .container {
+        flex-direction: column;
+        max-width: 500px;
+      }
+      
+      .form-sidebar,
+      .form-container {
+        width: 100%;
+      }
+      
+      .form-sidebar {
+        padding: 30px;
+      }
+      
+      .testimonial {
+        display: none;
+      }
+    }
+    
+    @media (max-width: 500px) {
+      .form-container {
+        padding: 20px;
+      }
+      
+      .form-row {
+        flex-direction: column;
+        gap: 0;
+      }
+    }
+    
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="form-sidebar">
+      <div class="sidebar-pattern"></div>
+      <div class="sidebar-content">
+        <div class="logo">Wave<span>Form</span></div>
+        <h2 class="sidebar-title">Join our community today!</h2>
+        <p class="sidebar-text">Create your account and get access to all our premium features, exclusive content, and special offers.</p>
+        
+        <div class="testimonial">
+          <p class="testimonial-text">"I've been using this platform for 6 months now, and it has completely transformed how I manage my workflow. The user interface is intuitive, and the customer support is exceptional."</p>
+          <div class="testimonial-author">
+            <div class="testimonial-avatar">SM</div>
+            <div>
+              <div class="testimonial-name">Sarah Mitchell</div>
+              <div class="testimonial-role">Product Designer</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <div class="form-container">
+      <div class="form-header">
+        <h1>Create Account</h1>
+        <p>Fill in your details to get started</p>
+      </div>
+      
+      <form id="registration-form">
+        <div class="form-row">
+          <div class="form-group">
+            <label for="first-name">First Name</label>
+            <div class="input-group">
+              <span class="input-icon">👤</span>
+              <input type="text" id="first-name" class="input-field" placeholder="Enter your first name" required>
+              <div class="error-message">First name is required</div>
+            </div>
+          </div>
+          
+          <div class="form-group">
+            <label for="last-name">Last Name</label>
+            <div class="input-group">
+              <span class="input-icon">👤</span>
+              <input type="text" id="last-name" class="input-field" placeholder="Enter your last name" required>
+              <div class="error-message">Last name is required</div>
+            </div>
+          </div>
+        </div>
+        
+        <div class="form-group">
+          <label for="email">Email Address</label>
+          <div class="input-group">
+            <span class="input-icon">✉️</span>
+            <input type="email" id="email" class="input-field" placeholder="Enter your email" required>
+            <div class="error-message">Please enter a valid email</div>
+          </div>
+        </div>
+        
+        <div class="form-group">
+          <label for="password">Password</label>
+          <div class="input-group">
+            <span class="input-icon">🔒</span>
+            <input type="password" id="password" class="input-field" placeholder="Create a password" required>
+            <div class="error-message">Password must be at least 8 characters</div>
+          </div>
+        </div>
+        
+        <div class="form-group">
+          <label for="dob">Date of Birth</label>
+          <div class="date-picker-container">
+            <div class="input-group">
+              <span class="input-icon">📅</span>
+              <input type="text" id="dob" class="input-field date-picker-input" placeholder="MM/DD/YYYY" readonly required>
+              <div class="error-message">Please select your date of birth</div>
+            </div>
+            <div class="calendar" id="calendar">
+              <div class="calendar-header">
+                <div class="calendar-month" id="calendar-month">April 2023</div>
+                <div class="calendar-nav">
+                  <button type="button" class="calendar-btn" id="prev-month">◀</button>
+                  <button type="button" class="calendar-btn" id="next-month">▶</button>
+                </div>
+              </div>
+              <div class="weekdays">
+                <div>Su</div>
+                <div>Mo</div>
+                <div>Tu</div>
+                <div>We</div>
+                <div>Th</div>
+                <div>Fr</div>
+                <div>Sa</div>
+              </div>
+              <div class="days" id="calendar-days"></div>
+            </div>
+          </div>
+        </div>
+        
+        <div class="form-group">
+          <label for="phone">Phone Number</label>
+          <div class="input-group">
+            <span class="input-icon">📞</span>
+            <input type="tel" id="phone" class="input-field" placeholder="Enter your phone number">
+            <div class="error-message">Please enter a valid phone number</div>
+          </div>
+        </div>
+        
+        <div class="form-group checkbox-group">
+          <label class="checkbox-container">
+            <input type="checkbox" id="terms" required>
+            <span class="checkmark"></span>
+            I agree to the Terms of Service and Privacy Policy
+          </label>
+          <div class="error-message">You must agree to the terms</div>
+        </div>
+        
+        <div class="form-group checkbox-group">
+          <label class="checkbox-container">
+            <input type="checkbox" id="newsletter">
+            <span class="checkmark"></span>
+            Subscribe to our newsletter
+          </label>
+        </div>
+        
+        <button type="submit" class="btn">Create Account</button>
+      </form>
+      
+      <div class="success-message" id="success-message">
+        <div class="success-icon">✓</div>
+        <h2>Registration Successful!</h2>
+        <p>Thank you for joining us. Check your email for verification.</p>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Date Picker Implementation
+    document.addEventListener('DOMContentLoaded', function() {
+      // Get DOM elements
+      const dobInput = document.getElementById('dob');
+      const calendar = document.getElementById('calendar');
+      const calendarDays = document.getElementById('calendar-days');
+      const calendarMonth = document.getElementById('calendar-month');
+      const prevMonthBtn = document.getElementById('prev-month');
+      const nextMonthBtn = document.getElementById('next-month');
+      const form = document.getElementById('registration-form');
+      const successMessage = document.getElementById('success-message');
+      
+      // Current date variables
+      const today = new Date();
+      let currentMonth = today.getMonth();
+      let currentYear = today.getFullYear();
+      let selectedDate = null;
+      
+      // Month names
+      const monthNames = [
+        'January', 'February', 'March', 'April', 'May', 'June',
+        'July', 'August', 'September', 'October', 'November', 'December'
+      ];
+      
+      // Initialize date picker
+      renderCalendar(currentMonth, currentYear);
+      
+      // Event listeners
+      dobInput.addEventListener('click', toggleCalendar);
+      prevMonthBtn.addEventListener('click', () => navigateMonth(-1));
+      nextMonthBtn.addEventListener('click', () => navigateMonth(1));
+      document.addEventListener('click', closeCalendarOnOutsideClick);
+      form.addEventListener('submit', handleSubmit);
+      
+      // Add event listeners to all input fields for validation
+      const inputFields = document.querySelectorAll('.input-field');
+      inputFields.forEach(input => {
+        input.addEventListener('blur', () => {
+          validateField(input);
+        });
+      });
+      
+      // Functions
+      function toggleCalendar(e) {
+        e.stopPropagation();
+        calendar.classList.toggle('open');
+      }
+      
+      function closeCalendarOnOutsideClick(e) {
+        if (!calendar.contains(e.target) && e.target !== dobInput) {
+          calendar.classList.remove('open');
+        }
+      }
+      
+      function navigateMonth(direction) {
+        currentMonth += direction;
+        
+        if (currentMonth < 0) {
+          currentMonth = 11;
+          currentYear--;
+        } else if (currentMonth > 11) {
+          currentMonth = 0;
+          currentYear++;
+        }
+        
+        renderCalendar(currentMonth, currentYear);
+      }
+      
+      function renderCalendar(month, year) {
+        // Update header
+        calendarMonth.textContent = `${monthNames[month]} ${year}`;
+        
+        // Clear previous days
+        calendarDays.innerHTML = '';
+        
+        // Get first day of the month and number of days
+        const firstDay = new Date(year, month, 1).getDay();
+        const daysInMonth = new Date(year, month + 1, 0).getDate();
+        
+        // Calculate minimum date (18 years ago)
+        const minDate = new Date();
+        minDate.setFullYear(minDate.getFullYear() - 18);
+        
+        // Create empty cells for days before the first day of month
+        for (let i = 0; i < firstDay; i++) {
+          const emptyDay = document.createElement('div');
+          emptyDay.classList.add('day', 'empty');
+          calendarDays.appendChild(emptyDay);
+        }
+        
+        // Create days of the month
+        for (let day = 1; day <= daysInMonth; day++) {
+          const dayElement = document.createElement('div');
+          dayElement.classList.add('day');
+          dayElement.textContent = day;
+          
+          const currentDate = new Date(year, month, day);
+          
+          // Check if day is today
+          if (
+            day === today.getDate() && 
+            month === today.getMonth() && 
+            year === today.getFullYear()
+          ) {
+            dayElement.classList.add('today');
+          }
+          
+          // Check if day is selected
+          if (
+            selectedDate && 
+            day === selectedDate.getDate() && 
+            month === selectedDate.getMonth() && 
+            year === selectedDate.getFullYear()
+          ) {
+            dayElement.classList.add('selected');
+          }
+          
+          // Disable future dates and dates less than 18 years ago
+          if (currentDate > today || currentDate > minDate) {
+            dayElement.classList.add('disabled');
+          } else {
+            dayElement.addEventListener('click', () => selectDate(day, month, year));
+          }
+          
+          calendarDays.appendChild(dayElement);
+        }
+      }
+      
+      function selectDate(day, month, year) {
+        selectedDate = new Date(year, month, day);
+        
+        // Format date for input (MM/DD/YYYY)
+        const formattedDate = `${month + 1}/${day}/${year}`;
+        dobInput.value = formattedDate;
+        
+        // Close calendar
+        calendar.classList.remove('open');
+        
+        // Re-render calendar to update selected date
+        renderCalendar(currentMonth, currentYear);
+        
+        // Validate the field
+        validateField(dobInput);
+      }
+      
+      function validateField(input) {
+        const formGroup = input.closest('.form-group');
+        let isValid = true;
+        
+        switch(input.id) {
+          case 'first-name':
+          case 'last-name':
+            isValid = input.value.trim() !== '';
+            break;
+            
+          case 'email':
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            isValid = emailRegex.test(input.value);
+            break;
+            
+          case 'password':
+            isValid = input.value.length >= 8;
+            break;
+            
+          case 'dob':
+            isValid = input.value !== '';
+            break;
+            
+          case 'phone':
+            // Phone is optional, so only validate if there's a value
+            if (input.value.trim() === '') {
+              isValid = true;
+            } else {
+              const phoneRegex = /^[0-9\+\-\(\)\s]{10,15}$/;
+              isValid = phoneRegex.test(input.value);
+            }
+            break;
+        }
+        
+        if (!isValid) {
+          formGroup.classList.add('error');
+          input.classList.add('error');
+        } else {
+          formGroup.classList.remove('error');
+          input.classList.remove('error');
+        }
+        
+        return isValid;
+      }
+      
+      function validateForm() {
+        let isValid = true;
+        
+        // Validate all required fields
+        const requiredFields = form.querySelectorAll('[required]');
+        requiredFields.forEach(field => {
+          if (!validateField(field)) {
+            isValid = false;
+          }
+        });
+        
+        // Validate terms checkbox
+        const termsCheckbox = document.getElementById('terms');
+        const termsGroup = termsCheckbox.closest('.form-group');
+        
+        if (!termsCheckbox.checked) {
+          termsGroup.classList.add('error');
+          isValid = false;
+        } else {
+          termsGroup.classList.remove('error');
+        }
+        
+        return isValid;
+      }
+      
+      function handleSubmit(e) {
+        e.preventDefault();
+        
+        // Validate form
+        if (!validateForm()) {
+          return;
+        }
+        
+        // Get form data
+        const formData = {
+          firstName: document.getElementById('first-name').value,
+          lastName: document.getElementById('last-name').value,
+          email: document.getElementById('email').value,
+          password: document.getElementById('password').value,
+          dob: document.getElementById('dob').value,
+          phone: document.getElementById('phone').value,
+          newsletter: document.getElementById('newsletter').checked
+        };
+        
+        // Here you would normally send data to server
+        console.log('Form submitted with data:', formData);
+        
+        // Show success message
+        form.style.display = 'none';
+        successMessage.classList.add('show');
+      }
+    });
+  </script>
+</body>
+</html>

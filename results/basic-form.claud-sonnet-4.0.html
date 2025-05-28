@@ -1,0 +1,940 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TechConf 2024 Workshop Registration</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary-color: #667eea;
+            --primary-dark: #5a67d8;
+            --secondary-color: #764ba2;
+            --accent-color: #f093fb;
+            --success-color: #48bb78;
+            --error-color: #f56565;
+            --warning-color: #ed8936;
+            --text-primary: #2d3748;
+            --text-secondary: #4a5568;
+            --text-light: #718096;
+            --background: #f7fafc;
+            --white: #ffffff;
+            --gray-100: #f7fafc;
+            --gray-200: #edf2f7;
+            --gray-300: #e2e8f0;
+            --gray-400: #cbd5e0;
+            --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.1);
+            --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.1);
+            --shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.1);
+            --shadow-xl: 0 20px 25px rgba(0, 0, 0, 0.1);
+            --border-radius: 8px;
+            --border-radius-lg: 12px;
+            --transition: all 0.3s ease;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+            color: var(--text-primary);
+            line-height: 1.6;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: var(--white);
+            border-radius: var(--border-radius-lg);
+            box-shadow: var(--shadow-xl);
+            overflow: hidden;
+            display: grid;
+            grid-template-columns: 1fr 2fr;
+            min-height: 600px;
+        }
+
+        .sidebar {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: var(--white);
+            padding: 40px 30px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .sidebar::before {
+            content: '';
+            position: absolute;
+            top: -50px;
+            right: -50px;
+            width: 200px;
+            height: 200px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            z-index: 1;
+        }
+
+        .sidebar::after {
+            content: '';
+            position: absolute;
+            bottom: -30px;
+            left: -30px;
+            width: 150px;
+            height: 150px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 50%;
+            z-index: 1;
+        }
+
+        .sidebar-content {
+            position: relative;
+            z-index: 2;
+        }
+
+        .event-logo {
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .event-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 15px;
+            text-align: center;
+        }
+
+        .event-details {
+            margin-top: 30px;
+        }
+
+        .detail-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+            padding: 15px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: var(--border-radius);
+            backdrop-filter: blur(10px);
+        }
+
+        .detail-icon {
+            font-size: 1.2rem;
+            margin-right: 15px;
+            width: 30px;
+            text-align: center;
+        }
+
+        .detail-text h4 {
+            font-size: 0.9rem;
+            font-weight: 600;
+            margin-bottom: 5px;
+            opacity: 0.9;
+        }
+
+        .detail-text p {
+            font-size: 0.8rem;
+            opacity: 0.8;
+            line-height: 1.4;
+        }
+
+        .form-section {
+            padding: 40px;
+            overflow-y: auto;
+        }
+
+        .form-header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .form-header h1 {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 10px;
+        }
+
+        .form-header p {
+            color: var(--text-secondary);
+            font-size: 1rem;
+        }
+
+        .progress-bar {
+            background: var(--gray-200);
+            height: 4px;
+            border-radius: 2px;
+            margin-bottom: 30px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            background: linear-gradient(90deg, var(--primary-color), var(--accent-color));
+            height: 100%;
+            width: 0%;
+            transition: var(--transition);
+        }
+
+        .form-step {
+            display: none;
+        }
+
+        .form-step.active {
+            display: block;
+            animation: slideIn 0.3s ease-out;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateX(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: var(--text-primary);
+            font-size: 0.9rem;
+        }
+
+        .required {
+            color: var(--error-color);
+        }
+
+        input, select, textarea {
+            width: 100%;
+            padding: 12px 16px;
+            border: 2px solid var(--gray-300);
+            border-radius: var(--border-radius);
+            font-size: 1rem;
+            transition: var(--transition);
+            background: var(--white);
+        }
+
+        input:focus, select:focus, textarea:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        input.error, select.error, textarea.error {
+            border-color: var(--error-color);
+        }
+
+        .error-message {
+            color: var(--error-color);
+            font-size: 0.8rem;
+            margin-top: 5px;
+            opacity: 0;
+            transition: var(--transition);
+        }
+
+        .error-message.show {
+            opacity: 1;
+        }
+
+        .checkbox-group {
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+        }
+
+        .checkbox-group input[type="checkbox"] {
+            width: auto;
+            margin-top: 4px;
+        }
+
+        .workshop-options {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 15px;
+            margin-top: 15px;
+        }
+
+        .workshop-card {
+            border: 2px solid var(--gray-300);
+            border-radius: var(--border-radius);
+            padding: 20px;
+            cursor: pointer;
+            transition: var(--transition);
+            position: relative;
+        }
+
+        .workshop-card:hover {
+            border-color: var(--primary-color);
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-md);
+        }
+
+        .workshop-card.selected {
+            border-color: var(--primary-color);
+            background: rgba(102, 126, 234, 0.05);
+        }
+
+        .workshop-card input[type="radio"] {
+            position: absolute;
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .workshop-card h4 {
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: var(--text-primary);
+        }
+
+        .workshop-card p {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            margin-bottom: 10px;
+        }
+
+        .workshop-price {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: var(--primary-color);
+        }
+
+        .button-group {
+            display: flex;
+            gap: 15px;
+            justify-content: space-between;
+            margin-top: 30px;
+        }
+
+        .btn {
+            padding: 12px 30px;
+            border: none;
+            border-radius: var(--border-radius);
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            min-width: 120px;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary-color), var(--primary-dark));
+            color: var(--white);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-md);
+        }
+
+        .btn-secondary {
+            background: var(--gray-200);
+            color: var(--text-secondary);
+        }
+
+        .btn-secondary:hover {
+            background: var(--gray-300);
+        }
+
+        .btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none !important;
+        }
+
+        .success-screen {
+            display: none;
+            text-align: center;
+            padding: 60px 40px;
+        }
+
+        .success-screen.show {
+            display: block;
+            animation: fadeIn 0.5s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .success-icon {
+            font-size: 4rem;
+            color: var(--success-color);
+            margin-bottom: 20px;
+        }
+
+        .success-title {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 15px;
+        }
+
+        .success-message {
+            font-size: 1.1rem;
+            color: var(--text-secondary);
+            margin-bottom: 30px;
+            line-height: 1.6;
+        }
+
+        .confirmation-details {
+            background: var(--gray-100);
+            border-radius: var(--border-radius);
+            padding: 20px;
+            margin-bottom: 30px;
+            text-align: left;
+        }
+
+        .confirmation-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px 0;
+            border-bottom: 1px solid var(--gray-300);
+        }
+
+        .confirmation-row:last-child {
+            border-bottom: none;
+        }
+
+        .confirmation-label {
+            font-weight: 600;
+            color: var(--text-secondary);
+        }
+
+        .confirmation-value {
+            color: var(--text-primary);
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                grid-template-columns: 1fr;
+                margin: 10px;
+            }
+
+            .sidebar {
+                padding: 30px 20px;
+            }
+
+            .form-section {
+                padding: 30px 20px;
+            }
+
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+
+            .workshop-options {
+                grid-template-columns: 1fr;
+            }
+
+            .button-group {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="sidebar">
+            <div class="sidebar-content">
+                <div class="event-logo">🚀</div>
+                <h1 class="event-title">TechConf 2024</h1>
+                <p style="text-align: center; opacity: 0.9; margin-bottom: 30px;">Join the Future of Technology</p>
+                
+                <div class="event-details">
+                    <div class="detail-item">
+                        <div class="detail-icon">📅</div>
+                        <div class="detail-text">
+                            <h4>Date & Time</h4>
+                            <p>March 15-17, 2024<br>9:00 AM - 6:00 PM PST</p>
+                        </div>
+                    </div>
+                    
+                    <div class="detail-item">
+                        <div class="detail-icon">📍</div>
+                        <div class="detail-text">
+                            <h4>Location</h4>
+                            <p>San Francisco Convention Center<br>747 Howard St, San Francisco, CA</p>
+                        </div>
+                    </div>
+                    
+                    <div class="detail-item">
+                        <div class="detail-icon">🎯</div>
+                        <div class="detail-text">
+                            <h4>What You'll Learn</h4>
+                            <p>Latest trends in AI, Cloud Computing, and Web3 technologies</p>
+                        </div>
+                    </div>
+                    
+                    <div class="detail-item">
+                        <div class="detail-icon">👥</div>
+                        <div class="detail-text">
+                            <h4>Expected Attendees</h4>
+                            <p>500+ developers, engineers, and tech leaders</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="form-section">
+            <div class="form-header">
+                <h1>Workshop Registration</h1>
+                <p>Secure your spot at TechConf 2024</p>
+            </div>
+
+            <div class="progress-bar">
+                <div class="progress-fill" id="progressFill"></div>
+            </div>
+
+            <form id="registrationForm">
+                <!-- Step 1: Personal Information -->
+                <div class="form-step active" data-step="1">
+                    <h2 style="margin-bottom: 20px; color: var(--text-primary);">Personal Information</h2>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="firstName">First Name <span class="required">*</span></label>
+                            <input type="text" id="firstName" name="firstName" required>
+                            <div class="error-message" id="firstNameError">Please enter your first name</div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="lastName">Last Name <span class="required">*</span></label>
+                            <input type="text" id="lastName" name="lastName" required>
+                            <div class="error-message" id="lastNameError">Please enter your last name</div>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="email">Email Address <span class="required">*</span></label>
+                        <input type="email" id="email" name="email" required>
+                        <div class="error-message" id="emailError">Please enter a valid email address</div>
+                    </div>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="phone">Phone Number</label>
+                            <input type="tel" id="phone" name="phone">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="company">Company/Organization</label>
+                            <input type="text" id="company" name="company">
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="jobTitle">Job Title</label>
+                        <input type="text" id="jobTitle" name="jobTitle">
+                    </div>
+                </div>
+
+                <!-- Step 2: Workshop Selection -->
+                <div class="form-step" data-step="2">
+                    <h2 style="margin-bottom: 20px; color: var(--text-primary);">Select Your Workshop Track</h2>
+                    
+                    <div class="workshop-options">
+                        <div class="workshop-card" data-workshop="ai-ml">
+                            <input type="radio" name="workshop" value="ai-ml" id="workshop-ai">
+                            <h4>AI & Machine Learning</h4>
+                            <p>Deep dive into neural networks, TensorFlow, and practical AI applications for modern businesses.</p>
+                            <div class="workshop-price">$299</div>
+                        </div>
+                        
+                        <div class="workshop-card" data-workshop="cloud">
+                            <input type="radio" name="workshop" value="cloud" id="workshop-cloud">
+                            <h4>Cloud Architecture</h4>
+                            <p>Master AWS, Azure, and Google Cloud platforms with hands-on deployment exercises.</p>
+                            <div class="workshop-price">$249</div>
+                        </div>
+                        
+                        <div class="workshop-card" data-workshop="web3">
+                            <input type="radio" name="workshop" value="web3" id="workshop-web3">
+                            <h4>Web3 & Blockchain</h4>
+                            <p>Build decentralized applications using Ethereum, Solidity, and modern Web3 frameworks.</p>
+                            <div class="workshop-price">$349</div>
+                        </div>
+                        
+                        <div class="workshop-card" data-workshop="fullstack">
+                            <input type="radio" name="workshop" value="fullstack" id="workshop-fullstack">
+                            <h4>Full-Stack Development</h4>
+                            <p>Complete React, Node.js, and database integration workshop with real-world projects.</p>
+                            <div class="workshop-price">$199</div>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group" style="margin-top: 30px;">
+                        <label for="experience">Experience Level <span class="required">*</span></label>
+                        <select id="experience" name="experience" required>
+                            <option value="">Select your experience level</option>
+                            <option value="beginner">Beginner (0-2 years)</option>
+                            <option value="intermediate">Intermediate (2-5 years)</option>
+                            <option value="advanced">Advanced (5+ years)</option>
+                        </select>
+                        <div class="error-message" id="experienceError">Please select your experience level</div>
+                    </div>
+                </div>
+
+                <!-- Step 3: Additional Information -->
+                <div class="form-step" data-step="3">
+                    <h2 style="margin-bottom: 20px; color: var(--text-primary);">Additional Information</h2>
+                    
+                    <div class="form-group">
+                        <label for="dietary">Dietary Restrictions or Allergies</label>
+                        <textarea id="dietary" name="dietary" rows="3" placeholder="Please let us know about any dietary restrictions or allergies..."></textarea>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="special">Special Accommodations</label>
+                        <textarea id="special" name="special" rows="3" placeholder="Any special accommodations needed for accessibility..."></textarea>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="referral">How did you hear about TechConf?</label>
+                        <select id="referral" name="referral">
+                            <option value="">Select an option</option>
+                            <option value="social-media">Social Media</option>
+                            <option value="colleague">Colleague/Friend</option>
+                            <option value="newsletter">Newsletter</option>
+                            <option value="search">Search Engine</option>
+                            <option value="previous-attendee">Previous Attendee</option>
+                            <option value="other">Other</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <div class="checkbox-group">
+                            <input type="checkbox" id="newsletter" name="newsletter">
+                            <label for="newsletter">Subscribe to our newsletter for future events and updates</label>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <div class="checkbox-group">
+                            <input type="checkbox" id="terms" name="terms" required>
+                            <label for="terms">I agree to the <a href="#" style="color: var(--primary-color);">Terms & Conditions</a> and <a href="#" style="color: var(--primary-color);">Privacy Policy</a> <span class="required">*</span></label>
+                        </div>
+                        <div class="error-message" id="termsError">Please agree to the terms and conditions</div>
+                    </div>
+                </div>
+
+                <div class="button-group">
+                    <button type="button" class="btn btn-secondary" id="prevBtn">Previous</button>
+                    <button type="button" class="btn btn-primary" id="nextBtn">Next</button>
+                    <button type="submit" class="btn btn-primary" id="submitBtn" style="display: none;">Complete Registration</button>
+                </div>
+            </form>
+
+            <!-- Success Screen -->
+            <div class="success-screen" id="successScreen">
+                <div class="success-icon">✅</div>
+                <h2 class="success-title">Registration Successful!</h2>
+                <p class="success-message">Thank you for registering for TechConf 2024. We've sent a confirmation email with all the details to your inbox.</p>
+                
+                <div class="confirmation-details" id="confirmationDetails">
+                    <!-- Confirmation details will be populated by JavaScript -->
+                </div>
+                
+                <button class="btn btn-primary" onclick="window.print()">Download Confirmation</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Form state management
+        let currentStep = 1;
+        const totalSteps = 3;
+        const formData = {};
+
+        // DOM elements
+        const form = document.getElementById('registrationForm');
+        const steps = document.querySelectorAll('.form-step');
+        const progressFill = document.getElementById('progressFill');
+        const prevBtn = document.getElementById('prevBtn');
+        const nextBtn = document.getElementById('nextBtn');
+        const submitBtn = document.getElementById('submitBtn');
+        const successScreen = document.getElementById('successScreen');
+        const workshopCards = document.querySelectorAll('.workshop-card');
+
+        // Initialize form
+        updateProgress();
+        updateButtons();
+
+        // Workshop card selection
+        workshopCards.forEach(card => {
+            card.addEventListener('click', () => {
+                // Remove selection from all cards
+                workshopCards.forEach(c => c.classList.remove('selected'));
+                // Add selection to clicked card
+                card.classList.add('selected');
+                // Check the radio button
+                const radio = card.querySelector('input[type="radio"]');
+                radio.checked = true;
+                // Clear any error state
+                clearFieldError('workshop');
+            });
+        });
+
+        // Event listeners
+        prevBtn.addEventListener('click', () => {
+            if (currentStep > 1) {
+                currentStep--;
+                showStep(currentStep);
+                updateProgress();
+                updateButtons();
+            }
+        });
+
+        nextBtn.addEventListener('click', () => {
+            if (validateStep(currentStep)) {
+                if (currentStep < totalSteps) {
+                    currentStep++;
+                    showStep(currentStep);
+                    updateProgress();
+                    updateButtons();
+                }
+            }
+        });
+
+        form.addEventListener('submit', (e) => {
+            e.preventDefault();
+            if (validateStep(currentStep)) {
+                collectFormData();
+                showSuccessScreen();
+            }
+        });
+
+        // Validation functions
+        function validateStep(step) {
+            let isValid = true;
+
+            switch (step) {
+                case 1:
+                    isValid = validateField('firstName', 'Please enter your first name') && isValid;
+                    isValid = validateField('lastName', 'Please enter your last name') && isValid;
+                    isValid = validateField('email', 'Please enter a valid email address', validateEmail) && isValid;
+                    break;
+                
+                case 2:
+                    isValid = validateRadioGroup('workshop', 'Please select a workshop track') && isValid;
+                    isValid = validateField('experience', 'Please select your experience level') && isValid;
+                    break;
+                
+                case 3:
+                    isValid = validateCheckbox('terms', 'Please agree to the terms and conditions') && isValid;
+                    break;
+            }
+
+            return isValid;
+        }
+
+        function validateField(fieldName, errorMessage, customValidator = null) {
+            const field = document.getElementById(fieldName);
+            const errorElement = document.getElementById(fieldName + 'Error');
+            
+            let isValid = field.value.trim() !== '';
+            
+            if (isValid && customValidator) {
+                isValid = customValidator(field.value);
+            }
+
+            if (!isValid) {
+                field.classList.add('error');
+                errorElement.textContent = errorMessage;
+                errorElement.classList.add('show');
+            } else {
+                field.classList.remove('error');
+                errorElement.classList.remove('show');
+            }
+
+            return isValid;
+        }
+
+        function validateRadioGroup(groupName, errorMessage) {
+            const radios = document.querySelectorAll(`input[name="${groupName}"]`);
+            const isValid = Array.from(radios).some(radio => radio.checked);
+            
+            if (!isValid) {
+                // Show error message near the workshop options
+                showCustomError(errorMessage);
+            }
+
+            return isValid;
+        }
+
+        function validateCheckbox(fieldName, errorMessage) {
+            const field = document.getElementById(fieldName);
+            const errorElement = document.getElementById(fieldName + 'Error');
+            
+            const isValid = field.checked;
+
+            if (!isValid) {
+                errorElement.textContent = errorMessage;
+                errorElement.classList.add('show');
+            } else {
+                errorElement.classList.remove('show');
+            }
+
+            return isValid;
+        }
+
+        function validateEmail(email) {
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            return emailRegex.test(email);
+        }
+
+        function clearFieldError(fieldName) {
+            const field = document.getElementById(fieldName);
+            const errorElement = document.getElementById(fieldName + 'Error');
+            
+            if (field) field.classList.remove('error');
+            if (errorElement) errorElement.classList.remove('show');
+        }
+
+        function showCustomError(message) {
+            // Create temporary error message
+            const errorDiv = document.createElement('div');
+            errorDiv.className = 'error-message show';
+            errorDiv.textContent = message;
+            errorDiv.style.marginTop = '10px';
+            
+            // Find workshop options container
+            const workshopContainer = document.querySelector('.workshop-options');
+            workshopContainer.appendChild(errorDiv);
+            
+            // Remove after 3 seconds
+            setTimeout(() => {
+                if (errorDiv.parentNode) {
+                    errorDiv.parentNode.removeChild(errorDiv);
+                }
+            }, 3000);
+        }
+
+        // Form navigation functions
+        function showStep(step) {
+            steps.forEach((stepElement, index) => {
+                stepElement.classList.toggle('active', index + 1 === step);
+            });
+        }
+
+        function updateProgress() {
+            const progress = (currentStep / totalSteps) * 100;
+            progressFill.style.width = progress + '%';
+        }
+
+        function updateButtons() {
+            prevBtn.style.display = currentStep === 1 ? 'none' : 'inline-flex';
+            nextBtn.style.display = currentStep === totalSteps ? 'none' : 'inline-flex';
+            submitBtn.style.display = currentStep === totalSteps ? 'inline-flex' : 'none';
+        }
+
+        function collectFormData() {
+            const formElements = form.elements;
+            
+            for (let element of formElements) {
+                if (element.name && element.type !== 'button' && element.type !== 'submit') {
+                    if (element.type === 'checkbox') {
+                        formData[element.name] = element.checked;
+                    } else if (element.type === 'radio') {
+                        if (element.checked) {
+                            formData[element.name] = element.value;
+                        }
+                    } else {
+                        formData[element.name] = element.value;
+                    }
+                }
+            }
+        }
+
+        function showSuccessScreen() {
+            form.style.display = 'none';
+            document.querySelector('.progress-bar').style.display = 'none';
+            document.querySelector('.form-header').style.display = 'none';
+            
+            // Generate confirmation details
+            const confirmationDetails = document.getElementById('confirmationDetails');
+            const confirmationId = 'TC' + Date.now().toString().slice(-6);
+            
+            // Get workshop details
+            const workshopLabels = {
+                'ai-ml': 'AI & Machine Learning - $299',
+                'cloud': 'Cloud Architecture - $249',
+                'web3': 'Web3 & Blockchain - $349',
+                'fullstack': 'Full-Stack Development - $199'
+            };
+
+            confirmationDetails.innerHTML = `
+                <div class="confirmation-row">
+                    <span class="confirmation-label">Confirmation ID:</span>
+                    <span class="confirmation-value">${confirmationId}</span>
+                </div>
+                <div class="confirmation-row">
+                    <span class="confirmation-label">Name:</span>
+                    <span class="confirmation-value">${formData.firstName} ${formData.lastName}</span>
+                </div>
+                <div class="confirmation-row">
+                    <span class="confirmation-label">Email:</span>
+                    <span class="confirmation-value">${formData.email}</span>
+                </div>
+                <div class="confirmation-row">
+                    <span class="confirmation-label">Workshop:</span>
+                    <span class="confirmation-value">${workshopLabels[formData.workshop] || 'Not selected'}</span>
+                </div>
+                <div class="confirmation-row">
+                    <span class="confirmation-label">Experience Level:</span>
+                    <span class="confirmation-value">${formData.experience.charAt(0).toUpperCase() + formData.experience.slice(1)}</span>
+                </div>
+                <div class="confirmation-row">
+                    <span class="confirmation-label">Company:</span>
+                    <span class="confirmation-value">${formData.company || 'Not provided'}</span>
+                </div>
+            `;
+            
+            successScreen.classList.add('show');
+        }
+
+        // Real-time validation
+        document.getElementById('email').addEventListener('input', function() {
+            if (this.value && !validateEmail(this.value)) {
+                this.classList.add('error');
+                document.getElementById('emailError').classList.add('show');
+            } else {
+                this.classList.remove('error');
+                document.getElementById('emailError').classList.remove('show');
+            }
+        });
+
+        // Clear errors on input
+        ['firstName', 'lastName', 'experience'].forEach(fieldName => {
+            document.getElementById(fieldName).addEventListener('input', function() {
+                clearFieldError(fieldName);
+            });
+        });
+    </script>
+</body>
+</html>

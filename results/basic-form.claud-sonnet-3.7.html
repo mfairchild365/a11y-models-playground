@@ -1,0 +1,1064 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Conference Workshop Registration</title>
+    <style>
+        /* Modern CSS Reset */
+        *,
+        *::before,
+        *::after {
+            box-sizing: border-box;
+        }
+
+        /* Variables */
+        :root {
+            --color-primary: #3a86ff;
+            --color-primary-dark: #2667cc;
+            --color-secondary: #8338ec;
+            --color-accent: #ff006e;
+            --color-success: #38b000;
+            --color-warning: #ffbe0b;
+            --color-error: #e63946;
+            --color-text: #333;
+            --color-text-light: #666;
+            --color-background: #f8f9fa;
+            --color-white: #fff;
+            --color-border: #dee2e6;
+            
+            --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.1);
+            --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.1);
+            --shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.1);
+            
+            --border-radius-sm: 4px;
+            --border-radius-md: 8px;
+            --border-radius-lg: 16px;
+            
+            --transition: all 0.3s ease;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: var(--color-text);
+            background-color: var(--color-background);
+            background-image: linear-gradient(135deg, #f5f7fa 0%, #e4e9f2 100%);
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 900px;
+            margin: 40px 20px;
+            background-color: var(--color-white);
+            border-radius: var(--border-radius-lg);
+            overflow: hidden;
+            box-shadow: var(--shadow-lg);
+            display: flex;
+            flex-direction: column;
+            position: relative;
+        }
+
+        @media (min-width: 992px) {
+            .container {
+                flex-direction: row;
+                height: 720px;
+            }
+        }
+
+        .form-sidebar {
+            background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-secondary) 100%);
+            color: var(--color-white);
+            padding: 40px;
+            position: relative;
+            z-index: 1;
+            overflow: hidden;
+        }
+
+        @media (min-width: 992px) {
+            .form-sidebar {
+                width: 40%;
+            }
+        }
+
+        .form-sidebar::before {
+            content: '';
+            position: absolute;
+            top: -50px;
+            left: -50px;
+            width: 200px;
+            height: 200px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.1);
+            z-index: -1;
+        }
+
+        .form-sidebar::after {
+            content: '';
+            position: absolute;
+            bottom: -50px;
+            right: -50px;
+            width: 200px;
+            height: 200px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.1);
+            z-index: -1;
+        }
+
+        .sidebar-header {
+            margin-bottom: 30px;
+        }
+
+        .sidebar-header h1 {
+            font-size: 32px;
+            margin-bottom: 10px;
+            font-weight: 700;
+        }
+
+        .sidebar-header p {
+            opacity: 0.8;
+            font-size: 16px;
+            margin-top: 0;
+        }
+
+        .workshop-details {
+            margin-top: 40px;
+        }
+
+        .detail-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .detail-icon {
+            background: rgba(255, 255, 255, 0.2);
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 15px;
+            font-size: 18px;
+        }
+
+        .detail-text {
+            flex: 1;
+        }
+
+        .detail-text h4 {
+            margin: 0 0 5px 0;
+            font-weight: 600;
+        }
+
+        .detail-text p {
+            margin: 0;
+            opacity: 0.8;
+            font-size: 14px;
+        }
+
+        .form-content {
+            padding: 40px;
+            flex: 1;
+            overflow-y: auto;
+        }
+
+        .steps {
+            display: flex;
+            margin-bottom: 30px;
+        }
+
+        .step {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            flex: 1;
+            position: relative;
+        }
+
+        .step:not(:last-child)::after {
+            content: '';
+            position: absolute;
+            top: 15px;
+            right: calc(-50% + 15px);
+            width: calc(100% - 30px);
+            height: 2px;
+            background-color: var(--color-border);
+            z-index: 1;
+        }
+
+        .step-number {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            background-color: var(--color-border);
+            color: var(--color-text-light);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            margin-bottom: 10px;
+            position: relative;
+            z-index: 2;
+            transition: var(--transition);
+        }
+
+        .step.active .step-number, 
+        .step.completed .step-number {
+            background-color: var(--color-primary);
+            color: var(--color-white);
+        }
+
+        .step-label {
+            font-size: 14px;
+            color: var(--color-text-light);
+            text-align: center;
+        }
+
+        .step.active .step-label {
+            color: var(--color-primary);
+            font-weight: 600;
+        }
+
+        .form-step {
+            display: none;
+        }
+
+        .form-step.active {
+            display: block;
+            animation: fadeIn 0.5s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .form-group {
+            margin-bottom: 24px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: var(--color-text);
+        }
+
+        .form-control {
+            display: block;
+            width: 100%;
+            padding: 12px 16px;
+            font-size: 16px;
+            line-height: 1.5;
+            color: var(--color-text);
+            background-color: var(--color-white);
+            background-clip: padding-box;
+            border: 1px solid var(--color-border);
+            border-radius: var(--border-radius-md);
+            transition: var(--transition);
+        }
+
+        .form-control:focus {
+            border-color: var(--color-primary);
+            outline: 0;
+            box-shadow: 0 0 0 3px rgba(58, 134, 255, 0.15);
+        }
+
+        .form-control::placeholder {
+            color: #adb5bd;
+        }
+
+        .form-control.invalid {
+            border-color: var(--color-error);
+        }
+
+        .form-control.invalid:focus {
+            box-shadow: 0 0 0 3px rgba(230, 57, 70, 0.15);
+        }
+
+        .error-message {
+            color: var(--color-error);
+            font-size: 14px;
+            margin-top: 8px;
+            display: none;
+        }
+
+        .error-message.visible {
+            display: block;
+        }
+
+        .checkbox-group {
+            margin-top: 8px;
+        }
+
+        .checkbox-wrapper {
+            display: flex;
+            align-items: flex-start;
+            margin-bottom: 10px;
+        }
+
+        .checkbox-wrapper input {
+            margin-top: 5px;
+            margin-right: 10px;
+        }
+
+        select.form-control {
+            appearance: none;
+            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>');
+            background-repeat: no-repeat;
+            background-position: right 12px center;
+            background-size: 16px;
+        }
+
+        .form-actions {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 40px;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 12px 24px;
+            font-size: 16px;
+            font-weight: 600;
+            text-align: center;
+            text-decoration: none;
+            white-space: nowrap;
+            border-radius: var(--border-radius-md);
+            cursor: pointer;
+            transition: var(--transition);
+            outline: none;
+            border: none;
+        }
+
+        .btn-primary {
+            background-color: var(--color-primary);
+            color: var(--color-white);
+        }
+
+        .btn-primary:hover, .btn-primary:focus {
+            background-color: var(--color-primary-dark);
+        }
+
+        .btn-secondary {
+            background-color: transparent;
+            color: var(--color-text);
+            border: 1px solid var(--color-border);
+        }
+
+        .btn-secondary:hover, .btn-secondary:focus {
+            background-color: #f1f3f5;
+            border-color: #ced4da;
+        }
+
+        .card-section {
+            border: 1px solid var(--color-border);
+            border-radius: var(--border-radius-md);
+            padding: 20px;
+            margin-bottom: 24px;
+        }
+
+        .card-section h3 {
+            margin-top: 0;
+            font-size: 18px;
+            margin-bottom: 15px;
+        }
+
+        .payment-options {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .payment-option {
+            flex: 1;
+            min-width: 120px;
+            position: relative;
+        }
+
+        .payment-option input {
+            position: absolute;
+            opacity: 0;
+            width: 100%;
+            height: 100%;
+            cursor: pointer;
+        }
+
+        .payment-option label {
+            border: 1px solid var(--color-border);
+            border-radius: var(--border-radius-md);
+            padding: 15px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .payment-option input:checked + label {
+            border-color: var(--color-primary);
+            background-color: rgba(58, 134, 255, 0.05);
+        }
+
+        .payment-icon {
+            font-size: 24px;
+            margin-bottom: 10px;
+        }
+
+        /* Success page styles */
+        .success-page {
+            display: none;
+            text-align: center;
+            padding: 30px;
+        }
+
+        .success-page.active {
+            display: block;
+            animation: fadeIn 0.5s ease;
+        }
+
+        .success-icon {
+            font-size: 80px;
+            color: var(--color-success);
+            margin-bottom: 20px;
+        }
+
+        .success-title {
+            font-size: 28px;
+            color: var(--color-text);
+            margin-bottom: 20px;
+        }
+
+        .success-message {
+            font-size: 18px;
+            color: var(--color-text-light);
+            max-width: 500px;
+            margin: 0 auto 30px;
+        }
+
+        .registration-details {
+            background-color: var(--color-background);
+            border-radius: var(--border-radius-md);
+            padding: 20px;
+            margin-bottom: 30px;
+            text-align: left;
+        }
+
+        .detail-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+        }
+
+        .detail-row:last-child {
+            margin-bottom: 0;
+        }
+
+        .detail-label {
+            font-weight: 600;
+            color: var(--color-text-light);
+        }
+
+        .detail-value {
+            color: var(--color-text);
+            font-weight: 500;
+        }
+    </style>
+</head>
+<body>
+    <div class="container" id="registration-form-container">
+        <div class="form-sidebar">
+            <div class="sidebar-header">
+                <h1>Tech Innovate 2024</h1>
+                <p>Advanced React Development Workshop</p>
+            </div>
+            <div class="workshop-details">
+                <div class="detail-item">
+                    <div class="detail-icon">📅</div>
+                    <div class="detail-text">
+                        <h4>Date & Time</h4>
+                        <p>June 15-16, 2024 | 9:00 AM - 5:00 PM</p>
+                    </div>
+                </div>
+                <div class="detail-item">
+                    <div class="detail-icon">📍</div>
+                    <div class="detail-text">
+                        <h4>Location</h4>
+                        <p>Tech Hub Conference Center, 123 Innovation Blvd, San Francisco</p>
+                    </div>
+                </div>
+                <div class="detail-item">
+                    <div class="detail-icon">👨‍🏫</div>
+                    <div class="detail-text">
+                        <h4>Instructor</h4>
+                        <p>Sarah Johnson, Lead React Engineer at CodeFusion</p>
+                    </div>
+                </div>
+                <div class="detail-item">
+                    <div class="detail-icon">💰</div>
+                    <div class="detail-text">
+                        <h4>Price</h4>
+                        <p>$499 - Early Bird (until May 15)<br>$599 - Regular</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="form-content">
+            <div class="steps">
+                <div class="step active" data-step="1">
+                    <div class="step-number">1</div>
+                    <div class="step-label">Personal Info</div>
+                </div>
+                <div class="step" data-step="2">
+                    <div class="step-number">2</div>
+                    <div class="step-label">Workshop Details</div>
+                </div>
+                <div class="step" data-step="3">
+                    <div class="step-number">3</div>
+                    <div class="step-label">Payment</div>
+                </div>
+            </div>
+
+            <form id="registration-form" novalidate>
+                <!-- Step 1: Personal Information -->
+                <div class="form-step active" data-step="1">
+                    <h2>Personal Information</h2>
+                    <p>Please provide your contact information for registration.</p>
+                    
+                    <div class="form-group">
+                        <label for="full-name">Full Name*</label>
+                        <input type="text" class="form-control" id="full-name" placeholder="Enter your full name" required>
+                        <div class="error-message" id="full-name-error">Please enter your full name</div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="email">Email Address*</label>
+                        <input type="email" class="form-control" id="email" placeholder="Enter your email address" required>
+                        <div class="error-message" id="email-error">Please enter a valid email address</div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="phone">Phone Number*</label>
+                        <input type="tel" class="form-control" id="phone" placeholder="Enter your phone number" required>
+                        <div class="error-message" id="phone-error">Please enter a valid phone number</div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="company">Company/Organization</label>
+                        <input type="text" class="form-control" id="company" placeholder="Enter your company or organization">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="job-title">Job Title</label>
+                        <input type="text" class="form-control" id="job-title" placeholder="Enter your job title">
+                    </div>
+                    
+                    <div class="form-actions">
+                        <div></div> <!-- Empty div for flex spacing -->
+                        <button type="button" class="btn btn-primary" id="step1-next">Continue</button>
+                    </div>
+                </div>
+                
+                <!-- Step 2: Workshop Details -->
+                <div class="form-step" data-step="2">
+                    <h2>Workshop Details</h2>
+                    <p>Please select your workshop preferences.</p>
+                    
+                    <div class="form-group">
+                        <label for="experience">Experience Level*</label>
+                        <select class="form-control" id="experience" required>
+                            <option value="">Select your experience level</option>
+                            <option value="beginner">Beginner (0-1 years)</option>
+                            <option value="intermediate">Intermediate (1-3 years)</option>
+                            <option value="advanced">Advanced (3+ years)</option>
+                        </select>
+                        <div class="error-message" id="experience-error">Please select your experience level</div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Workshop Modules*</label>
+                        <div class="checkbox-group">
+                            <div class="checkbox-wrapper">
+                                <input type="checkbox" id="module1" name="modules" value="react-hooks">
+                                <label for="module1">Advanced React Hooks & Patterns</label>
+                            </div>
+                            <div class="checkbox-wrapper">
+                                <input type="checkbox" id="module2" name="modules" value="state-management">
+                                <label for="module2">State Management with Redux & Zustand</label>
+                            </div>
+                            <div class="checkbox-wrapper">
+                                <input type="checkbox" id="module3" name="modules" value="performance">
+                                <label for="module3">React Performance Optimization</label>
+                            </div>
+                            <div class="checkbox-wrapper">
+                                <input type="checkbox" id="module4" name="modules" value="testing">
+                                <label for="module4">Testing React Applications</label>
+                            </div>
+                        </div>
+                        <div class="error-message" id="modules-error">Please select at least one module</div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="dietary">Dietary Restrictions</label>
+                        <input type="text" class="form-control" id="dietary" placeholder="Enter any dietary restrictions or allergies">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="special-requests">Special Requests or Accommodations</label>
+                        <textarea class="form-control" id="special-requests" rows="3" placeholder="Enter any special requests or accommodations"></textarea>
+                    </div>
+
+                    <div class="form-actions">
+                        <button type="button" class="btn btn-secondary" id="step2-prev">Back</button>
+                        <button type="button" class="btn btn-primary" id="step2-next">Continue</button>
+                    </div>
+                </div>
+                
+                <!-- Step 3: Payment Information -->
+                <div class="form-step" data-step="3">
+                    <h2>Payment Information</h2>
+                    <p>Complete your registration by providing payment details.</p>
+                    
+                    <div class="card-section">
+                        <h3>Registration Type</h3>
+                        <div class="form-group">
+                            <select class="form-control" id="registration-type" required>
+                                <option value="">Select registration type</option>
+                                <option value="early-bird">Early Bird Registration - $499</option>
+                                <option value="regular">Regular Registration - $599</option>
+                                <option value="group">Group Registration (3+ people) - $449 per person</option>
+                                <option value="student">Student Registration - $299</option>
+                            </select>
+                            <div class="error-message" id="registration-type-error">Please select a registration type</div>
+                        </div>
+                    </div>
+                    
+                    <div class="card-section">
+                        <h3>Payment Method</h3>
+                        <div class="payment-options">
+                            <div class="payment-option">
+                                <input type="radio" name="payment-method" id="credit-card" value="credit-card" checked>
+                                <label for="credit-card">
+                                    <div class="payment-icon">💳</div>
+                                    <span>Credit Card</span>
+                                </label>
+                            </div>
+                            <div class="payment-option">
+                                <input type="radio" name="payment-method" id="paypal" value="paypal">
+                                <label for="paypal">
+                                    <div class="payment-icon">🅿️</div>
+                                    <span>PayPal</span>
+                                </label>
+                            </div>
+                            <div class="payment-option">
+                                <input type="radio" name="payment-method" id="invoice" value="invoice">
+                                <label for="invoice">
+                                    <div class="payment-icon">📄</div>
+                                    <span>Invoice</span>
+                                </label>
+                            </div>
+                        </div>
+                        
+                        <div id="credit-card-details">
+                            <div class="form-group">
+                                <label for="card-holder">Cardholder Name*</label>
+                                <input type="text" class="form-control" id="card-holder" placeholder="Enter cardholder name">
+                                <div class="error-message" id="card-holder-error">Please enter the cardholder's name</div>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="card-number">Card Number*</label>
+                                <input type="text" class="form-control" id="card-number" placeholder="•••• •••• •••• ••••">
+                                <div class="error-message" id="card-number-error">Please enter a valid card number</div>
+                            </div>
+                            
+                            <div class="form-group" style="display: flex; gap: 15px;">
+                                <div style="flex: 1;">
+                                    <label for="expiry-date">Expiration Date*</label>
+                                    <input type="text" class="form-control" id="expiry-date" placeholder="MM/YY">
+                                    <div class="error-message" id="expiry-date-error">Please enter a valid expiration date</div>
+                                </div>
+                                <div style="flex: 1;">
+                                    <label for="cvv">CVV*</label>
+                                    <input type="text" class="form-control" id="cvv" placeholder="•••">
+                                    <div class="error-message" id="cvv-error">Please enter a valid CVV</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <div class="checkbox-wrapper">
+                            <input type="checkbox" id="terms" required>
+                            <label for="terms">I agree to the <a href="#" target="_blank">Terms and Conditions</a> and <a href="#" target="_blank">Privacy Policy</a>.*</label>
+                        </div>
+                        <div class="error-message" id="terms-error">You must agree to the terms and conditions</div>
+                    </div>
+                    
+                    <div class="form-actions">
+                        <button type="button" class="btn btn-secondary" id="step3-prev">Back</button>
+                        <button type="submit" class="btn btn-primary" id="submit-registration">Complete Registration</button>
+                    </div>
+                </div>
+            </form>
+            
+            <!-- Success Page -->
+            <div class="success-page" id="success-page">
+                <div class="success-icon">✓</div>
+                <h2 class="success-title">Registration Complete!</h2>
+                <p class="success-message">Thank you for registering for the Advanced React Development Workshop. We've sent a confirmation email with all the details to your inbox.</p>
+                
+                <div class="registration-details">
+                    <div class="detail-row">
+                        <span class="detail-label">Registration ID:</span>
+                        <span class="detail-value" id="confirmation-id">REG-12345</span>
+                    </div>
+                    <div class="detail-row">
+                        <span class="detail-label">Name:</span>
+                        <span class="detail-value" id="confirmation-name">-</span>
+                    </div>
+                    <div class="detail-row">
+                        <span class="detail-label">Email:</span>
+                        <span class="detail-value" id="confirmation-email">-</span>
+                    </div>
+                    <div class="detail-row">
+                        <span class="detail-label">Workshop:</span>
+                        <span class="detail-value">Advanced React Development Workshop</span>
+                    </div>
+                    <div class="detail-row">
+                        <span class="detail-label">Date:</span>
+                        <span class="detail-value">June 15-16, 2024</span>
+                    </div>
+                    <div class="detail-row">
+                        <span class="detail-label">Payment Status:</span>
+                        <span class="detail-value">Completed</span>
+                    </div>
+                </div>
+                
+                <button type="button" class="btn btn-primary" id="download-confirmation">Download Confirmation</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Form navigation and validation
+        document.addEventListener('DOMContentLoaded', function() {
+            const form = document.getElementById('registration-form');
+            const steps = document.querySelectorAll('.form-step');
+            const stepIndicators = document.querySelectorAll('.step');
+            const formContainer = document.getElementById('registration-form-container');
+            const successPage = document.getElementById('success-page');
+            
+            // Navigation buttons
+            const step1NextBtn = document.getElementById('step1-next');
+            const step2PrevBtn = document.getElementById('step2-prev');
+            const step2NextBtn = document.getElementById('step2-next');
+            const step3PrevBtn = document.getElementById('step3-prev');
+            const submitBtn = document.getElementById('submit-registration');
+            
+            // Validation functions
+            function validateStep1() {
+                let isValid = true;
+                
+                // Validate full name
+                const fullName = document.getElementById('full-name');
+                const fullNameError = document.getElementById('full-name-error');
+                
+                if (!fullName.value.trim()) {
+                    fullName.classList.add('invalid');
+                    fullNameError.classList.add('visible');
+                    isValid = false;
+                } else {
+                    fullName.classList.remove('invalid');
+                    fullNameError.classList.remove('visible');
+                }
+                
+                // Validate email
+                const email = document.getElementById('email');
+                const emailError = document.getElementById('email-error');
+                const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                
+                if (!email.value.trim() || !emailRegex.test(email.value.trim())) {
+                    email.classList.add('invalid');
+                    emailError.classList.add('visible');
+                    isValid = false;
+                } else {
+                    email.classList.remove('invalid');
+                    emailError.classList.remove('visible');
+                }
+                
+                // Validate phone
+                const phone = document.getElementById('phone');
+                const phoneError = document.getElementById('phone-error');
+                const phoneRegex = /^[\d\s\+\-\(\)]{10,20}$/;
+                
+                if (!phone.value.trim() || !phoneRegex.test(phone.value.trim())) {
+                    phone.classList.add('invalid');
+                    phoneError.classList.add('visible');
+                    isValid = false;
+                } else {
+                    phone.classList.remove('invalid');
+                    phoneError.classList.remove('visible');
+                }
+                
+                return isValid;
+            }
+            
+            function validateStep2() {
+                let isValid = true;
+                
+                // Validate experience level
+                const experience = document.getElementById('experience');
+                const experienceError = document.getElementById('experience-error');
+                
+                if (!experience.value) {
+                    experience.classList.add('invalid');
+                    experienceError.classList.add('visible');
+                    isValid = false;
+                } else {
+                    experience.classList.remove('invalid');
+                    experienceError.classList.remove('visible');
+                }
+                
+                // Validate modules (at least one selected)
+                const modules = document.querySelectorAll('input[name="modules"]:checked');
+                const modulesError = document.getElementById('modules-error');
+                
+                if (modules.length === 0) {
+                    modulesError.classList.add('visible');
+                    isValid = false;
+                } else {
+                    modulesError.classList.remove('visible');
+                }
+                
+                return isValid;
+            }
+            
+            function validateStep3() {
+                let isValid = true;
+                
+                // Validate registration type
+                const registrationType = document.getElementById('registration-type');
+                const registrationTypeError = document.getElementById('registration-type-error');
+                
+                if (!registrationType.value) {
+                    registrationType.classList.add('invalid');
+                    registrationTypeError.classList.add('visible');
+                    isValid = false;
+                } else {
+                    registrationType.classList.remove('invalid');
+                    registrationTypeError.classList.remove('visible');
+                }
+                
+                // Get payment method
+                const paymentMethod = document.querySelector('input[name="payment-method"]:checked').value;
+                
+                // Only validate credit card details if that payment method is selected
+                if (paymentMethod === 'credit-card') {
+                    // Validate cardholder name
+                    const cardHolder = document.getElementById('card-holder');
+                    const cardHolderError = document.getElementById('card-holder-error');
+                    
+                    if (!cardHolder.value.trim()) {
+                        cardHolder.classList.add('invalid');
+                        cardHolderError.classList.add('visible');
+                        isValid = false;
+                    } else {
+                        cardHolder.classList.remove('invalid');
+                        cardHolderError.classList.remove('visible');
+                    }
+                    
+                    // Validate card number (simplified)
+                    const cardNumber = document.getElementById('card-number');
+                    const cardNumberError = document.getElementById('card-number-error');
+                    const cardNumberRegex = /^\d{16}$/;
+                    
+                    // Remove spaces and dashes for validation
+                    const cardNumberValue = cardNumber.value.replace(/[\s-]/g, '');
+                    
+                    if (!cardNumberValue || !cardNumberRegex.test(cardNumberValue)) {
+                        cardNumber.classList.add('invalid');
+                        cardNumberError.classList.add('visible');
+                        isValid = false;
+                    } else {
+                        cardNumber.classList.remove('invalid');
+                        cardNumberError.classList.remove('visible');
+                    }
+                    
+                    // Validate expiration date
+                    const expiryDate = document.getElementById('expiry-date');
+                    const expiryDateError = document.getElementById('expiry-date-error');
+                    const expiryDateRegex = /^(0[1-9]|1[0-2])\/\d{2}$/;
+                    
+                    if (!expiryDate.value.trim() || !expiryDateRegex.test(expiryDate.value.trim())) {
+                        expiryDate.classList.add('invalid');
+                        expiryDateError.classList.add('visible');
+                        isValid = false;
+                    } else {
+                        // Check if card is expired
+                        const [month, year] = expiryDate.value.split('/');
+                        const currentDate = new Date();
+                        const currentYear = currentDate.getFullYear() % 100; // Get last two digits
+                        const currentMonth = currentDate.getMonth() + 1; // Months are 0-indexed
+                        
+                        if ((parseInt(year) < currentYear) || 
+                            (parseInt(year) === currentYear && parseInt(month) < currentMonth)) {
+                            expiryDate.classList.add('invalid');
+                            expiryDateError.textContent = 'Card has expired';
+                            expiryDateError.classList.add('visible');
+                            isValid = false;
+                        } else {
+                            expiryDate.classList.remove('invalid');
+                            expiryDateError.classList.remove('visible');
+                        }
+                    }
+                    
+                    // Validate CVV
+                    const cvv = document.getElementById('cvv');
+                    const cvvError = document.getElementById('cvv-error');
+                    const cvvRegex = /^\d{3,4}$/;
+                    
+                    if (!cvv.value.trim() || !cvvRegex.test(cvv.value.trim())) {
+                        cvv.classList.add('invalid');
+                        cvvError.classList.add('visible');
+                        isValid = false;
+                    } else {
+                        cvv.classList.remove('invalid');
+                        cvvError.classList.remove('visible');
+                    }
+                }
+                
+                // Validate terms agreement
+                const terms = document.getElementById('terms');
+                const termsError = document.getElementById('terms-error');
+                
+                if (!terms.checked) {
+                    termsError.classList.add('visible');
+                    isValid = false;
+                } else {
+                    termsError.classList.remove('visible');
+                }
+                
+                return isValid;
+            }
+            
+            // Form navigation
+            function goToStep(stepNumber) {
+                steps.forEach(step => {
+                    step.classList.remove('active');
+                });
+                
+                stepIndicators.forEach(indicator => {
+                    indicator.classList.remove('active');
+                    
+                    if (parseInt(indicator.dataset.step) < stepNumber) {
+                        indicator.classList.add('completed');
+                    } else {
+                        indicator.classList.remove('completed');
+                    }
+                });
+                
+                document.querySelector(`.form-step[data-step="${stepNumber}"]`).classList.add('active');
+                document.querySelector(`.step[data-step="${stepNumber}"]`).classList.add('active');
+            }
+            
+            // Navigation button event listeners
+            step1NextBtn.addEventListener('click', function() {
+                if (validateStep1()) {
+                    goToStep(2);
+                }
+            });
+            
+            step2PrevBtn.addEventListener('click', function() {
+                goToStep(1);
+            });
+            
+            step2NextBtn.addEventListener('click', function() {
+                if (validateStep2()) {
+                    goToStep(3);
+                }
+            });
+            
+            step3PrevBtn.addEventListener('click', function() {
+                goToStep(2);
+            });
+            
+            // Handle payment method change
+            document.querySelectorAll('input[name="payment-method"]').forEach(radio => {
+                radio.addEventListener('change', function() {
+                    const creditCardDetails = document.getElementById('credit-card-details');
+                    if (this.value === 'credit-card') {
+                        creditCardDetails.style.display = 'block';
+                    } else {
+                        creditCardDetails.style.display = 'none';
+                    }
+                });
+            });
+            
+            // Form submission
+            form.addEventListener('submit', function(e) {
+                e.preventDefault();
+                
+                if (validateStep3()) {
+                    // In a real application, you would submit the form data to a server here
+                    
+                    // For demo purposes, we'll just show the success page
+                    const fullName = document.getElementById('full-name').value;
+                    const email = document.getElementById('email').value;
+                    const registrationId = 'REG-' + Math.floor(10000 + Math.random() * 90000);
+                    
+                    // Update confirmation details
+                    document.getElementById('confirmation-name').textContent = fullName;
+                    document.getElementById('confirmation-email').textContent = email;
+                    document.getElementById('confirmation-id').textContent = registrationId;
+                    
+                    // Hide form and show success page
+                    form.style.display = 'none';
+                    document.querySelector('.steps').style.display = 'none';
+                    successPage.classList.add('active');
+                }
+            });
+            
+            // Format card number with spaces
+            const cardNumberInput = document.getElementById('card-number');
+            cardNumberInput.addEventListener('input', function(e) {
+                let value = e.target.value.replace(/\D/g, '');
+                if (value.length > 16) value = value.slice(0, 16);
+                
+                // Add spaces after every 4 digits
+                value = value.replace(/(\d{4})(?=\d)/g, '$1 ');
+                
+                e.target.value = value;
+            });
+            
+            // Format expiration date
+            const expiryDateInput = document.getElementById('expiry-date');
+            expiryDateInput.addEventListener('input', function(e) {
+                let value = e.target.value.replace(/\D/g, '');
+                
+                if (value.length > 2) {
+                    value = value.slice(0, 2) + '/' + value.slice(2, 4);
+                }
+                
+                e.target.value = value;
+            });
+            
+            // Download confirmation (demo only)
+            document.getElementById('download-confirmation').addEventListener('click', function() {
+                alert('In a real application, this would download a PDF confirmation of your registration.');
+            });
+        });
+    </script>
+</body>
+</html>
