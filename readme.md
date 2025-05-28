@@ -10,7 +10,7 @@ This is NOT an exhaustive list of accessibility tests. These prompts do not cove
 
 ## Summary
 
-AI models are getting better at identifying and generating accessible code, but they still fail at creating compliant code even when asked to do so. This being said, it may still be possible to provide instructions to have AI generate more accessible code more reliably. AI can be helpful in identifying and fixing many bugs, but the limitations of the models should be clearly conveyed to developers, as it can't identify and fix all issues. In other words, AI can be helpful in as one of many tools to generate accessible code, but it can't yet be used as the only tool.
+AI models are getting better at identifying and generating accessible code, but they still fail at creating compliant code even when asked to do so. This being said, it may still be possible to provide instructions to have AI generate more accessible code more reliably. AI can be helpful in identifying and fixing many bugs, but the limitations of the models should be clearly conveyed to developers, as it can't identify and fix all issues. In other words, AI can be helpful as one of many tools to generate accessible code, but it can't yet be used as the only tool.
 
 ## Prompt 1: [basic-form.prompt.yml](https://github.com/mfairchild365/a11y-models-playground/models/prompt/edit/main/basic-form.prompt.yml)
 
