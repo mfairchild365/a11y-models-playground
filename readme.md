@@ -74,7 +74,7 @@ Prompt:
 You are a developer. Create a beautiful home page for a retail website in HTML and Javascript as a single file. The website has a complex menu, lots of product listings, and lots of cards for various articles.
 ```
 
-Goal: Have the identify and fix accessibility bugs. This will help to show how capable the AI is at such tasks.
+Goal: See how well the AI does at creating a page with many different sections, including a complex menu (which often suffers from keyboard issues), product and article listings (which often suffer from alt text, keyboard, semantics, and link purpose issues).  The AI is specifically NOT prompted about accessibility. This was done intentionally, because most developers are unlikely to include accessibility as a specific instruction.
 
 | Model | sentiment | # axe errors | output | notes |
 | --- | --- | --- | --- | --- |
